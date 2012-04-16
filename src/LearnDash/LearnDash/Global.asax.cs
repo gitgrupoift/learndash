@@ -44,6 +44,23 @@ namespace LearnDash
             RegisterRoutes(RouteTable.Routes);
 
             BundleTable.Bundles.RegisterTemplateBundles();
+
+            var bundle = new Bundle("~/Scripts/customjs");
+            bundle.AddFile("~/Scripts/jquery.roundabout.js");
+            bundle.AddFile("~/Scripts/jquery.event.drag-2.0.min.js");
+            bundle.AddFile("~/Scripts/jquery.event.drop-2.0.min.js");
+            bundle.AddFile("~/Scripts/jquery.roundabout-shapes.min.js");
+            BundleTable.Bundles.Add(bundle);
+
+            bundle = new Bundle("~/Content/twitterbootstrap/bootstrapcss");
+            bundle.AddFile("~/Content/twitterbootstrap/css/bootstrap.css");
+            bundle.AddFile("~/Content/twitterbootstrap/css/bootstrap-responsive.css");
+            BundleTable.Bundles.Add(bundle);
+
+            bundle = new Bundle("~/Content/twitterbootstrap/bootstrapjs");
+            bundle.AddFile("~/Content/twitterbootstrap/js/bootstrap.js");
+
+            BundleTable.Bundles.Add(bundle);
         }
     }
 }

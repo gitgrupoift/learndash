@@ -9,6 +9,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{898FF7
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnDash.Dal", "LearnDash.Dal\LearnDash.Dal.csproj", "{C5C3035B-84D5-4E9F-A990-52BF9DEEEDB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnDashDal.Tests", "LearnDashDal.Tests\LearnDashDal.Tests.csproj", "{19224A6D-A2C6-4D21-B3D9-18D3E065BBD1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +23,14 @@ Global
 		{4F31BCA4-04E9-47D9-9BC9-E60185EB7547}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F31BCA4-04E9-47D9-9BC9-E60185EB7547}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F31BCA4-04E9-47D9-9BC9-E60185EB7547}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5C3035B-84D5-4E9F-A990-52BF9DEEEDB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5C3035B-84D5-4E9F-A990-52BF9DEEEDB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5C3035B-84D5-4E9F-A990-52BF9DEEEDB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5C3035B-84D5-4E9F-A990-52BF9DEEEDB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19224A6D-A2C6-4D21-B3D9-18D3E065BBD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19224A6D-A2C6-4D21-B3D9-18D3E065BBD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19224A6D-A2C6-4D21-B3D9-18D3E065BBD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19224A6D-A2C6-4D21-B3D9-18D3E065BBD1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

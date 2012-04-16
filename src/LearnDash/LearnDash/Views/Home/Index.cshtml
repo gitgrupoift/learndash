@@ -1,0 +1,167 @@
+﻿<div class="roundabout">
+    <ul>
+        <li class="flow-name"><span>Programming</span></li>
+        <li class="flow-task flow-next">
+            <span>
+                Test Tools
+            </span>
+        </li>
+        <li class="flow-task">
+            <span>
+                Lam Blog
+            </span>
+        </li>
+        <li class="flow-task">
+            <span>
+                Kata
+            </span>
+        </li>
+        <li class="flow-task">
+            <span>
+                Book
+            </span>
+        </li>
+        <li class="flow-task">
+            <span>
+                Blogs
+            </span>
+        </li>
+        <li class="flow-task">
+            <span>
+                Reading List
+            </span>
+        </li>
+        <li class="flow-task">
+            <span>
+                Stack
+            </span>
+        </li>
+        <li class="flow-task">
+            <span>
+                Projects
+            </span>
+        </li>
+        <li class="flow-task">
+            <span>
+                Book
+            </span>
+        </li>
+        <li class="flow-task">
+            <span>
+                Speaking
+            </span>
+        </li>
+        <li class="flow-task">
+            <span>
+                Reading Code
+            </span>
+        </li>
+        <li class="flow-task">
+            <span>
+                Lam Blog
+            </span>
+        </li>
+        <li class="flow-task">
+            <span>
+                Screencast
+            </span>
+        </li>
+        <li class="flow-task">
+            <span>
+                Projects
+            </span>
+        </li>
+    </ul>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.roundabout ul').roundabout({
+            tilt: -4,
+            minScale: 0.6,
+            minOpacity: 1,
+            minZ: 100,
+            maxZ: 300,
+            duration: 400,
+            easing: 'easeOutQuad',
+            enableDrag: true,
+            dropEasing: 'easeOutBounce',
+            childSelector: '.flow-task'
+        }, function () {
+            $(this).fadeTo(500, 1);
+        });
+    });
+</script>
+<style>
+    .flow-name
+    {
+        margin-top: 15%;
+        background-color: #222;
+        color: yellow;
+        font-weight: bold;
+        text-align: center;
+        width: 300px;
+        height: 70px;
+        position: absolute;
+        z-index: 260;
+        margin-left: 35%;
+        border-color: #222;
+        opacity: 0.8;
+        -moz-border-radius: 15px;
+        border-radius: 15px;
+    }
+    
+    .flow-next
+    {
+        background: transparent url(Content/images/arrow-down.png) no-repeat 50% -50%;
+    }
+    
+    .flow-name span
+    {
+        line-height: 3;
+        font-size: 22px;
+    }
+    
+    div.roundabout
+    {
+        margin-left: 50%;
+        margin-right: 50%;
+    }
+    
+    .flow-task
+    {
+        text-align: center;
+    }
+    
+    .flow-task span
+    {
+        font-size: 25px;
+        font-weight: bold;
+        position: relative;
+        top: 40%;
+        color: navy;
+    }
+    
+    .roundabout-holder
+    {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        height: 20em;
+        width: 80em;
+        margin-left: -40em;
+    }
+    .roundabout-moveable-item
+    {
+        height: 10em;
+        width: 15em;
+        cursor: pointer;
+        background-color: #eb7e2a;
+        border: 2px solid black;
+        -moz-border-radius: 15px;
+        border-radius: 15px;
+    }
+    .roundabout-in-focus
+    {
+        cursor: auto;
+    }
+</style>
