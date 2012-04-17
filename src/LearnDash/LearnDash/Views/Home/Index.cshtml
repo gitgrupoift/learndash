@@ -73,10 +73,41 @@
         </li>
     </ul>
 </div>
+<div class="flow-menu">
+    <input type="text"/>
+    <button>Add Task</button>    
+    <button id="btnComplete">Complete</button>    
+</div>
 <script>
+    var currentChild = 0;
+
     $(document).ready(function () {
+
+        $("#btnComplete").click(function () {
+            $("#btnComplete").hide();
+            currentChild++;
+            if (currentChild >= $('.roundabout ul li').length - 1) {
+                currentChild = 0;
+                var current1 = $(".flow-next");
+                var next1 = $(".flow-task").first();
+                next1.addClass("flow-next");
+                current1.removeClass("flow-next");
+            }
+            else {
+                var current = $(".flow-next");
+                var next = current.next();
+                next.addClass("flow-next");
+                current.removeClass("flow-next");
+            }
+
+            $('.roundabout ul').roundabout("animateToNextChild", function () {
+                $("#btnComplete").show();
+            });
+        });
+
+
         $('.roundabout ul').roundabout({
-            tilt: -4,
+            tilt: 0,
             minScale: 0.6,
             minOpacity: 1,
             minZ: 100,
@@ -85,7 +116,11 @@
             easing: 'easeOutQuad',
             enableDrag: true,
             dropEasing: 'easeOutBounce',
-            childSelector: '.flow-task'
+            childSelector: '.flow-task',
+            dragFactor: 15,
+            dropCallback: function () {
+                $(this).roundabout("animateToChild", currentChild);
+            }
         }, function () {
             $(this).fadeTo(500, 1);
         });
@@ -94,7 +129,7 @@
 <style>
     .flow-name
     {
-        margin-top: 15%;
+        margin-top: -5%;
         background-color: #222;
         color: yellow;
         font-weight: bold;
@@ -112,7 +147,7 @@
     
     .flow-next
     {
-        background: transparent url(Content/images/arrow-down.png) no-repeat 50% -50%;
+        background-color: lightgreen !important;
     }
     
     .flow-name span
@@ -123,6 +158,7 @@
     
     div.roundabout
     {
+        margin-top: 5%;
         margin-left: 50%;
         margin-right: 50%;
     }
