@@ -25,7 +25,6 @@ namespace LearnDash.Dal
         public string Name { get; set; }
         public LearningTaskType Type { get; set; }
 
-
         /// <summary>
         /// Should task be reused after completion
         /// </summary>

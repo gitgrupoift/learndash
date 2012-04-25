@@ -26,6 +26,39 @@ namespace LearnDash.Dal
 
     public static class RedisDal
     {
+        private static LearningTask CreateTestTask(string name)
+        {
+            return new LearningTask{Name=name};
+        }
+
+        public static LearningFlow GetTestFlow()
+        {
+            var newFlow = new LearningFlow("LaM Flow");
+            newFlow.Tasks.Add(CreateTestTask("Test Tools"));
+            newFlow.Tasks.Add(CreateTestTask("LaM Blog"));
+            newFlow.Tasks.Add(CreateTestTask("Projects"));
+            newFlow.Tasks.Add(CreateTestTask("Book"));
+            newFlow.Tasks.Add(CreateTestTask("Blogs"));
+            newFlow.Tasks.Add(CreateTestTask("Reading List"));
+            newFlow.Tasks.Add(CreateTestTask("Stack"));
+            newFlow.Tasks.Add(CreateTestTask("Projects"));
+            newFlow.Tasks.Add(CreateTestTask("Kata"));
+            newFlow.Tasks.Add(CreateTestTask("Book"));
+            newFlow.Tasks.Add(CreateTestTask("Speaking"));
+            newFlow.Tasks.Add(CreateTestTask("LaM Blog"));
+            newFlow.Tasks.Add(CreateTestTask("Screencast"));
+            newFlow.Tasks.Add(CreateTestTask("Project"));
+            newFlow.Tasks.Add(CreateTestTask("Design Patterns"));
+            newFlow.Tasks.Add(CreateTestTask("Interview Questions"));
+            newFlow.Tasks.Add(CreateTestTask("Testing Frameworks"));
+            newFlow.Tasks.Add(CreateTestTask("Reading Code"));
+            newFlow.Tasks.Add(CreateTestTask("Projects"));
+            newFlow.Tasks.Add(CreateTestTask("Kata"));
+            newFlow.Tasks.Add(CreateTestTask("Maintain"));
+            return newFlow;
+
+        }
+
         /// <summary>
         /// This emthod creates new entity if Id <=0
         /// </summary>
@@ -60,7 +93,6 @@ namespace LearnDash.Dal
             return flow;
         }
 
-        //todo : this should not get all the data about projects only the ones that are needed in the menu
         public static List<LearningFlow> GetAll()
         {
             var redisManager = new PooledRedisClientManager("localhost:6379");

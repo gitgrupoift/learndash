@@ -16,7 +16,7 @@ namespace LearnDashDal.Tests
         {
             #region Arrange
 
-            var learningFlow = new LearningFlow
+            var learningFlow = new LearningFlow("Test")
                                    {
                                        Tasks = new Collection<LearningTask>
                                                    {
@@ -41,6 +41,7 @@ namespace LearnDashDal.Tests
             var flow = RedisDal.Get(returnedId);
             Assert.That(flow.Id,Is.EqualTo(returnedId));
             Assert.That(flow.Tasks.Count,Is.EqualTo(3));
+            Assert.That(flow.Name, Is.EqualTo("Test"));
 
             RedisDal.Remove(returnedId);
 
