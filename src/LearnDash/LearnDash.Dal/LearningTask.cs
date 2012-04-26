@@ -30,10 +30,11 @@ namespace LearnDash.Dal
         /// </summary>
         public bool Reccuring { get; set; }
         
-
         /// <summary>
         /// This is counter used to count every user in the system
         /// </summary>
         public int TimesDone { get; set; }
+
+        public bool IsNext { get; set; }
     }
 }

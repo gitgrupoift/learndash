@@ -14,14 +14,32 @@ namespace LearnDash.Controllers
         public ActionResult Index()
         {
             var testFlow =  RedisDal.GetTestFlow();
-            return View("View",testFlow);
+            return View("View", testFlow);
         }
 
+
+        private LearningFlow SortFlow(LearningFlow sourceFlow)
+        {
+            var tasksPreSort = sourceFlow.Tasks.ToList();
+            var tasksPreNext = new List<LearningTask>();
+
+            while (tasksPreSort.FirstOrDefault() != null && !tasksPreSort.First().IsNext)
+            {
+                tasksPreNext.Add(tasksPreSort.First());
+                tasksPreSort.RemoveAt(0);
+            }
+   
+            tasksPreNext.InsertRange(0,tasksPreSort);
+
+            sourceFlow.Tasks = tasksPreNext;
+            return sourceFlow;
+        }
 
         public ActionResult View(long id)
         {
             var flow = RedisDal.Get(id);
-            return View(flow);
+
+            return View(SortFlow(flow));
         }
 
         [HttpPost]

@@ -9,7 +9,6 @@ namespace LearnDash.Dal
     public class LearningFlow : RedisEntity
     {
         public string Name { get; set; }
-        public int NextTaskId { get; set; }
         public ICollection<LearningTask> Tasks { get; set; }
 
         //has to be defined for the json serializer
@@ -21,7 +20,6 @@ namespace LearnDash.Dal
         public LearningFlow(string name)
         {
             Tasks = new Collection<LearningTask>();
-            NextTaskId = 1;
             Name = name;
         }
     }

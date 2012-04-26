@@ -5,7 +5,14 @@
         <li class="flow-name"><span>@Model.Name</span></li>
         @foreach(var task in Model.Tasks)
         {
-            <li class="flow-task"><span>@task.Name</span></li>
+            var flowClass = "flow-task";
+            
+            if (task.IsNext)
+            {
+                flowClass += " flow-next";
+            }
+            <li class="@flowClass"><span>@task.Name</span></li>
+            
         }
     </ul>
 </div>
@@ -21,7 +28,20 @@
         SaveFlow</button>
 </div>
 <script>
-    var currentChild = 0;
+    var currentNextChild = 0;
+
+    function CreateTask(taskData)
+    {
+        var flowTaskName = taskData.find("span").html();
+        var isNext = taskData.hasClass("flow-next");
+        var task =
+            {
+                Name : flowTaskName,
+                IsNext : isNext
+            };
+        return task;
+    }
+
 
     $(document).ready(function () {
 
@@ -32,14 +52,8 @@
             var flowTasks = new Array();
 
             $(".flow-task").each(function () {
-                var flowTaskName = $(this).find("span").html();
-                var task =
-                    {
-                        Name : flowTaskName
-                    };
-                flowTasks.push(
-                        task
-                    );
+                var newFlowTask = CreateTask($(this));
+                flowTasks.push(newFlowTask);
             });
 
             var learningFlow = {
@@ -50,7 +64,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "@Url.Action("Save","LearningFlow")",
+                url: "@Url.Action("Save", "LearningFlow")",
                 data: JSON.stringify(learningFlow),
                 dataType : "json",
                 contentType : 'application/json',
@@ -78,19 +92,19 @@
             $('.roundabout ul li').eq(index + 1).remove();
             $('.roundabout ul').roundabout("relayoutChildren");
 
-            if (index < currentChild) {
-                currentChild--;
+            if (index < currentNextChild) {
+                currentNextChild--;
             }
-            if (index == currentChild) {
-                $('.roundabout ul li').eq(currentChild + 1).addClass("flow-next");
+            if (index == currentNextChild) {
+                $('.roundabout ul li').eq(currentNextChild + 1).addClass("flow-next");
             }
         });
 
         $("#btnComplete").click(function () {
             $("#btnComplete").hide();
-            currentChild++;
-            if (currentChild >= $('.roundabout ul li').length - 1) {
-                currentChild = 0;
+            currentNextChild++;
+            if (currentNextChild >= $('.roundabout ul li').length - 1) {
+                currentNextChild = 0;
                 var current1 = $(".flow-next");
                 var next1 = $(".flow-task").first();
                 next1.addClass("flow-next");
@@ -125,7 +139,7 @@
             childSelector: '.flow-task',
             dragFactor: 15,
             dropCallback: function () {
-                $(this).roundabout("animateToChild", currentChild);
+                $(this).roundabout("animateToChild", currentNextChild);
             }
         }, function () {
             $(this).fadeTo(500, 1);

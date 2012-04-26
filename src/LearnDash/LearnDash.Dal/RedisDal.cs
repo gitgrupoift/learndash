@@ -34,7 +34,7 @@ namespace LearnDash.Dal
         public static LearningFlow GetTestFlow()
         {
             var newFlow = new LearningFlow("LaM Flow");
-            newFlow.Tasks.Add(CreateTestTask("Test Tools"));
+            newFlow.Tasks.Add(new LearningTask{Name = "Test Tools",IsNext = true});
             newFlow.Tasks.Add(CreateTestTask("LaM Blog"));
             newFlow.Tasks.Add(CreateTestTask("Projects"));
             newFlow.Tasks.Add(CreateTestTask("Book"));
@@ -89,7 +89,6 @@ namespace LearnDash.Dal
                                                       {
                                                           flow = redisProject.GetById(Id);
                                                       });
-
             return flow;
         }
 
