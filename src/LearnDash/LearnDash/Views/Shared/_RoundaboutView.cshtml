@@ -1,0 +1,92 @@
+﻿@model LearnDash.Dal.LearningFlow
+<link href="../../Content/roundabout.css" rel="stylesheet" type="text/css" />
+<div class="roundabout">
+    <ul>
+        <li class="flow-name"><span>@Model.Name</span></li>
+        @foreach(var task in Model.Tasks)
+        {
+            var flowClass = "flow-task";
+            
+            if (task.IsNext)
+            {
+                flowClass += " flow-next";
+            }
+            <li class="@flowClass" data-counter ="@task.TimesDone"><span>@task.Name</span></li>
+            
+        }
+    </ul>
+</div>
+
+<script>
+    var currentNextChild = 0;
+    
+    function CreateTask(taskData) {
+        var flowTaskName = taskData.find("span").html();
+        var isNext = taskData.hasClass("flow-next");
+        var timesDone = taskData.attr("data-counter");
+        var task =
+            {
+                Name: flowTaskName,
+                IsNext: isNext,
+                TimesDone: timesDone
+            };
+        return task;
+    }
+
+    function SaveFlow() {
+        var flowId = '@Model.Id';
+        var flowName = $(".flow-name span").html();
+        var flowTasks = new Array();
+
+        $(".flow-task").each(function () {
+            var newFlowTask = CreateTask($(this));
+            flowTasks.push(newFlowTask);
+        });
+
+        var learningFlow = {
+            Id    : flowId,
+            Name  : flowName,
+            Tasks : flowTasks
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("Save", "LearningFlow")",
+            data: JSON.stringify(learningFlow),
+            dataType : "json",
+            contentType : 'application/json',
+            success: function (data) {
+                var jsonData = $.parseJSON(data);
+                if (jsonData.items.length <= 0) {
+                }
+            }
+        });
+    }
+
+    $(document).ready(function () {
+
+        initRoundAbout();
+    });
+
+    function initRoundAbout() {
+        $('.roundabout ul').roundabout({
+            tilt: 0,
+            minScale: 0.1,
+            minOpacity: 1,
+            minZ: 100,
+            maxZ: 6000,
+            duration: 400,
+            easing: 'easeOutQuad',
+            enableDrag: true,
+            dropEasing: 'easeOutBounce',
+            childSelector: '.flow-task',
+            dragFactor: 15,
+            dropCallback: function () {
+                $(this).roundabout("animateToChild", currentNextChild);
+            }
+        }, function () {
+            $(this).fadeTo(500, 1);
+        });
+    }
+    
+</script>

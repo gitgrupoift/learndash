@@ -1,0 +1,73 @@
+﻿    .flow-name
+    {
+        margin-top: -5%;
+        background-color: #222;
+        color: yellow;
+        font-weight: bold;
+        text-align: center;
+        width: 300px;
+        height: 70px;
+        position: absolute;
+        z-index: 260;
+        margin-left: 35%;
+        border-color: #222;
+        opacity: 0.8;
+        -moz-border-radius: 15px;
+        border-radius: 15px;
+    }
+    
+    .flow-next
+    {
+        background-color: lightgreen !important;
+    }
+    
+    .flow-name span
+    {
+        line-height: 3;
+        font-size: 22px;
+    }
+    
+    div.roundabout
+    {
+        margin-top: 5%;
+        margin-left: 50%;
+        margin-right: 50%;
+    }
+    
+    .flow-task
+    {
+        text-align: center;
+    }
+    
+    .flow-task span
+    {
+        font-size: 25px;
+        font-weight: bold;
+        position: relative;
+        top: 40%;
+        color: navy;
+    }
+    
+    .roundabout-holder
+    {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        height: 20em;
+        width: 80em;
+        margin-left: -40em;
+    }
+    .roundabout-moveable-item
+    {
+        height: 10em;
+        width: 15em;
+        cursor: pointer;
+        background-color: #eb7e2a;
+        border: 2px solid black;
+        -moz-border-radius: 15px;
+        border-radius: 15px;
+    }
+    .roundabout-in-focus
+    {
+        cursor: auto;
+    }

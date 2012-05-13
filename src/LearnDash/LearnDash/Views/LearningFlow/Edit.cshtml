@@ -1,0 +1,74 @@
+﻿@model LearnDash.Dal.LearningFlow
+<link href="../../Content/roundabout.css" rel="stylesheet" type="text/css" />
+@using (Html.BeginForm())
+{
+    <fieldset>
+        @Html.HiddenFor(model => model.Id)
+        <div>
+            @Html.LabelFor(model => model.Name)
+            @Html.TextBoxFor(model => model.Name)
+        </div>
+        <div>
+            <input type="submit" value="Edit" />
+        </div>
+    </fieldset>
+}
+
+<ul class="flow-list">
+@foreach (var task in Model.Tasks)
+{
+  <li class="flow-task"><span>@task.Name</span>
+    <button class="btnRemoveTask">Delete Task</button>
+    <button class="btnMakeNext">MakeNext</button>
+  </li>
+}
+</ul>
+
+<div class="flow-menu">
+    <input id="txtBoxTaskName" type="text" />
+    <button id="btnAddTask">
+        Add Task</button>
+    <button id="btnSaveFlow">
+        SaveFlow</button>
+    <button id="btnClear">
+        ClearFlow</button>
+</div>
+<script type="text/javascript">
+    $(function () {
+
+
+        $("#btnAddTask").click(function () {
+            var taskName = $("#txtBoxTaskName").val();
+            var currentElementsCount = $('.flow-task').size();
+            var taskClass = "flow-task";
+            if (currentElementsCount <= 1) {
+                taskClass = taskClass + " flow-next";
+            }
+            var newElement = $("<li class='" + taskClass + "'><span>" + taskName + "</span><button class='btnRemoveTask'>Delete Task</button><button class='btnMakeNext'>MakeNext</button></li>");
+            $(".flow-list").append(newElement);
+            InitButtons();
+        });
+
+        InitButtons();
+    });
+    
+    function InitButtons() {
+        $("#btnSaveFlow").click(function () {
+            SaveFlow();
+        });
+
+        $(".btnMakeNext").click(function () {
+            $('.flow-task').removeClass("flow-next");
+            $(this).parent().addClass("flow-next");
+        });
+
+        $(".btnRemoveTask").click(function () {
+            $(this).parent().remove();
+        });
+
+        $("#btnClear").click(function () {
+            $('.flow-task').remove();
+        });
+    }
+
+</script>

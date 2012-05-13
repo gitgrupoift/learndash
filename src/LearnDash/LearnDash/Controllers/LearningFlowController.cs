@@ -20,25 +20,82 @@ namespace LearnDash.Controllers
 
         private LearningFlow SortFlow(LearningFlow sourceFlow)
         {
-            var tasksPreSort = sourceFlow.Tasks.ToList();
-            var tasksPreNext = new List<LearningTask>();
-
-            while (tasksPreSort.FirstOrDefault() != null && !tasksPreSort.First().IsNext)
+            if (sourceFlow.Tasks != null)
             {
-                tasksPreNext.Add(tasksPreSort.First());
-                tasksPreSort.RemoveAt(0);
-            }
-   
-            tasksPreNext.InsertRange(0,tasksPreSort);
+                var tasksPreSort = sourceFlow.Tasks.ToList();
+                var tasksPreNext = new List<LearningTask>();
 
-            sourceFlow.Tasks = tasksPreNext;
+                while (tasksPreSort.FirstOrDefault() != null && !tasksPreSort.First().IsNext)
+                {
+                    tasksPreNext.Add(tasksPreSort.First());
+                    tasksPreSort.RemoveAt(0);
+                }
+
+                tasksPreNext.InsertRange(0, tasksPreSort);
+
+                sourceFlow.Tasks = tasksPreNext;
+            }
             return sourceFlow;
+        }
+
+        [HttpGet]
+        public ActionResult Edit(long id)
+        {
+            var flow = RedisDal.Get(id);
+            return View(SortFlow(flow));
+        }
+
+        [HttpPost]
+        public ActionResult Edit(LearningFlow flow)
+        {
+            if (ModelState.IsValid)
+            {
+                RedisDal.Save(flow);
+                return View(flow);
+            }
+
+            return View();
+        }
+
+
+        [HttpGet]
+        public ActionResult Add()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult List(long id)
+        {
+            return View(id);
+        }
+
+        [HttpPost]
+        public ActionResult Add(LearningFlow newFlow)
+        {
+            if (ModelState.IsValid)
+            {
+                newFlow.Tasks = new LinkedList<LearningTask>();
+                var id = RedisDal.Save(newFlow);
+                return RedirectToAction("Edit", new {id});
+            }
+            return View();
+        }
+
+
+        [HttpPost]
+        public ActionResult CompleteTask(long taskId)
+        {
+            if (taskId >= 0)
+            {
+                
+            }
+            return Json(Is.Success);
         }
 
         public ActionResult View(long id)
         {
             var flow = RedisDal.Get(id);
-
             return View(SortFlow(flow));
         }
 
