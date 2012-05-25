@@ -29,7 +29,7 @@
                 $("#btnComplete").show();
             });
 
-            SaveFlow();
+            SaveFlow('@Model.Id',"@Url.Action("Save", "LearningFlow")");
         });
     })
 </script>

@@ -12,7 +12,6 @@
                 flowClass += " flow-next";
             }
             <li class="@flowClass" data-counter ="@task.TimesDone"><span>@task.Name</span></li>
-            
         }
     </ul>
 </div>
@@ -20,51 +19,7 @@
 <script>
     var currentNextChild = 0;
     
-    function CreateTask(taskData) {
-        var flowTaskName = taskData.find("span").html();
-        var isNext = taskData.hasClass("flow-next");
-        var timesDone = taskData.attr("data-counter");
-        var task =
-            {
-                Name: flowTaskName,
-                IsNext: isNext,
-                TimesDone: timesDone
-            };
-        return task;
-    }
-
-    function SaveFlow() {
-        var flowId = '@Model.Id';
-        var flowName = $(".flow-name span").html();
-        var flowTasks = new Array();
-
-        $(".flow-task").each(function () {
-            var newFlowTask = CreateTask($(this));
-            flowTasks.push(newFlowTask);
-        });
-
-        var learningFlow = {
-            Id    : flowId,
-            Name  : flowName,
-            Tasks : flowTasks
-        };
-
-        $.ajax({
-            type: "POST",
-            url: "@Url.Action("Save", "LearningFlow")",
-            data: JSON.stringify(learningFlow),
-            dataType : "json",
-            contentType : 'application/json',
-            success: function (data) {
-                var jsonData = $.parseJSON(data);
-                if (jsonData.items.length <= 0) {
-                }
-            }
-        });
-    }
-
     $(document).ready(function () {
-
         initRoundAbout();
     });
 

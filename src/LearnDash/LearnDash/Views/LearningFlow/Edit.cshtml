@@ -15,9 +15,17 @@
 }
 
 <ul class="flow-list">
+<li class="flow-name"><span>@Model.Name</span></li>
 @foreach (var task in Model.Tasks)
 {
-  <li class="flow-task"><span>@task.Name</span>
+    var flowClass = "flow-task";
+
+    if (task.IsNext)
+    {
+        flowClass += " flow-next";
+    }
+    
+  <li class="@flowClass" data-counter ="@task.TimesDone"><span>@task.Name</span>
     <button class="btnRemoveTask">Delete Task</button>
     <button class="btnMakeNext">MakeNext</button>
   </li>
@@ -54,7 +62,7 @@
     
     function InitButtons() {
         $("#btnSaveFlow").click(function () {
-            SaveFlow();
+            SaveFlow('@Model.Id',"@Url.Action("Save", "LearningFlow")");
         });
 
         $(".btnMakeNext").click(function () {
@@ -70,5 +78,4 @@
             $('.flow-task').remove();
         });
     }
-
 </script>
