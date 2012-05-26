@@ -1,21 +1,19 @@
 ﻿@model LearnDash.Dal.LearningFlow
 <link href="../../Content/roundabout.css" rel="stylesheet" type="text/css" />
-@using (Html.BeginForm())
-{
-    <fieldset>
-        @Html.HiddenFor(model => model.Id)
-        <div>
-            @Html.LabelFor(model => model.Name)
-            @Html.TextBoxFor(model => model.Name)
-        </div>
-        <div>
-            <input type="submit" value="Edit" />
-        </div>
-    </fieldset>
-}
+
+<br />
+<br />
+<br />
+
+<!-- refactor delete unused span -->
+<div class="flow-name"><span>@Model.Name</span></div>
+
+<br />
+<br />
+<br />
 
 <ul class="flow-list">
-<li class="flow-name"><span>@Model.Name</span></li>
+
 @foreach (var task in Model.Tasks)
 {
     var flowClass = "flow-task";

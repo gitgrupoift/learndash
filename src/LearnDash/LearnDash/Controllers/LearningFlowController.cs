@@ -65,6 +65,20 @@ namespace LearnDash.Controllers
         }
 
         [HttpGet]
+        public ActionResult Remove(long id)
+        {
+            var flow = RedisDal.Get(id);
+            return View(flow);
+        }
+
+        [HttpPost]
+        public ActionResult Remove(LearningFlow flow)
+        {
+            RedisDal.Remove(flow.Id);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
         public ActionResult List(long id)
         {
             return View(id);
