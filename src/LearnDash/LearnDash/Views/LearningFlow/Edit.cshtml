@@ -47,7 +47,7 @@
             var taskName = $("#txtBoxTaskName").val();
             var currentElementsCount = $('.flow-task').size();
             var taskClass = "flow-task";
-            if (currentElementsCount <= 1) {
+            if (currentElementsCount <= 0) {
                 taskClass = taskClass + " flow-next";
             }
             var newElement = $("<li class='" + taskClass + "'><span>" + taskName + "</span><button class='btnRemoveTask'>Delete Task</button><button class='btnMakeNext'>MakeNext</button></li>");
