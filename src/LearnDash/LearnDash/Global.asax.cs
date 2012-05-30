@@ -6,6 +6,10 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Castle.Core.Logging;
+using Castle.Windsor;
+using LearnDash.Windsor;
+using LearnDash.Windsor.Installers;
 
 namespace LearnDash
 {
@@ -14,6 +18,8 @@ namespace LearnDash
 
     public class MvcApplication : System.Web.HttpApplication
     {
+        private static IWindsorContainer container;
+
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
@@ -38,6 +44,8 @@ namespace LearnDash
 
         protected void Application_Start()
         {
+            BootstrapContainer();
+
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);
@@ -60,8 +68,24 @@ namespace LearnDash
 
             bundle = new Bundle("~/Content/twitterbootstrap/bootstrapjs");
             bundle.AddFile("~/Content/twitterbootstrap/js/bootstrap.js");
-
             BundleTable.Bundles.Add(bundle);
         }
+
+        private static void BootstrapContainer()
+        {
+            container = new WindsorContainer()
+                .Install(
+                new ControllersInstaller(),
+                new LoggerInstaller()
+                );
+            var controllerFactory = new WindsorControllerFactory(container.Kernel);
+            ControllerBuilder.Current.SetControllerFactory(controllerFactory);
+        }
+
+        protected void Application_End()
+        {
+            container.Dispose();
+        }
+
     }
 }
