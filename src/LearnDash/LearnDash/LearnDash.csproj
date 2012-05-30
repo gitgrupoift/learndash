@@ -144,8 +144,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ILearningFlowService.cs" />
+    <Compile Include="Services\LearningFlowService.cs" />
     <Compile Include="Windsor\Installers\ControllersInstaller.cs" />
     <Compile Include="Windsor\Installers\LoggerInstaller.cs" />
+    <Compile Include="Windsor\Installers\ServicesInstaller.cs" />
     <Compile Include="Windsor\WindsorControllerFactory.cs" />
   </ItemGroup>
   <ItemGroup>

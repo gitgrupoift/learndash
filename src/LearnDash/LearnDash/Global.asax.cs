@@ -20,6 +20,11 @@ namespace LearnDash
     {
         private static IWindsorContainer container;
 
+        public static ILogger Logger
+        {
+            get { return container.Resolve<ILogger>(); }
+        }
+
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
@@ -69,6 +74,8 @@ namespace LearnDash
             bundle = new Bundle("~/Content/twitterbootstrap/bootstrapjs");
             bundle.AddFile("~/Content/twitterbootstrap/js/bootstrap.js");
             BundleTable.Bundles.Add(bundle);
+
+            Logger.Info("Application start finished");
         }
 
         private static void BootstrapContainer()
@@ -76,7 +83,8 @@ namespace LearnDash
             container = new WindsorContainer()
                 .Install(
                 new ControllersInstaller(),
-                new LoggerInstaller()
+                new LoggerInstaller(),
+                new ServicesInstaller()
                 );
             var controllerFactory = new WindsorControllerFactory(container.Kernel);
             ControllerBuilder.Current.SetControllerFactory(controllerFactory);

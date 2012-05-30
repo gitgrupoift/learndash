@@ -1,48 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Castle.Core.Logging;
 using LearnDash.Dal;
+using LearnDash.Services;
 
 namespace LearnDash.Controllers
 {
     public class LearningFlowController : Controller
     {
-        // GET: /LearningFlow/
+        public ILearningFlowService LearningFlowService { get; set; }
 
+        public ILogger Logger { get; set; } 
+
+        //todo : should open default learing flow
         public ActionResult Index()
         {
-            var testFlow =  RedisDal.GetTestFlow();
-            return View("View", testFlow);
-        }
-
-
-        private LearningFlow SortFlow(LearningFlow sourceFlow)
-        {
-            if (sourceFlow.Tasks != null)
-            {
-                var tasksPreSort = sourceFlow.Tasks.ToList();
-                var tasksPreNext = new List<LearningTask>();
-
-                while (tasksPreSort.FirstOrDefault() != null && !tasksPreSort.First().IsNext)
-                {
-                    tasksPreNext.Add(tasksPreSort.First());
-                    tasksPreSort.RemoveAt(0);
-                }
-
-                tasksPreNext.InsertRange(0, tasksPreSort);
-
-                sourceFlow.Tasks = tasksPreNext;
-            }
-            return sourceFlow;
+            return View();
         }
 
         [HttpGet]
         public ActionResult Edit(long id)
         {
-            var flow = RedisDal.Get(id);
-            return View(SortFlow(flow));
+            var flow = LearningFlowService.Get(id);
+            return View(flow);
         }
 
         [HttpPost]
@@ -50,7 +32,7 @@ namespace LearnDash.Controllers
         {
             if (ModelState.IsValid)
             {
-                RedisDal.Save(flow);
+                LearningFlowService.Save(flow);
                 return View(flow);
             }
 
@@ -67,14 +49,14 @@ namespace LearnDash.Controllers
         [HttpGet]
         public ActionResult Remove(long id)
         {
-            var flow = RedisDal.Get(id);
+            var flow = LearningFlowService.Get(id);
             return View(flow);
         }
 
         [HttpPost]
         public ActionResult Remove(LearningFlow flow)
         {
-            RedisDal.Remove(flow.Id);
+            LearningFlowService.Remove(flow.Id);
             return RedirectToAction("Index", "Home");
         }
 
@@ -89,8 +71,8 @@ namespace LearnDash.Controllers
         {
             if (ModelState.IsValid)
             {
-                newFlow.Tasks = new LinkedList<LearningTask>();
-                var id = RedisDal.Save(newFlow);
+                newFlow.Tasks = new List<LearningTask>();
+                var id = LearningFlowService.Save(newFlow);
                 return RedirectToAction("Edit", new {id});
             }
             return View();
@@ -109,14 +91,14 @@ namespace LearnDash.Controllers
 
         public ActionResult View(long id)
         {
-            var flow = RedisDal.Get(id);
-            return View(SortFlow(flow));
+            var flow = LearningFlowService.Get(id);
+            return View(flow);
         }
 
         [HttpPost]
         public ActionResult Save(LearningFlow flow)
         {
-            RedisDal.Save(flow);
+            LearningFlowService.Save(flow);
             return Json(Is.Success);
         }
     }

@@ -31,21 +31,21 @@ namespace LearnDashDal.Tests
 
             #region Act Assert
 
-            var returnedId = RedisDal.Save(learningFlow);
+            var returnedId = LearningFlowRepository.Save(learningFlow);
             Assert.That(returnedId,Is.GreaterThan(0));
 
-            var currentFlow = RedisDal.GetAll();
+            var currentFlow = LearningFlowRepository.GetAll();
 
             Assert.That(currentFlow.Count,Is.EqualTo(1));
 
-            var flow = RedisDal.Get(returnedId);
+            var flow = LearningFlowRepository.Get(returnedId);
             Assert.That(flow.Id,Is.EqualTo(returnedId));
             Assert.That(flow.Tasks.Count,Is.EqualTo(3));
             Assert.That(flow.Name, Is.EqualTo("Test"));
 
-            RedisDal.Remove(returnedId);
+            LearningFlowRepository.Remove(returnedId);
 
-            var currentFlows = RedisDal.GetAll();
+            var currentFlows = LearningFlowRepository.GetAll();
             Assert.That(currentFlows.Count,Is.EqualTo(0));
 
 

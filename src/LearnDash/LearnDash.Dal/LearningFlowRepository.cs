@@ -24,43 +24,10 @@ namespace LearnDash.Dal
         }
     }
 
-    public static class RedisDal
+    public static class LearningFlowRepository
     {
-        private static LearningTask CreateTestTask(string name)
-        {
-            return new LearningTask{Name=name};
-        }
-
-        public static LearningFlow GetTestFlow()
-        {
-            var newFlow = new LearningFlow("LaM Flow");
-            newFlow.Tasks.Add(new LearningTask{Name = "Test Tools",IsNext = true});
-            newFlow.Tasks.Add(CreateTestTask("LaM Blog"));
-            newFlow.Tasks.Add(CreateTestTask("Projects"));
-            newFlow.Tasks.Add(CreateTestTask("Book"));
-            newFlow.Tasks.Add(CreateTestTask("Blogs"));
-            newFlow.Tasks.Add(CreateTestTask("Reading List"));
-            newFlow.Tasks.Add(CreateTestTask("Stack"));
-            newFlow.Tasks.Add(CreateTestTask("Projects"));
-            newFlow.Tasks.Add(CreateTestTask("Kata"));
-            newFlow.Tasks.Add(CreateTestTask("Book"));
-            newFlow.Tasks.Add(CreateTestTask("Speaking"));
-            newFlow.Tasks.Add(CreateTestTask("LaM Blog"));
-            newFlow.Tasks.Add(CreateTestTask("Screencast"));
-            newFlow.Tasks.Add(CreateTestTask("Project"));
-            newFlow.Tasks.Add(CreateTestTask("Design Patterns"));
-            newFlow.Tasks.Add(CreateTestTask("Interview Questions"));
-            newFlow.Tasks.Add(CreateTestTask("Testing Frameworks"));
-            newFlow.Tasks.Add(CreateTestTask("Reading Code"));
-            newFlow.Tasks.Add(CreateTestTask("Projects"));
-            newFlow.Tasks.Add(CreateTestTask("Kata"));
-            newFlow.Tasks.Add(CreateTestTask("Maintain"));
-            return newFlow;
-
-        }
-
         /// <summary>
-        /// This emthod creates new entity if Id <=0
+        /// This method creates new entity if Id <=0
         /// </summary>
         /// <param name="flow"></param>
         /// <returns></returns>

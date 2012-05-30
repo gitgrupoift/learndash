@@ -57,7 +57,7 @@
     <Compile Include="LearningDashboard.cs" />
     <Compile Include="LearningFlow.cs" />
     <Compile Include="LearningTask.cs" />
-    <Compile Include="RedisDal.cs" />
+    <Compile Include="LearningFlowRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -15,7 +15,7 @@ namespace LearnDash.Controllers
         public ActionResult Index()
         {
             Logger.Info("Home Controller Index");
-            var flows = RedisDal.GetAll();
+            var flows = LearningFlowRepository.GetAll();
             return View(flows);
         }
 
