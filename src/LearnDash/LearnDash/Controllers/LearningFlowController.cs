@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using Castle.Core.Logging;
 using LearnDash.Dal;
 using LearnDash.Services;
@@ -50,7 +51,10 @@ namespace LearnDash.Controllers
         public ActionResult Remove(long id)
         {
             var flow = LearningFlowService.Get(id);
-            return View(flow);
+            if (flow != null)
+                return View(flow);
+            else
+                return View("Error", ErrorType.NotFound);
         }
 
         [HttpPost]
@@ -92,7 +96,10 @@ namespace LearnDash.Controllers
         public ActionResult View(long id)
         {
             var flow = LearningFlowService.Get(id);
-            return View(flow);
+            if (flow != null)
+                return View(flow);
+            else
+                return View("Error", ErrorType.NotFound);
         }
 
         [HttpPost]

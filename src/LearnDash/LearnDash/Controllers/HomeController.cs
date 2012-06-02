@@ -8,6 +8,11 @@ using LearnDash.Dal;
 
 namespace LearnDash.Controllers
 {
+    public enum ErrorType
+    {
+        NotFound
+    }
+
     public class HomeController : Controller
     {
         public ILogger Logger { get; set; }

@@ -7,9 +7,10 @@ namespace LearnDash.Services
 {
     public class LearningFlowService : ILearningFlowService
     {
-        private LearningFlow SortFlow(LearningFlow sourceFlow)
+        //utest
+        public LearningFlow SortFlow(LearningFlow sourceFlow)
         {
-            if (sourceFlow.Tasks != null)
+            if (sourceFlow != null && sourceFlow.Tasks != null)
             {
                 var tasksPreSort = sourceFlow.Tasks.ToList();
                 var tasksPreNext = new List<LearningTask>();

@@ -1,16 +1,18 @@
-﻿@{
-    Layout = null;
+﻿@using LearnDash.Controllers
+@model ErrorType
+
+@{
+    ViewBag.Title = "Error";
+    string message;
+    switch (@Model)
+    {
+        case ErrorType.NotFound:
+            message = "404 NotFound";
+            break;
+        default:
+            message = "Unspecified Error";
+            break;
+    }
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Error</title>
-</head>
-<body>
-    <h2>
-        Sorry, an error occurred while processing your request.
-    </h2>
-</body>
-</html>
+<h2>Error : @message</h2>
