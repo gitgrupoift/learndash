@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using Core;
 using ServiceStack.Redis;
 
 namespace LearnDash.Dal
@@ -27,13 +28,6 @@ namespace LearnDash.Dal
 
     public static class LearningFlowRepository
     {
-        private static bool useLocal = false;
-
-        private static string address = "fish.redistogo.com:9261";
-        private static string password = "b4e641f05d9160d2e508e21d41359d4e";
-        private static string localAddress = "localhost:6379";
-
-
         /// <summary>
         /// This method creates new entity if Id <=0
         /// </summary>
@@ -41,18 +35,16 @@ namespace LearnDash.Dal
         /// <returns></returns>
         public static long Save(LearningFlow flow)
         {
-            var redisManager = new PooledRedisClientManager(address);
+            var redisManager = RedisDal.GetClient();
 
-            using (var redis = redisManager.GetClient())
-            using (var typedRedis = redis.GetTypedClient<LearningFlow>())
+            redisManager.ExecAs<LearningFlow>(redisProject =>
             {
-                redis.Password = password;
                 if (flow.Id <= 0)
                 {
-                    flow.Id = typedRedis.GetNextSequence();
+                    flow.Id = redisProject.GetNextSequence();
                 }
-                typedRedis.Store(flow);
-            }
+                redisProject.Store(flow);
+            });
 
             return flow.Id;
         }
@@ -60,7 +52,7 @@ namespace LearnDash.Dal
         public static LearningFlow Get(long Id)
         {
             //Thread-safe client factory
-            var redisManager = new PooledRedisClientManager(address);
+            var redisManager = RedisDal.GetClient();
             LearningFlow flow = null;
 
             redisManager.ExecAs<LearningFlow>(redisProject =>
@@ -72,7 +64,7 @@ namespace LearnDash.Dal
 
         public static List<LearningFlow> GetAll()
         {
-            var redisManager = new PooledRedisClientManager(address);
+            var redisManager = RedisDal.GetClient();
             IList<LearningFlow> flows = null;
 
             redisManager.ExecAs<LearningFlow>(redisProject =>
@@ -85,7 +77,7 @@ namespace LearnDash.Dal
 
         public static void Remove(long Id)
         {
-            var redisManager = new PooledRedisClientManager(address);
+            var redisManager = RedisDal.GetClient();
 
             redisManager.ExecAs<LearningFlow>(redisProject => redisProject.DeleteById(Id));
         }

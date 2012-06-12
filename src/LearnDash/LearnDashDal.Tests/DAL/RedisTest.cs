@@ -15,10 +15,8 @@ namespace LearnDashDal.Tests.DAL
         {
             var password = "b4e641f05d9160d2e508e21d41359d4e";
             var host = "fish.redistogo.com:9261";
-            RedisServer server = new RedisServer(password, host);
-            
-            var result = server.Ping();
-
+            RedisClientManagerPassword clientManagerPassword = new RedisClientManagerPassword(password, host);
+            var result = clientManagerPassword.IsServerAlive();
             Assert.IsTrue(result);
         }
     }

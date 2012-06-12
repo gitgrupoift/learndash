@@ -210,7 +210,9 @@
     <Content Include="Scripts\learningflow.js" />
     <Content Include="Scripts\modernizr-2.0.6-development-only.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -235,6 +237,10 @@
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{547FA436-1A66-4104-B2B7-672A2D365D18}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LearnDash.Dal\LearnDash.Dal.csproj">
       <Project>{C5C3035B-84D5-4E9F-A990-52BF9DEEEDB1}</Project>
       <Name>LearnDash.Dal</Name>
