@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using LearnDash.Dal;
 using NUnit.Framework;
 
-namespace LearnDashDal.Tests
+namespace LearnDashDal.Tests.DAL
 {
     [TestFixture]
-    public class RedisDalTests
+    public class LearningFlowRepositoryTests
     {
         [Test]
         public  void Learning_flow_dal_test()

@@ -58,7 +58,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RedisDalTests.cs" />
+    <Compile Include="DAL\LearningFlowRepositoryTests.cs" />
+    <Compile Include="DAL\RedisTest.cs" />
+    <Compile Include="Issues.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

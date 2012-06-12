@@ -59,6 +59,8 @@
     <Compile Include="LearningTask.cs" />
     <Compile Include="LearningFlowRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RedisOfflineException.cs" />
+    <Compile Include="RedisServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
