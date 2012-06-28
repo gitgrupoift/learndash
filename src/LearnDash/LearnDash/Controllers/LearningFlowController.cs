@@ -9,6 +9,7 @@ using LearnDash.Services;
 
 namespace LearnDash.Controllers
 {
+    [Authorize]
     public class LearningFlowController : Controller
     {
         public ILearningFlowService LearningFlowService { get; set; }

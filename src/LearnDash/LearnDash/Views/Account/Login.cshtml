@@ -1,0 +1,52 @@
+﻿<script type="text/javascript">
+
+    function openIdUrl(site) {
+        var value = "";
+        var autoClick = false;
+
+        if (site == "openid") {
+            value = "<Your Account>.myopenid.com";
+        }
+        else if (site == "google") {
+            value = "https://www.google.com/accounts/o8/id";
+            autoClick = true;
+        }
+        else if (site == "yahoo") {
+            value = "http://yahoo.com/";
+            autoClick = true;
+        }
+
+        if (value) {
+            var jText = $("#openid_identifier");
+            jText.val(value)
+            .focus();
+            if (autoClick)
+                $("#btnOpenIdLogin").trigger("click");
+        }
+    }
+
+ </script>
+
+
+@using (Html.BeginForm(new { Controller = "Account", Action = "OpenIdLogon" }))
+{
+    <fieldset >                             
+        <div class="containercontent" >
+            <div class="labelheaderblock">Log on using OpenId:</div>
+            <input id="openid_identifier" name="openid_identifier"/>             
+            <input id="btnOpenIdLogin" type="submit" value="Login"/>        
+            <img id="imgOpenIdLoginProgress" src="/css/images/loading_small.gif" style="display:none" />                 
+             
+            <div id="divOpenIdIcons">
+                <img src="/images/openid-icon.png" onclick="openIdUrl('openid')" title="myopenid.com" class="hoverbutton" />
+                <img src="/images/google-icon.png" onclick="openIdUrl('google')" title="Google" class="hoverbutton"/>
+                <img src="/images/yahoo-icon.png" onclick="openIdUrl('yahoo')" title="Yahoo" class="hoverbutton" />
+            </div>     
+        </div>
+    </fieldset>
+} 
+
+@if (ViewBag.Error != null)
+{
+    @ViewBag.Error
+}
