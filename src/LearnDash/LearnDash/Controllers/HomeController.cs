@@ -8,7 +8,7 @@ using LearnDash.Dal;
 
 namespace LearnDash.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class HomeController : Controller
     {
         public ILogger Logger { get; set; }
@@ -17,6 +17,8 @@ namespace LearnDash.Controllers
         {
             Logger.Info("Home Controller Index");
             var flows = LearningFlowRepository.GetAll();
+            ViewBag.Notification = Notification.ShowNotification(NotificationType.Succesfully_add);
+            
             return View(flows);
         }
 

@@ -9,7 +9,7 @@ using LearnDash.Services;
 
 namespace LearnDash.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class LearningFlowController : Controller
     {
         public ILearningFlowService LearningFlowService { get; set; }
@@ -27,6 +27,7 @@ namespace LearnDash.Controllers
         {
             var flow = LearningFlowService.Get(id);
             return View(flow);
+            
         }
 
         [HttpPost]
@@ -36,9 +37,10 @@ namespace LearnDash.Controllers
             {
                 LearningFlowService.Save(flow);
                 return View(flow);
-            }
-
+            }            
             return View();
+
+            
         }
 
 
@@ -52,22 +54,24 @@ namespace LearnDash.Controllers
         public ActionResult Remove(long id)
         {
             var flow = LearningFlowService.Get(id);
-            if (flow != null)
-                return View(flow);
+            if (flow != null)            
+                return View(flow);              
             else
                 return View("Error", ErrorType.NotFound);
+
         }
 
         [HttpPost]
         public ActionResult Remove(LearningFlow flow)
         {
-            LearningFlowService.Remove(flow.Id);
+            LearningFlowService.Remove(flow.Id);            
             return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
         public ActionResult List(long id)
         {
+            ViewBag.Notification = Notification.ShowNotification(NotificationType.Succesfully_add);
             return View(id);
         }
 
@@ -77,7 +81,7 @@ namespace LearnDash.Controllers
             if (ModelState.IsValid)
             {
                 newFlow.Tasks = new List<LearningTask>();
-                var id = LearningFlowService.Save(newFlow);
+                var id = LearningFlowService.Save(newFlow);                
                 return RedirectToAction("Edit", new {id});
             }
             return View();
