@@ -1,11 +1,10 @@
-﻿@model LearnDash.Dal.LearningFlow
+﻿@model LearnDash.Dal.Models.LearningFlow
 
 @{
     ViewBag.Title = "Remove";
 }
 
 <h2>Remove</h2>
-@Html.HiddenFor(model=>model.Id)
 <h3>Are you sure you want to delete this?</h3>
 <fieldset>
     <legend>LearningFlow</legend>
@@ -18,8 +17,9 @@
     </div>
 </fieldset>
 @using (Html.BeginForm()) {
+    @Html.HiddenFor(model => model.ID)
     <p>
         <input type="submit" value="Delete" /> |
-        @Html.ActionLink("Back", "Index","Home")
+        @Html.ActionLink("Back", "Index", "Home")
     </p>
 }

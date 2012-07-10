@@ -1,4 +1,4 @@
-﻿@model LearnDash.Dal.LearningFlow
+﻿@model LearnDash.Dal.Models.LearningFlow
 
 @Html.Partial("_RoundaboutView", Model)
 
@@ -29,7 +29,7 @@
                 $("#btnComplete").show();
             });
 
-            SaveFlow('@Model.Id',"@Url.Action("Save", "LearningFlow")");
+            SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
         });
     })
 </script>

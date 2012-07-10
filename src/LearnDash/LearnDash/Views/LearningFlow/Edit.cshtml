@@ -1,4 +1,4 @@
-﻿@model LearnDash.Dal.LearningFlow
+﻿@model LearnDash.Dal.Models.LearningFlow
 <link href="../../Content/roundabout.css" rel="stylesheet" type="text/css" />
 
 <br />
@@ -23,7 +23,7 @@
         flowClass += " flow-next";
     }
     
-  <li class="@flowClass" data-counter ="@task.TimesDone"><span>@task.Name</span>
+  <li class="@flowClass" data-id="@task.ID" data-counter ="@task.TimesDone"><span>@task.Name</span>
     <button class="btnRemoveTask">Delete Task</button>
     <button class="btnMakeNext">MakeNext</button>
   </li>
@@ -52,7 +52,10 @@
             }
             var newElement = $("<li class='" + taskClass + "'><span>" + taskName + "</span><button class='btnRemoveTask'>Delete Task</button><button class='btnMakeNext'>MakeNext</button></li>");
             $(".flow-list").append(newElement);
-            InitButtons();
+            
+            $(".btnRemoveTask").click(function () {
+                $(this).parent().remove();
+            });
         });
 
         InitButtons();
@@ -60,7 +63,7 @@
     
     function InitButtons() {
         $("#btnSaveFlow").click(function () {
-            SaveFlow('@Model.Id',"@Url.Action("Save", "LearningFlow")");
+            SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
         });
 
         $(".btnMakeNext").click(function () {

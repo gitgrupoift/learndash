@@ -7,23 +7,22 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Castle.Core.Logging;
+using Castle.Facilities.TypedFactory;
+using Castle.MicroKernel.Registration;
 using Castle.Windsor;
+using LearnDash.Dal.NHibernate;
 using LearnDash.Windsor;
 using LearnDash.Windsor.Installers;
+using LearnDash.Services;
+using Core.Extensions;
 
 namespace LearnDash
 {
-    // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
-    // visit http://go.microsoft.com/?LinkId=9394801
-
-    public class MvcApplication : System.Web.HttpApplication
+    public class MvcApplication : HttpApplication
     {
         private static IWindsorContainer container;
 
-        public static ILogger Logger
-        {
-            get { return container.Resolve<ILogger>(); }
-        }
+        public static NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
@@ -80,12 +79,20 @@ namespace LearnDash
 
         private static void BootstrapContainer()
         {
-            container = new WindsorContainer()
-                .Install(
+            container = new WindsorContainer();
+
+            //ISessionFactoryProvider doesnt have implemention by using TypedFactoryFacility castle will provide its own default factory
+            container.Kernel.AddFacility<TypedFactoryFacility>();
+
+            //installing all the castle providers
+            container.Install(
+                new NHibernateInstaller(),
+                new RepositoryInstaller(),
                 new ControllersInstaller(),
-                new LoggerInstaller(),
                 new ServicesInstaller()
                 );
+
+            //binding mvc controller factory with new factory that uses windsor
             var controllerFactory = new WindsorControllerFactory(container.Kernel);
             ControllerBuilder.Current.SetControllerFactory(controllerFactory);
         }
@@ -95,5 +102,16 @@ namespace LearnDash
             container.Dispose();
         }
 
+        public void Application_Error(object sender, EventArgs e)
+        {
+            var ctx = HttpContext.Current;
+
+            var exception = ctx.Server.GetLastError();
+
+            Logger.ErrorExceptionsWithInner("Unhandled Application Error", exception);
+            Logger.Error("Requested url : {0} StackTrace : \r\n{1}", Request.RawUrl,exception.StackTrace);
+
+            Server.ClearError();
+        }
     }
 }

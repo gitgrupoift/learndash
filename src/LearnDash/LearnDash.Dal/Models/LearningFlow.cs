@@ -1,15 +1,17 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 
-namespace LearnDash.Dal
+namespace LearnDash.Dal.Models
 {
-    public class LearningFlow : RedisEntity
+    public class LearningFlow : IModel
     {
-        private ICollection<LearningTask> _tasks;
-        public ICollection<LearningTask> Tasks {
+        public virtual int ID { get; set; }
+        public virtual string Name { get; set; }
+
+        private  ICollection<LearningTask> _tasks;
+        public virtual ICollection<LearningTask> Tasks
+        {
             get
             {
                 if(_tasks == null)
@@ -19,15 +21,11 @@ namespace LearnDash.Dal
             set { _tasks = value; }
         }
 
-
-        public string Name { get; set; }
-
-        //has to be defined for the json serializer
-        public LearningFlow()
+        [Obsolete("Dont use this.Has to be defined for the json serializer")]
+        public  LearningFlow()
         {
             
         }
-
         public LearningFlow(string name)
         {
             Name = name;

@@ -4,15 +4,21 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using Castle.Core.Logging;
 using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OpenId;
 using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
 using DotNetOpenAuth.OpenId.RelyingParty;
+using LearnDash.Dal.Models;
+using LearnDash.Dal.NHibernate;
 
 namespace LearnDash.Controllers
 {
     public class AccountController : Controller
     {
+        public static NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
+        public IRepository<UserProfile> _userRepository { get; set; } 
 
         public ActionResult Logout()
         {
@@ -75,6 +81,20 @@ namespace LearnDash.Controllers
                         //todo : create a simple parser of this data first tog et mail
                         var claimsResponse = response.GetExtension<FetchResponse>();
                         this.IssueAuthTicket(claimsResponse.Attributes[0].Values[0], true);
+
+                        var currentUser = _userRepository.GetByParameterEqualsFilter("UserId", claimsResponse.Attributes[0].Values[0]).SingleOrDefault();
+                        if (currentUser == null)
+                        {
+                            Logger.Info("Detected new user. Creating new profile with UserId - {0}", claimsResponse.Attributes[0].Values[0]);
+                            currentUser = new UserProfile
+                                              {
+                                                  UserId = claimsResponse.Attributes[0].Values[0],
+                                                  Dashboards = new List<LearningDashboard> {new LearningDashboard()}
+                                              };
+                            _userRepository.Add(currentUser);
+                        }
+
+                        SessionManager.CurrentUser = currentUser;
 
                         if (!string.IsNullOrEmpty(returnUrl))
                             return Redirect(returnUrl);

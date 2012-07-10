@@ -2,8 +2,10 @@
     var flowTaskName = taskData.find("span").html();
     var isNext = taskData.hasClass("flow-next");
     var timesDone = taskData.attr("data-counter");
+    var id = taskData.attr("data-id");
     var task =
             {
+                ID : id,
                 Name: flowTaskName,
                 IsNext: isNext,
                 TimesDone: timesDone

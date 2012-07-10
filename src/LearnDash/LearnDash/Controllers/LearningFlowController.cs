@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Castle.Core.Logging;
 using LearnDash.Dal;
+using LearnDash.Dal.Models;
+using LearnDash.Dal.NHibernate;
 using LearnDash.Services;
 
 namespace LearnDash.Controllers
@@ -14,7 +17,7 @@ namespace LearnDash.Controllers
     {
         public ILearningFlowService LearningFlowService { get; set; }
 
-        public ILogger Logger { get; set; } 
+        public static NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
         //todo : should open default learing flow
         public ActionResult Index()
@@ -23,7 +26,7 @@ namespace LearnDash.Controllers
         }
 
         [HttpGet]
-        public ActionResult Edit(long id)
+        public ActionResult Edit(int id)
         {
             var flow = LearningFlowService.Get(id);
             return View(flow);
@@ -34,7 +37,7 @@ namespace LearnDash.Controllers
         {
             if (ModelState.IsValid)
             {
-                LearningFlowService.Save(flow);
+                LearningFlowService.Update(flow);
                 return View(flow);
             }
 
@@ -48,8 +51,20 @@ namespace LearnDash.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult Add(LearningFlow newFlow)
+        {
+            if (ModelState.IsValid)
+            {
+                newFlow.Tasks = new List<LearningTask>();
+                var id = LearningFlowService.Add(newFlow);
+                return RedirectToAction("Edit", new { id });
+            }
+            return View();
+        }
+
         [HttpGet]
-        public ActionResult Remove(long id)
+        public ActionResult Remove(int id)
         {
             var flow = LearningFlowService.Get(id);
             if (flow != null)
@@ -61,7 +76,7 @@ namespace LearnDash.Controllers
         [HttpPost]
         public ActionResult Remove(LearningFlow flow)
         {
-            LearningFlowService.Remove(flow.Id);
+            LearningFlowService.Remove(flow.ID);
             return RedirectToAction("Index", "Home");
         }
 
@@ -71,19 +86,7 @@ namespace LearnDash.Controllers
             return View(id);
         }
 
-        [HttpPost]
-        public ActionResult Add(LearningFlow newFlow)
-        {
-            if (ModelState.IsValid)
-            {
-                newFlow.Tasks = new List<LearningTask>();
-                var id = LearningFlowService.Save(newFlow);
-                return RedirectToAction("Edit", new {id});
-            }
-            return View();
-        }
-
-
+        //todo : Complete action should be a separate action that doesnt send whole data as it happens with save action
         [HttpPost]
         public ActionResult CompleteTask(long taskId)
         {
@@ -94,7 +97,7 @@ namespace LearnDash.Controllers
             return Json(Is.Success);
         }
 
-        public ActionResult View(long id)
+        public ActionResult View(int id)
         {
             var flow = LearningFlowService.Get(id);
             if (flow != null)
@@ -106,8 +109,12 @@ namespace LearnDash.Controllers
         [HttpPost]
         public ActionResult Save(LearningFlow flow)
         {
-            LearningFlowService.Save(flow);
-            return Json(Is.Success);
+            if (ModelState.IsValid)
+            {
+                LearningFlowService.Update(flow);
+                return Json(Is.Success);
+            }
+            return Json(Is.Fail.Message("Save Failed"));
         }
     }
 

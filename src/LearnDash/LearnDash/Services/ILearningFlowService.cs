@@ -1,13 +1,15 @@
 using System.Collections.Generic;
 using LearnDash.Dal;
+using LearnDash.Dal.Models;
 
 namespace LearnDash.Services
 {
-    public interface ILearningFlowService
+    public interface ILearningFlowService 
     {
-        long Save(LearningFlow flow);
-        LearningFlow Get(long Id);
+        bool Update(LearningFlow flow);
+        int? Add(LearningFlow flow);
+        LearningFlow Get(int id);
         List<LearningFlow> GetAll();
-        void Remove(long id);
+        void Remove(int id);
     }
 }

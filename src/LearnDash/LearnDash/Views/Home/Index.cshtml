@@ -1,12 +1,12 @@
-﻿@model List<LearnDash.Dal.LearningFlow>
+﻿@model List<LearnDash.Dal.Models.LearningFlow>
 
 <ul>
 @foreach (var flow in Model)
 {
     <li>
-     @Html.ActionLink(@flow.Name,"View","LearningFlow",new {id=@flow.Id},null)
-     @Html.ActionLink("Edit", "Edit", "LearningFlow", new { id = @flow.Id }, null)
-     @Html.ActionLink("Remove", "Remove", "LearningFlow", new { id = @flow.Id }, null)
+     @Html.ActionLink(@flow.Name,"View","LearningFlow",new {id=@flow.ID},null)
+     @Html.ActionLink("Edit", "Edit", "LearningFlow", new { id = @flow.ID }, null)
+     @Html.ActionLink("Remove", "Remove", "LearningFlow", new { id = @flow.ID }, null)
     </li>
 }
 </ul>

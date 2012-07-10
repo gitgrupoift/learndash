@@ -4,15 +4,8 @@
         var value = "";
         var autoClick = false;
 
-        if (site == "openid") {
-            value = "<Your Account>.myopenid.com";
-        }
-        else if (site == "google") {
+        if (site == "google") {
             value = "https://www.google.com/accounts/o8/id";
-            autoClick = true;
-        }
-        else if (site == "yahoo") {
-            value = "http://yahoo.com/";
             autoClick = true;
         }
 
@@ -31,16 +24,13 @@
 @using (Html.BeginForm(new { Controller = "Account", Action = "OpenIdLogon" }))
 {
     <fieldset >                             
-        <div class="containercontent" >
-            <div class="labelheaderblock">Log on using OpenId:</div>
-            <input id="openid_identifier" name="openid_identifier"/>             
-            <input id="btnOpenIdLogin" type="submit" value="Login"/>        
-            <img id="imgOpenIdLoginProgress" src="/css/images/loading_small.gif" style="display:none" />                 
+        <div>
+            <div>Click on one of the icons to login through your open id provider.</div>
+            <input id="openid_identifier" name="openid_identifier" style="visibility:hidden;"/>             
+            <input id="btnOpenIdLogin" type="submit" value="Login" style="visibility:hidden;"/>        
              
             <div id="divOpenIdIcons">
-                <img src="/images/openid-icon.png" onclick="openIdUrl('openid')" title="myopenid.com" class="hoverbutton" />
-                <img src="/images/google-icon.png" onclick="openIdUrl('google')" title="Google" class="hoverbutton"/>
-                <img src="/images/yahoo-icon.png" onclick="openIdUrl('yahoo')" title="Yahoo" class="hoverbutton" />
+                <img src="@Url.Content("/Content/images/google.png")" onclick="openIdUrl('google')" title="Google" style="cursor: pointer" />
             </div>     
         </div>
     </fieldset>

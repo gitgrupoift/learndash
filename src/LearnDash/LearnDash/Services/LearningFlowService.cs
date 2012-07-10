@@ -2,11 +2,18 @@ using System.Collections.Generic;
 using System.Linq;
 using LearnDash.Controllers;
 using LearnDash.Dal;
+using LearnDash.Dal.Models;
+using LearnDash.Dal.NHibernate;
 
 namespace LearnDash.Services
 {
     public class LearningFlowService : ILearningFlowService
     {
+        public NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger(); 
+        public IRepository<LearningFlow> _flowRepo { get; set; }
+        public IRepository<LearningDashboard> _dashRepo { get; set; }
+        public IRepository<LearningTask> _tasksRepo { get; set; } 
+
         //utest
         public LearningFlow SortFlow(LearningFlow sourceFlow)
         {
@@ -28,24 +35,39 @@ namespace LearnDash.Services
             return sourceFlow;
         }
 
-        public long Save(LearningFlow flow)
+        public bool Update(LearningFlow flow)
         {
-            return LearningFlowRepository.Save(flow);
+            var result = _flowRepo.Update(flow);
+            return result;
         }
 
-        public LearningFlow Get(long Id)
+        public int? Add(LearningFlow flow)
         {
-            return SortFlow(LearningFlowRepository.Get(Id));
+            var currentDashboard = _dashRepo.GetById(1);
+            currentDashboard.Flows.Add(flow);
+            _dashRepo.Update(currentDashboard);
+            return flow.ID;
+        }
+
+        public LearningFlow Get(int id)
+        {
+            return SortFlow(_flowRepo.GetById(id));
         }
 
         public List<LearningFlow> GetAll()
         {
-            return LearningFlowRepository.GetAll();
+            return _flowRepo.GetAll().ToList();
         }
 
-        public void Remove(long id)
+        public void Remove(int id)
         {
-            LearningFlowRepository.Remove(id);
+            var learnFlow = _flowRepo.GetById(id);
+            if (learnFlow != null)
+            {
+                _flowRepo.Remove(learnFlow);
+            }
+            else
+                Logger.Warn("Remove method failed beacuse no learnFlow with id '{0}' exists",id );
         }
     }
 }

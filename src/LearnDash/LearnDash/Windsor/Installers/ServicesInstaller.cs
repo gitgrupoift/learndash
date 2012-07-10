@@ -17,7 +17,7 @@ namespace LearnDash.Windsor.Installers
             container.Register(AllTypes.FromThisAssembly()
                                 .Where(Component.IsInSameNamespaceAs(typeof(ILearningFlowService)))
                                 .WithService.DefaultInterfaces()
-                                .Configure(c => c.LifestyleTransient()));
+                                .Configure(c => c.LifestylePerWebRequest()));
         }
     }
 }
