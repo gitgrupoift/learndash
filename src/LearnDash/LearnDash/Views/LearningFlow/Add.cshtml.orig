@@ -1,6 +1,7 @@
-﻿@model LearnDash.Dal.Models.LearningFlow
+@model LearnDash.Dal.Models.LearningFlow
 @using LearnDash.Controllers
 
+>>>>>>> remotes/pawelsawicz/learndash/master
 @using (Html.BeginForm())
 {
     <fieldset>

@@ -30,6 +30,7 @@ namespace LearnDash.Controllers
                 }
                 IList<LearningFlow> flows;
                 flows = user.Dashboards.First().Flows.ToList();
+                ViewBag.Notification = Notification.ShowNotification(NotificationType.Succesfully_add);
                 return View(flows);
             }
             else

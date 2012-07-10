@@ -90,7 +90,6 @@ namespace LearnDash.Controllers
             return View(id);
         }
 
-        //todo : Complete action should be a separate action that doesnt send whole data as it happens with save action
         [HttpPost]
         public ActionResult CompleteTask(long taskId)
         {

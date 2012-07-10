@@ -3986,3 +3986,8 @@ a.thumbnail:hover {
 .invisible {
   visibility: hidden;
 }
+.notification-box {
+	width:100%;
+	height:auto;
+    background-color: #466886;	
+}
