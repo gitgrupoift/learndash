@@ -46,12 +46,13 @@ namespace LearnDash
 
         protected void Application_Start()
         {
-            BootstrapContainer();
+           
 
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+            BootstrapContainer();
 
             BundleTable.Bundles.RegisterTemplateBundles();
 
@@ -107,9 +108,7 @@ namespace LearnDash
             var exception = ctx.Server.GetLastError();
 
             Logger.ErrorExceptionsWithInner("Unhandled Application Error", exception);
-            Logger.Error("Requested url : {0} StackTrace : \r\n{1}", Request.RawUrl,exception.StackTrace);
-
-            Server.ClearError();
+            Logger.Error("Requested url : {0} StackTrace : \r\n{1}", Request.RawUrl, exception.StackTrace);
         }
     }
 }
