@@ -12,5 +12,4 @@ namespace LearnDash.Controllers
             return type.ToString().Replace("_", " ");
         }        
     }
-   
 }

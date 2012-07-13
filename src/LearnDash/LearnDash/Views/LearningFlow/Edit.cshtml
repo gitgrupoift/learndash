@@ -43,9 +43,18 @@
 <script type="text/javascript">
     $(function () {
 
+        var btnAddTask = $("#btnAddTask");
+        var txtBoxtTaskName = $("#txtBoxTaskName");
 
-        $("#btnAddTask").click(function () {
-            var taskName = $("#txtBoxTaskName").val();
+        txtBoxtTaskName.focus().keypress(function(e) {
+                if(e.which == 13) {
+                    btnAddTask.click();
+                    $(this).val("");
+                }
+            });
+
+        btnAddTask.click(function () {
+            var taskName = txtBoxtTaskName.val();
             var currentElementsCount = $('.flow-task').size();
             var taskClass = "flow-task";
             if (currentElementsCount <= 0) {

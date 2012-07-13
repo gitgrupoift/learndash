@@ -38,7 +38,6 @@ namespace LearnDash.Controllers
                 Logger.Warn("User '{0}' doesn't exist \r\nPropably session should be recycled and register procedure performed again.", User.Identity.Name);
                 return RedirectToAction("Logout", "Account");
             }
-
         }
 
         public ActionResult About()
