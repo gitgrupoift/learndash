@@ -8,19 +8,22 @@
     $(function () {
 
         $("#btnComplete").click(function () {
+
             $("#btnComplete").hide();
             currentNextChild++;
             var current = $(".flow-next");
+            var next;
+
             var currentTimesDone = current.attr("data-counter");
             current.attr("data-counter", ++currentTimesDone);
             if (currentNextChild >= $('.roundabout ul li').length - 1) {
                 currentNextChild = 0;
-                var next1 = $(".flow-task").first();
-                next1.addClass("flow-next");
+                next = $(".flow-task").first();
+                next.addClass("flow-next");
                 current.removeClass("flow-next");
             }
             else {
-                var next = current.next();
+                next = current.next();
                 next.addClass("flow-next");
                 current.removeClass("flow-next");
             }
@@ -29,7 +32,10 @@
                 $("#btnComplete").show();
             });
 
-            SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
+            var lastId = current.attr("data-id");
+            var newId = next.attr("data-id");
+
+            CompleteTask(lastId, newId, "@Url.Action("CompleteTask", "LearningFlow")");
         });
     })
 </script>

@@ -15,7 +15,6 @@ namespace LearnDash.Dal.NHibernate
     {
         private const string TestConnString = "Data Source=.\\SQLEXPRESS;Initial Catalog=LearnDash;Integrated Security=SSPI";
 
-
         private static string ConnectionString
         {
             get

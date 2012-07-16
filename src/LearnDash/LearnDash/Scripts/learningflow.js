@@ -41,3 +41,24 @@
             }
         });
     }
+
+
+    function CompleteTask(lastId, newId, url) {
+        var data = {
+            lastCompleteTaskId: lastId,
+            newCompleteTaskId: newId
+        };
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: JSON.stringify(data),
+            dataType: "json",
+            contentType: 'application/json',
+            success: function (data) {
+                var jsonData = $.parseJSON(data);
+                if (jsonData.items.length <= 0) {
+                }
+            }
+        });
+    }

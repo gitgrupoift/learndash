@@ -17,6 +17,8 @@ namespace LearnDash.Controllers
     {
         public ILearningFlowService LearningFlowService { get; set; }
 
+        public IRepository<LearningTask> LearningTaskRepository { get; set; }
+
         public static NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
         //todo : should open default learing flow
@@ -40,10 +42,9 @@ namespace LearnDash.Controllers
             {
                 LearningFlowService.Update(flow);
                 return View(flow);
-            }            
+            }      
+      
             return View();
-
-            
         }
 
 
@@ -90,24 +91,37 @@ namespace LearnDash.Controllers
             return View(id);
         }
 
-        //todo : Complete action should be a separate action that doesnt send whole data as it happens with save action
         [HttpPost]
-        public ActionResult CompleteTask(long taskId)
+        public ActionResult CompleteTask(int lastCompleteTaskId, int newCompleteTaskId)
         {
-            if (taskId >= 0)
+            if (lastCompleteTaskId >= 0 && newCompleteTaskId >= 0)
             {
-                
+                var lastTask = this.LearningTaskRepository.GetById(lastCompleteTaskId);
+                var newTask = this.LearningTaskRepository.GetById(newCompleteTaskId);
+
+                lastTask.IsNext = false;
+                newTask.IsNext = true;
+
+                this.LearningTaskRepository.Update(lastTask);
+                this.LearningTaskRepository.Update(newTask);
+                return this.Json(Is.Success);
             }
-            return Json(Is.Success);
+
+            Logger.Warn("Wrong data sent to the action \r\nparams: lTaskId - {0}\r\n nTaskId - {1} ", lastCompleteTaskId, newCompleteTaskId);
+            return this.Json(Is.Fail.Message("Wrong data sent"));
         }
 
         public ActionResult View(int id)
         {
-            var flow = LearningFlowService.Get(id);
+            var flow = this.LearningFlowService.Get(id);
             if (flow != null)
-                return View(flow);
+            {
+                return this.View(flow);
+            }
             else
-                return View("Error", ErrorType.NotFound);
+            {
+                return this.View("Error", ErrorType.NotFound);
+            }
         }
 
         [HttpPost]
