@@ -4,9 +4,13 @@ using System.Collections.ObjectModel;
 
 namespace LearnDash.Dal.Models
 {
+    using Microsoft.Build.Framework;
+
     public class LearningFlow : IModel
     {
+        [Required]
         public virtual int ID { get; set; }
+        [Required]
         public virtual string Name { get; set; }
 
         private  ICollection<LearningTask> _tasks;
