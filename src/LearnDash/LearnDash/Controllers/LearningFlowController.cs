@@ -42,8 +42,9 @@ namespace LearnDash.Controllers
             {
                 LearningFlowService.Update(flow);
                 return View(flow);
-            }      
-      
+            }
+
+            Logger.Warn("Flow model not valid!. Propably client validation didn't worked out.");
             return View();
         }
 
@@ -63,6 +64,8 @@ namespace LearnDash.Controllers
                 var id = LearningFlowService.Add(newFlow);
                 return RedirectToAction("Edit", new { id });
             }
+
+            Logger.Warn("Flow model not valid!. Propably client validation didn't worked out.");
             return View();
         }
 
@@ -70,10 +73,15 @@ namespace LearnDash.Controllers
         public ActionResult Remove(int id)
         {
             var flow = LearningFlowService.Get(id);
-            if (flow != null)            
-                return View(flow);              
+            if (flow != null)
+            {
+                return View(flow);
+            }
             else
+            {
+                Logger.Warn("Unable to remove flow beacuse it wasn't found in DB. Possible error. Beacuse flow is visible in view but not visible in DB.");
                 return View("Error", ErrorType.NotFound);
+            }
 
         }
 
@@ -120,6 +128,7 @@ namespace LearnDash.Controllers
             }
             else
             {
+                Logger.Warn("Requested flow with id - {0} that doesn't exist", id);
                 return this.View("Error", ErrorType.NotFound);
             }
         }
@@ -132,6 +141,8 @@ namespace LearnDash.Controllers
                 LearningFlowService.Update(flow);
                 return Json(Is.Success);
             }
+
+            Logger.Warn("Flow model not valid!. Propably client validation didn't worked out.");
             return Json(Is.Fail.Message("Save Failed"));
         }
     }

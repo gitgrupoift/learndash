@@ -5,24 +5,26 @@ using System.Text;
 
 namespace Core.Extensions
 {
+    using NLog;
+
     public static class NLogLogger
     {
         public static string ExtractInnerException(Exception ex)
         {
-            var innerException = String.Empty;
+            var innerException = string.Empty;
             if (ex.InnerException != null)
                 innerException = ExtractInnerException(ex.InnerException);
 
-            return String.Format("{0} \r\n   {1}", ex.Message, innerException);
+            return string.Format("{0} \r\n   {1}", ex.Message, innerException);
         }
 
-        public static void ErrorExceptionsWithInner(this NLog.Logger logger,string message,Exception ex)
+        public static void ErrorExceptionsWithInner(this Logger logger,string message,Exception ex)
         {
-            var innerExceptions = String.Empty;
+            var innerExceptions = string.Empty;
             if(ex.InnerException != null)
                 innerExceptions = ExtractInnerException(ex.InnerException);
 
-            logger.Error(String.Format("{0} Exception\r\n {1} \r\n--------------\r\n {2}", message, ex.Message, innerExceptions));
+            logger.Error(string.Format("{0} Exception\r\n {1} \r\n--------------\r\n {2}", message, ex.Message, innerExceptions));
         }
     }
 }

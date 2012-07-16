@@ -67,7 +67,9 @@ namespace LearnDash.Services
                 _flowRepo.Remove(learnFlow);
             }
             else
-                Logger.Warn("Remove method failed beacuse no learnFlow with id '{0}' exists",id );
+            {
+                Logger.Warn("Remove method failed beacuse no learnFlow with id '{0}' exists", id);
+            }
         }
     }
 }

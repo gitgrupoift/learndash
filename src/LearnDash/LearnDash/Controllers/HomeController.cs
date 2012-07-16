@@ -15,21 +15,16 @@ namespace LearnDash.Controllers
     {
         public static NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        public IRepository<UserProfile> _userRepository { get; set; } 
+        public IRepository<UserProfile> userRepository { get; set; } 
 
         public ActionResult Index()
         {
-            //refactor : here we are using GetByParameteres euqls which return IList unnecesary implement nhibernate Linq :X
-            var user = _userRepository.GetByParameterEqualsFilter("UserId", User.Identity.Name).SingleOrDefault();
+            // refactor : here we are using GetByParameteres euqls which return IList unnecesary implement nhibernate Linq :X
+            var user = this.userRepository.GetByParameterEqualsFilter("UserId", User.Identity.Name).SingleOrDefault();
 
             if (user != null)
             {
-                if (user.Dashboards.FirstOrDefault() == null)
-                {
-
-                }
-                IList<LearningFlow> flows;
-                flows = user.Dashboards.First().Flows.ToList();
+                var flows = user.Dashboards.First().Flows.ToList();
                 ViewBag.Notification = Notification.ShowNotification(NotificationType.Succesfully_add);
                 return View(flows);
             }
