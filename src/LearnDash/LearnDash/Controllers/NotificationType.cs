@@ -13,6 +13,7 @@ namespace LearnDash.Controllers
         Fail_add,
         Fail_deleted,
         Fail_edited,
-        Failed_to_load_flow
+        Failed_to_load_flow,
+        blank
     }
 }

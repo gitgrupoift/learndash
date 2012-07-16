@@ -32,9 +32,7 @@
         </div>
     </div>
       <div class="notification-box">
-                    <h3>
-                        Notification : @ViewBag.Notification
-                    </h3>
+                  @Html.Partial("_Notification", LearnDash.Controllers.NotificationType.blank);
                 </div>
     <div class="container">
         @RenderBody()

@@ -1,0 +1,38 @@
+﻿@using LearnDash.Controllers
+@model NotificationType
+
+@{
+    string message;
+    switch(@Model)
+    {
+        case NotificationType.Fail_add:
+            message = "Fail at adding";
+            break;
+        case NotificationType.Fail_deleted:
+            message = "Fail at deleting";
+            break;
+        case NotificationType.Fail_edited:
+            message = "Fail at editing";
+            break;
+        case NotificationType.Failed_to_load_flow:
+            message = "Fail at loading flow";
+            break;
+        case NotificationType.Succesfully_add:
+            message = "Succesfylly add";
+            break;
+        case NotificationType.Succesfully_deleted:
+            message = "Succesfully deleted";
+            break;
+        case NotificationType.Succesfully_edited:
+            message = "Succesfully edited";
+            break;
+        default:
+            message = "There's no important to say...";
+            break;
+    }
+    
+    
+    
+}
+
+<h3>Notification : @message</h3>
