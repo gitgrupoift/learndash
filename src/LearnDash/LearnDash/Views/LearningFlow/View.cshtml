@@ -6,7 +6,10 @@
 <button id="btnComplete">Complete</button>
 <script type="text/javascript">
     $(function () {
-
+        if($(".flow-next").length <=1) {
+            $("#btnComplete").hide();
+        }
+    
         $("#btnComplete").click(function () {
 
             $("#btnComplete").hide();
