@@ -40,6 +40,9 @@
     <button id="btnClear">
         ClearFlow</button>
 </div>
+<div id="taskNameValidation" style="display:none;">
+   Task name is required!
+</div>
 <script type="text/javascript">
     $(function () {
 
@@ -49,23 +52,29 @@
         txtBoxtTaskName.focus().keypress(function(e) {
                 if(e.which == 13) {
                     btnAddTask.click();
-                    $(this).val("");
                 }
             });
 
         btnAddTask.click(function () {
             var taskName = txtBoxtTaskName.val();
-            var currentElementsCount = $('.flow-task').size();
-            var taskClass = "flow-task";
-            if (currentElementsCount <= 0) {
-                taskClass = taskClass + " flow-next";
+            txtBoxtTaskName.val("");
+            $("#taskNameValidation").hide();
+            if(taskName) {
+                var currentElementsCount = $('.flow-task').size();
+                var taskClass = "flow-task";
+                if (currentElementsCount <= 0) {
+                    taskClass = taskClass + " flow-next";
+                }
+                var newElement = $("<li class='" + taskClass + "'><span>" + taskName + "</span><button class='btnRemoveTask'>Delete Task</button><button class='btnMakeNext'>MakeNext</button></li>");
+                $(".flow-list").append(newElement);
+
+                $(".btnRemoveTask").click(function() {
+                    $(this).parent().remove();
+                });
             }
-            var newElement = $("<li class='" + taskClass + "'><span>" + taskName + "</span><button class='btnRemoveTask'>Delete Task</button><button class='btnMakeNext'>MakeNext</button></li>");
-            $(".flow-list").append(newElement);
-            
-            $(".btnRemoveTask").click(function () {
-                $(this).parent().remove();
-            });
+            else {
+                $("#taskNameValidation").show();     
+            }
         });
 
         InitButtons();

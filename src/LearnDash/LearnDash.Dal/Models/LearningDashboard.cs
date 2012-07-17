@@ -2,8 +2,11 @@ using System.Collections.Generic;
 
 namespace LearnDash.Dal.Models
 {
-    public class LearningDashboard : IModel
+    using System.ComponentModel.DataAnnotations;
+
+    public class LearningDashboard : IDBModel
     {
+        [Required]
         public virtual int ID { get; set; }
 
         /// <summary>

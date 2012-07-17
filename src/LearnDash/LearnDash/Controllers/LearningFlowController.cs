@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
-using Castle.Core.Logging;
-using LearnDash.Dal;
-using LearnDash.Dal.Models;
-using LearnDash.Dal.NHibernate;
-using LearnDash.Services;
-
-namespace LearnDash.Controllers
+﻿namespace LearnDash.Controllers
 {
-    //[Authorize]
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Mvc;
+    using System.Web.Routing;
+    using Castle.Core.Logging;
+    using LearnDash.Dal;
+    using LearnDash.Dal.Models;
+    using LearnDash.Dal.NHibernate;
+    using LearnDash.Services;
+
+    [Authorize]
     public class LearningFlowController : Controller
     {
         public ILearningFlowService LearningFlowService { get; set; }

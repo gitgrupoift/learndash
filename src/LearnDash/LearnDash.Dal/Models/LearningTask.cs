@@ -1,12 +1,15 @@
 namespace LearnDash.Dal.Models
 {
+    using System.ComponentModel.DataAnnotations;
+
     public enum LearningTaskType
     {
         None=0,
     }
 
-    public class LearningTask : IModel
+    public class LearningTask : IDBModel
     {
+        [Required]
         public virtual int ID { get; set; }
         /// <summary>
         /// This allows to set specific ordering of tasks
@@ -21,6 +24,7 @@ namespace LearnDash.Dal.Models
         /// <summary>
         /// Name is displayed on the learning flow interface.
         /// </summary>
+        [Required(ErrorMessage = "Name is required")]
         public virtual string Name { get; set; }
 
         /// <summary>
