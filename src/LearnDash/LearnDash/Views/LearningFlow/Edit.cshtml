@@ -32,8 +32,8 @@
     <input id="txtBoxTaskName" type="text" />
     <button id="btnAddTask">
         Add Task</button>
-    <button id="btnSaveFlow">
-        SaveFlow</button>
+@*    <button id="btnSaveFlow">
+        SaveFlow</button>*@
     <button id="btnClear">
         ClearFlow</button>
 </div>
@@ -68,6 +68,8 @@
                 $(".btnRemoveTask").click(function() {
                     $(this).parent().remove();
                 });
+                
+                SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
             }
             else {
                 $("#taskNameValidation").show();     
@@ -78,9 +80,9 @@
     });
     
     function InitButtons() {
-        $("#btnSaveFlow").click(function () {
-            SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
-        });
+//        $("#btnSaveFlow").click(function () {
+//            SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
+//        });
 
         $(".btnMakeNext").click(function () {
             $('.flow-task').removeClass("flow-next");
