@@ -95,7 +95,13 @@
         });
 
         $(".btnRemoveTask").click(function () {
-            $(this).parent().remove();
+            var removedTask = $(this).parent();
+            
+            if(removedTask.hasClass("flow-next")) {
+                removedTask.next().addClass("flow-next");
+            }
+                
+            removedTask.remove();
             SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
         });
 
