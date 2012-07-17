@@ -85,16 +85,23 @@
 //        });
 
         $(".btnMakeNext").click(function () {
-            $('.flow-task').removeClass("flow-next");
-            $(this).parent().addClass("flow-next");
+            var lastTask = $('.flow-task');
+            var newTask = $(this).parent();
+            lastTask.removeClass("flow-next");
+            newTask.addClass("flow-next");
+            
+
+            CompleteTask(lastTask.attr('data-id'), newTask.attr('data-id'), "@Url.Action("CompleteTask", "LearningFlow")");
         });
 
         $(".btnRemoveTask").click(function () {
             $(this).parent().remove();
+            SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
         });
 
         $("#btnClear").click(function () {
             $('.flow-task').remove();
+            SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
         });
     }
     
