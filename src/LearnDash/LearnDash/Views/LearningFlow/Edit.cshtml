@@ -91,7 +91,7 @@
             newTask.addClass("flow-next");
             
 
-            CompleteTask(lastTask.attr('data-id'), newTask.attr('data-id'), "@Url.Action("CompleteTask", "LearningFlow")");
+            CompleteTask(lastTask.attr('data-id'), newTask.attr('data-id'), "@Url.Action("MakeNext", "LearningFlow")");
         });
 
         $(".btnRemoveTask").click(function () {

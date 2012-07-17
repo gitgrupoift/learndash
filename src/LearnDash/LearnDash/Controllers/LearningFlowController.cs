@@ -102,6 +102,12 @@
         [HttpPost]
         public ActionResult CompleteTask(int lastCompleteTaskId, int newCompleteTaskId)
         {
+            return this.MakeNext(lastCompleteTaskId, newCompleteTaskId);
+        }
+
+        [HttpPost]
+        public ActionResult MakeNext(int lastCompleteTaskId, int newCompleteTaskId)
+        {
             if (lastCompleteTaskId >= 0 && newCompleteTaskId >= 0)
             {
                 var lastTask = this.LearningTaskRepository.GetById(lastCompleteTaskId);
