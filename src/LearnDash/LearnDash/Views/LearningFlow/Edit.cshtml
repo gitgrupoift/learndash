@@ -1,36 +1,33 @@
 ﻿@model LearnDash.Dal.Models.LearningFlow
 @using LearnDash.Controllers
 <link href="../../Content/roundabout.css" rel="stylesheet" type="text/css" />
-
 <br />
 <br />
 <br />
-
 <!-- refactor delete unused span -->
-<div class="flow-name"><span>@Model.Name</span></div>
-
+<div class="flow-name">
+    <span>@Model.Name</span></div>
 <br />
 <br />
 <br />
-
 <ul class="flow-list">
-
-@foreach (var task in Model.Tasks)
-{
-    var flowClass = "flow-task";
-
-    if (task.IsNext)
+    @foreach (var task in Model.Tasks)
     {
-        flowClass += " flow-next";
-    }
-    
-  <li class="@flowClass" data-id="@task.ID" data-counter ="@task.TimesDone"><span>@task.Name</span>
-    <button class="btnRemoveTask">Delete Task</button>
-    <button class="btnMakeNext">MakeNext</button>
-  </li>
-}
-</ul>
+        var flowClass = "flow-task";
 
+        if (task.IsNext)
+        {
+            flowClass += " flow-next";
+        }
+    
+        <li class="@flowClass" data-id="@task.ID" data-counter ="@task.TimesDone"><span>@task.Name</span>
+            <button class="btnRemoveTask">
+                Delete Task</button>
+            <button class="btnMakeNext">
+                MakeNext</button>
+        </li>
+    }
+</ul>
 <div class="flow-menu">
     <input id="txtBoxTaskName" type="text" />
     <button id="btnAddTask">
@@ -40,8 +37,8 @@
     <button id="btnClear">
         ClearFlow</button>
 </div>
-<div id="taskNameValidation" style="display:none;">
-   Task name is required!
+<div id="taskNameValidation" style="display: none;">
+    Task name is required!
 </div>
 <script type="text/javascript">
     $(function () {
@@ -59,7 +56,7 @@
             var taskName = txtBoxtTaskName.val();
             txtBoxtTaskName.val("");
             $("#taskNameValidation").hide();
-            if(taskName) {
+            if(!isBlank(taskName)) {
                 var currentElementsCount = $('.flow-task').size();
                 var taskClass = "flow-task";
                 if (currentElementsCount <= 0) {
@@ -97,5 +94,9 @@
         $("#btnClear").click(function () {
             $('.flow-task').remove();
         });
+    }
+    
+    function isBlank(str) {
+        return (!str || /^\s*$/.test(str));
     }
 </script>
