@@ -43,7 +43,7 @@ namespace LearnDash.Services
 
         public int? Add(LearningFlow flow)
         {
-            var currentDashboard = _dashRepo.GetById(1);
+            var currentDashboard = _dashRepo.GetById(3);
             currentDashboard.Flows.Add(flow);
             _dashRepo.Update(currentDashboard);
             return flow.ID;

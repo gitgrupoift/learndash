@@ -24,15 +24,22 @@
         //todo : should open default learing flow
         public ActionResult Index()
         {
-            return View();
+            return this.View();
         }
 
         [HttpGet]
         public ActionResult Edit(int id)
         {
             var flow = LearningFlowService.Get(id);
-            return View(flow);
-            
+            if (flow != null)
+            {
+                return this.View(flow);
+            }
+            else
+            {
+                return this.View("Error", ErrorType.NotFound);
+            }
+
         }
 
         [HttpPost]

@@ -65,9 +65,26 @@
                 var newElement = $("<li class='" + taskClass + "'><span>" + taskName + "</span><button class='btnRemoveTask'>Delete Task</button><button class='btnMakeNext'>MakeNext</button></li>");
                 $(".flow-list").append(newElement);
 
-                $(".btnRemoveTask").click(function() {
-                    $(this).parent().remove();
+                $(".btnMakeNext").click(function () {
+                    var lastTask = $('.flow-task');
+                    var newTask = $(this).parent();
+                    lastTask.removeClass("flow-next");
+                    newTask.addClass("flow-next");
+            
+
+                    CompleteTask(lastTask.attr('data-id'), newTask.attr('data-id'), "@Url.Action("MakeNext", "LearningFlow")");
                 });
+
+                $(".btnRemoveTask").click(function () {
+                    var removedTask = $(this).parent();
+            
+                    if(removedTask.hasClass("flow-next")) {
+                        removedTask.next().addClass("flow-next");
+                    }
+                
+            removedTask.remove();
+            SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
+        });
                 
                 SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
             }
@@ -80,10 +97,6 @@
     });
     
     function InitButtons() {
-//        $("#btnSaveFlow").click(function () {
-//            SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
-//        });
-
         $(".btnMakeNext").click(function () {
             var lastTask = $('.flow-task');
             var newTask = $(this).parent();

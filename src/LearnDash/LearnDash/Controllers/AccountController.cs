@@ -103,7 +103,12 @@ namespace LearnDash.Controllers
                                                   UserId = claimsResponse.Attributes[0].Values[0],
                                                   Dashboards = new List<LearningDashboard> {new LearningDashboard()}
                                               };
-                            this.userRepository.Add(currentUser);
+                            var id = this.userRepository.Add(currentUser);
+                            if (id < 0)
+                            {
+                                Logger.Warn("Authentication procedure failed on adding new user, redirecting to Login");
+                                return RedirectToAction("Login");        
+                            }
                         }
 
                         SessionManager.CurrentUser = currentUser;
@@ -112,7 +117,7 @@ namespace LearnDash.Controllers
                         return RedirectToAction("Index","Home");
 
                     case AuthenticationStatus.Canceled:
-                        Logger.Info("Authentication canceled");
+                        Logger.Warn("Authentication canceled");
                         this.ViewBag.Error = "Canceled at provider";
                         return View("Login");
                     case AuthenticationStatus.Failed:
