@@ -6,6 +6,7 @@ using System.Web.Security;
 using Castle.Core.Logging;
 using LearnDash.Dal.Models;
 using LearnDash.Dal.NHibernate;
+using LearnDash.Controllers;
 
 namespace LearnDash
 {
@@ -13,6 +14,7 @@ namespace LearnDash
     {
         public static NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private const string CurrentUserKey = "CurrentUser";
+        private const string CurrentListOfNotification = "ListOfNotification";
         public static UserProfile CurrentUser
         {
             get
@@ -28,6 +30,24 @@ namespace LearnDash
                 }
             }
             set { HttpContext.Current.Session[CurrentUserKey] = value; }
+        }
+
+        public static List<Notification> ListOfNotifications
+        {            
+            get
+            {
+                if (HttpContext.Current.Session[CurrentListOfNotification] != null)
+                    return HttpContext.Current.Session[CurrentListOfNotification] as List<Notification>;
+                else
+                {
+                    Logger.Error("No Current Notification in Session \r\n This Value should be set in Notification Method - Add while we add new notification");
+                    return null;
+                }
+            }
+            set
+            {                
+                HttpContext.Current.Session[CurrentListOfNotification] = value;
+            }
         }
     }
 }

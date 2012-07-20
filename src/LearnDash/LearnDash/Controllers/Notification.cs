@@ -7,35 +7,9 @@ namespace LearnDash.Controllers
 {
     public class Notification
     {
-        #region Field Region
-        
-        private NotificationType type;
-        private DateTime notificationTime;
 
-        #endregion
-
-        #region Property Region
-        
-        public NotificationType Type
-        {
-            get { return type; }
-            set { type = value; }
-        }        
-
-        public DateTime NotificationTime
-        {
-            get { return notificationTime; }
-            set { notificationTime = value; }
-        }
-
-        #endregion
-
-        #region Constructor Region
-
-        public Notification()
-        {
-
-        }
+        public NotificationType Type { get; set; }
+        public DateTime NotificationTime { get; set; }
 
         public Notification(NotificationType type, DateTime notificationType)
         {
@@ -43,15 +17,26 @@ namespace LearnDash.Controllers
             NotificationTime = notificationType;
         }
 
-        #endregion
-
-        #region Notification Methods
-
-        public static string ShowNotification(NotificationType type)
+        public static void Add(Notification Item)
         {
-            return type.ToString().Replace("_", " ");
+            List<Notification> list = null;
+
+            if (SessionManager.ListOfNotifications != null)
+            {
+                list = SessionManager.ListOfNotifications;
+                list.Add(Item);
+                SessionManager.ListOfNotifications = list;
+            }
+            else
+            {
+                list = new List<Notification>();
+                list.Add(Item);
+                SessionManager.ListOfNotifications = list;
+            }
         }
 
-        #endregion
     }
+
+
+
 }

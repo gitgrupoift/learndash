@@ -1,4 +1,5 @@
 @using LearnDash.Controllers
+@using LearnDash
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,7 +34,7 @@
         </div>
     </div>
       <div class="notification-box">
-                  @Html.Partial("_Notification", ((List<Notification>)HttpContext.Current.Session["ListOfNotification"]));
+                  @Html.Partial("_Notification", SessionManager.ListOfNotifications);
                 </div>
     <div class="container">
         @RenderBody()

@@ -7,13 +7,13 @@ namespace LearnDash.Controllers
 {
     public enum NotificationType
     {
-        Succesfully_add,
-        Succesfully_deleted,
-        Succesfully_edited,
-        Fail_add,
-        Fail_deleted,
-        Fail_edited,
-        Failed_to_load_flow,
+        SuccesfullyAdd,
+        SuccesfullyDeleted,
+        SuccesfullyEdited,
+        FailAdd,
+        FailDeleted,
+        FailEdited,
+        FailedToLoadFlow,
         blank
     }
 }

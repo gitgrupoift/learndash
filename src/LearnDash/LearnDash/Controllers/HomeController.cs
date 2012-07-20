@@ -7,6 +7,7 @@ using Castle.Core.Logging;
 using LearnDash.Dal;
 using LearnDash.Dal.Models;
 using LearnDash.Dal.NHibernate;
+using System.Threading;
 
 namespace LearnDash.Controllers
 {
@@ -14,7 +15,7 @@ namespace LearnDash.Controllers
     public class HomeController : Controller
     {
         public static NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-        public static List<Notification> ListOfUserNotification = new List<Notification>();
+        
 
         public IRepository<UserProfile> userRepository { get; set; } 
 
@@ -24,8 +25,8 @@ namespace LearnDash.Controllers
             var user = this.userRepository.GetByParameterEqualsFilter("UserId", User.Identity.Name).SingleOrDefault();
 
             if (user != null)
-            {                
-                HttpContext.Session.Add("ListOfNotification", ListOfUserNotification);
+            {
+                
                 var flows = user.Dashboards.First().Flows.ToList();                
                 return View(flows);
             }
