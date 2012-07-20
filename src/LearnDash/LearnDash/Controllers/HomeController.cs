@@ -14,6 +14,7 @@ namespace LearnDash.Controllers
     public class HomeController : Controller
     {
         public static NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+        public static List<Notification> ListOfUserNotification = new List<Notification>();
 
         public IRepository<UserProfile> userRepository { get; set; } 
 
@@ -23,9 +24,9 @@ namespace LearnDash.Controllers
             var user = this.userRepository.GetByParameterEqualsFilter("UserId", User.Identity.Name).SingleOrDefault();
 
             if (user != null)
-            {
-                var flows = user.Dashboards.First().Flows.ToList();
-                ViewBag.Notification = Notification.ShowNotification(NotificationType.Succesfully_add);
+            {                
+                HttpContext.Session.Add("ListOfNotification", ListOfUserNotification);
+                var flows = user.Dashboards.First().Flows.ToList();                
                 return View(flows);
             }
             else
