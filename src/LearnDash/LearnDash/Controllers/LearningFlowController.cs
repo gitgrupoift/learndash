@@ -32,7 +32,7 @@ namespace LearnDash.Controllers
         {
             var flow = LearningFlowService.Get(id);
             return View(flow);
-            
+
         }
 
         [HttpPost]
@@ -40,7 +40,12 @@ namespace LearnDash.Controllers
         {
             if (ModelState.IsValid)
             {
-                LearningFlowService.Update(flow);                
+                var state = LearningFlowService.Update(flow);
+                if (state)                
+                    Notification.Add(new Notification(NotificationType.SuccesfullyEdited, DateTime.Now));                
+                else                
+                    Notification.Add(new Notification(NotificationType.FailEdited, DateTime.Now));
+                
                 return View(flow);
             }
 
@@ -51,7 +56,7 @@ namespace LearnDash.Controllers
 
         [HttpGet]
         public ActionResult Add()
-        {            
+        {
             return View();
         }
 
@@ -61,7 +66,12 @@ namespace LearnDash.Controllers
             if (ModelState.IsValid)
             {
                 newFlow.Tasks = new List<LearningTask>();
-                var id = LearningFlowService.Add(newFlow);                
+                var id = LearningFlowService.Add(newFlow);
+                if (id != null)                
+                    Notification.Add(new Notification(NotificationType.SuccesfullyAdd, DateTime.Now));                
+                else                
+                    Notification.Add(new Notification(NotificationType.FailAdd, DateTime.Now));
+                
                 return RedirectToAction("Edit", new { id });
             }
 
@@ -74,7 +84,7 @@ namespace LearnDash.Controllers
         {
             var flow = LearningFlowService.Get(id);
             if (flow != null)
-            {                
+            {
                 return View(flow);
             }
             else
@@ -94,7 +104,7 @@ namespace LearnDash.Controllers
 
         [HttpGet]
         public ActionResult List(long id)
-        {            
+        {
             return View(id);
         }
 
@@ -137,7 +147,11 @@ namespace LearnDash.Controllers
         {
             if (ModelState.IsValid)
             {
-                LearningFlowService.Update(flow);
+                var state = LearningFlowService.Update(flow);
+                if (state)
+                    Notification.Add(new Notification(NotificationType.SuccesfullyEdited, DateTime.Now));
+                else
+                    Notification.Add(new Notification(NotificationType.FailEdited, DateTime.Now));
                 return Json(Is.Success);
             }
 
