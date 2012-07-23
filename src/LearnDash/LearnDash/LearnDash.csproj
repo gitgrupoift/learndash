@@ -264,8 +264,6 @@
     <Content Include="Scripts\jquery-ui-1.8.11.min.js" />
     <Content Include="Scripts\jquery.event.drag-2.0.min.js" />
     <Content Include="Scripts\jquery.event.drop-2.0.min.js" />
-    <Content Include="Scripts\jquery.roundabout-shapes.min.js" />
-    <Content Include="Scripts\jquery.roundabout.js" />
     <Content Include="Scripts\jquery.roundabout.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />

@@ -57,10 +57,8 @@ namespace LearnDash
             BundleTable.Bundles.RegisterTemplateBundles();
 
             var bundle = new Bundle("~/Scripts/customjs");
-            bundle.AddFile("~/Scripts/jquery.roundabout.js");
             bundle.AddFile("~/Scripts/jquery.event.drag-2.0.min.js");
             bundle.AddFile("~/Scripts/jquery.event.drop-2.0.min.js");
-            bundle.AddFile("~/Scripts/jquery.roundabout-shapes.min.js");
             bundle.AddFile("~/Scripts/learningflow.js");
             bundle.AddFile("~/Scripts/userecho.js");
             BundleTable.Bundles.Add(bundle);
@@ -81,10 +79,10 @@ namespace LearnDash
         {
             container = new WindsorContainer();
 
-            //ISessionFactoryProvider doesnt have implemention by using TypedFactoryFacility castle will provide its own default factory
+            // ISessionFactoryProvider doesnt have implemention by using TypedFactoryFacility castle will provide its own default factory
             container.Kernel.AddFacility<TypedFactoryFacility>();
 
-            //installing all the castle providers
+            // installing all the castle providers
             container.Install(
                 new NHibernateInstaller(),
                 new RepositoryInstaller(),
@@ -92,7 +90,7 @@ namespace LearnDash
                 new ServicesInstaller()
                 );
 
-            //binding mvc controller factory with new factory that uses windsor
+            // binding mvc controller factory with new factory that uses windsor
             var controllerFactory = new WindsorControllerFactory(container.Kernel);
             ControllerBuilder.Current.SetControllerFactory(controllerFactory);
         }
