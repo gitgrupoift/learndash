@@ -6,10 +6,37 @@ using System.Web;
 namespace LearnDash.Controllers
 {
     public class Notification
-    {       
-        public static string ShowNotification(NotificationType type)
+    {
+
+        public NotificationType Type { get; set; }
+        public DateTime NotificationTime { get; set; }
+
+        public Notification(NotificationType type, DateTime notificationType)
         {
-            return type.ToString().Replace("_", " ");
-        }        
+            Type = type;
+            NotificationTime = notificationType;
+        }
+
+        public static void Add(Notification Item)
+        {
+            List<Notification> list = null;
+
+            if (SessionManager.ListOfNotifications != null)
+            {
+                list = SessionManager.ListOfNotifications;
+                list.Add(Item);
+                SessionManager.ListOfNotifications = list;
+            }
+            else
+            {
+                list = new List<Notification>();
+                list.Add(Item);
+                SessionManager.ListOfNotifications = list;
+            }
+        }
+
     }
+
+
+
 }

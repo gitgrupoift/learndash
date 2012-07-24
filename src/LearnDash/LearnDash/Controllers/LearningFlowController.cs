@@ -41,7 +41,6 @@
             {
                 return this.View("Error", ErrorType.NotFound);
             }
-
         }
 
         [HttpPost]
@@ -49,7 +48,12 @@
         {
             if (ModelState.IsValid)
             {
-                LearningFlowService.Update(flow);
+                var state = LearningFlowService.Update(flow);
+                if (state)                
+                    Notification.Add(new Notification(NotificationType.SuccesfullyEdited, DateTime.Now));                
+                else                
+                    Notification.Add(new Notification(NotificationType.FailEdited, DateTime.Now));
+                
                 return View(flow);
             }
 
@@ -71,6 +75,11 @@
             {
                 newFlow.Tasks = new List<LearningTask>();
                 var id = LearningFlowService.Add(newFlow);
+                if (id != null)                
+                    Notification.Add(new Notification(NotificationType.SuccesfullyAdd, DateTime.Now));                
+                else                
+                    Notification.Add(new Notification(NotificationType.FailAdd, DateTime.Now));
+                
                 return RedirectToAction("Edit", new { id });
             }
 
@@ -110,7 +119,6 @@
             if (user != null)
             {
                 var flows = user.Dashboards.First().Flows.ToList();
-                ViewBag.Notification = Notification.ShowNotification(NotificationType.Succesfully_add);
                 return View(flows);
             }
             else
@@ -165,7 +173,11 @@
         {
             if (ModelState.IsValid)
             {
-                LearningFlowService.Update(flow);
+                var state = LearningFlowService.Update(flow);
+                if (state)
+                    Notification.Add(new Notification(NotificationType.SuccesfullyEdited, DateTime.Now));
+                else
+                    Notification.Add(new Notification(NotificationType.FailEdited, DateTime.Now));
                 return Json(Is.Success);
             }
 

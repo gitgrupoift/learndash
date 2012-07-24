@@ -1,0 +1,60 @@
+﻿@using LearnDash.Controllers
+@model List<Notification>
+@{
+    string message = "There's no important to say..."; ;
+    if (@Model != null)
+    {
+        if (@Model.Count != 0)
+        {
+            foreach (var notification in @Model)
+            {
+
+                switch (notification.Type)
+                {
+                    case NotificationType.FailAdd:
+                        message = "Fail at adding";
+                        break;
+                    case NotificationType.FailDeleted:
+                        message = "Fail at deleting";
+                        break;
+                    case NotificationType.FailEdited:
+                        message = "Fail at editing";
+                        break;
+                    case NotificationType.FailedToLoadFlow:
+                        message = "Fail at loading flow";
+                        break;
+                    case NotificationType.SuccesfullyAdd:
+                        message = "Succesfylly add";
+                        break;
+                    case NotificationType.SuccesfullyDeleted:
+                        message = "Succesfully deleted";
+                        break;
+                    case NotificationType.SuccesfullyEdited:
+                        message = "Succesfully edited";
+                        break;
+                    default:
+                        message = "There's no important to say...";
+                        break;
+                }   
+        
+     
+        
+    <h3>
+        Notification : @message, time : @notification.NotificationTime</h3>
+
+            }
+        }
+        else
+        {
+    <h3>
+        Notification : @message</h3> 
+        }
+    }
+    else
+    {
+    <h3>
+        Notification : @message</h3>
+    }
+    
+
+}
