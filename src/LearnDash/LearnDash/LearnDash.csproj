@@ -197,6 +197,7 @@
     <Compile Include="Error.aspx.designer.cs">
       <DependentUpon>Error.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Services\IUserService.cs" />
     <Compile Include="SessionFactoryProvider.cs" />
     <Compile Include="ISessionFactoryProvider.cs" />
     <Compile Include="Controllers\ErrorType.cs" />
