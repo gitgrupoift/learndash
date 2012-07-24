@@ -1,53 +1,82 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Security;
-using Castle.Core.Logging;
-using LearnDash.Dal.Models;
-using LearnDash.Dal.NHibernate;
-using LearnDash.Controllers;
-
-namespace LearnDash
+﻿namespace LearnDash
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Security;
+
+    using LearnDash.Controllers;
+    using LearnDash.Dal.Models;
+    using LearnDash.Dal.NHibernate;
+
     public static class SessionManager
     {
-        public static NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-        private const string CurrentUserKey = "CurrentUser";
-        private const string CurrentListOfNotification = "ListOfNotification";
-        public static UserProfile CurrentUser
+        private const string CurrentUserKey = "CurrentUserSession";
+        private const string CurrentListOfNotificationKey = "ListOfNotification";
+
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
+
+
+        public static UserProfileSession CurrentUserSession
         {
             get
             {
-                if (HttpContext.Current.Session[CurrentUserKey] != null)
-                    return HttpContext.Current.Session[CurrentUserKey] as UserProfile;
-                else
+                var data = Session<UserProfileSession>(CurrentUserKey);
+
+                if (data == null)
                 {
                     Logger.Error("No Current User in Session. \r\nThis value should be set in Account Controller on Logon.\n deleting authentication token.");
 
                     FormsAuthentication.SignOut();
-                    return null;
                 }
+
+                return data;
             }
-            set { HttpContext.Current.Session[CurrentUserKey] = value; }
+
+            set
+            {
+                Logger.Trace("UserProfile session created");
+                HttpContext.Current.Session[CurrentUserKey] = value;
+            }
         }
 
         public static List<Notification> ListOfNotifications
         {            
             get
             {
-                if (HttpContext.Current.Session[CurrentListOfNotification] != null)
-                    return HttpContext.Current.Session[CurrentListOfNotification] as List<Notification>;
-                else
+                var data = Session<List<Notification>>(CurrentListOfNotificationKey);
+
+                if (data == null)
                 {
                     Logger.Error("No Current Notification in Session \r\n This Value should be set in Notification Method - Add while we add new notification");
-                    return null;
+                }
+
+                return data;
+            }
+
+            set
+            {
+                Logger.Trace("Notification session created");
+                HttpContext.Current.Session[CurrentListOfNotificationKey] = value;
+            }
+        }
+
+        private static T Session<T>(string key)
+            where T : class
+        {
+            if (HttpContext.Current.Session[key] != null)
+            {
+                var obj = HttpContext.Current.Session[key] as T;
+
+                if (obj != null)
+                {
+                    return obj;
                 }
             }
-            set
-            {                
-                HttpContext.Current.Session[CurrentListOfNotification] = value;
-            }
+
+            return null;
         }
     }
 }

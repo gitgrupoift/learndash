@@ -205,6 +205,8 @@
     <Compile Include="Error.aspx.designer.cs">
       <DependentUpon>Error.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Services\IUserService.cs" />
+    <Compile Include="Services\UserService.cs" />
     <Compile Include="SessionFactoryProvider.cs" />
     <Compile Include="ISessionFactoryProvider.cs" />
     <Compile Include="Controllers\ErrorType.cs" />
@@ -221,6 +223,7 @@
     <Compile Include="Services\ILearningFlowService.cs" />
     <Compile Include="Services\LearningFlowService.cs" />
     <Compile Include="SessionManager.cs" />
+    <Compile Include="UserProfileSession.cs" />
     <Compile Include="Windsor\Installers\ControllersInstaller.cs" />
     <Compile Include="Windsor\Installers\NHibernateInstaller.cs" />
     <Compile Include="Windsor\Installers\RepositoryInstaller.cs" />
@@ -272,8 +275,6 @@
     <Content Include="Scripts\jquery-ui-1.8.11.min.js" />
     <Content Include="Scripts\jquery.event.drag-2.0.min.js" />
     <Content Include="Scripts\jquery.event.drop-2.0.min.js" />
-    <Content Include="Scripts\jquery.roundabout-shapes.min.js" />
-    <Content Include="Scripts\jquery.roundabout.js" />
     <Content Include="Scripts\jquery.roundabout.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
@@ -286,6 +287,7 @@
     <Content Include="Scripts\knockout-2.0.0.js" />
     <Content Include="Scripts\learningflow.js" />
     <Content Include="Scripts\modernizr-2.0.6-development-only.js" />
+    <Content Include="Scripts\userecho.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

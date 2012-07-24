@@ -4,9 +4,13 @@ using System.Collections.ObjectModel;
 
 namespace LearnDash.Dal.Models
 {
-    public class LearningFlow : IModel
+    using System.ComponentModel.DataAnnotations;
+
+    public class LearningFlow : IDBModel
     {
+        [Required]
         public virtual int ID { get; set; }
+        [Required(ErrorMessage = "Name is required")]
         public virtual string Name { get; set; }
 
         private  ICollection<LearningTask> _tasks;
@@ -22,7 +26,7 @@ namespace LearnDash.Dal.Models
         }
 
         [Obsolete("Dont use this.Has to be defined for the json serializer")]
-        public  LearningFlow()
+        public LearningFlow()
         {
             
         }

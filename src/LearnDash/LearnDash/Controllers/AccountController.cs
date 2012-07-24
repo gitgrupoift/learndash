@@ -70,13 +70,14 @@ namespace LearnDash.Controllers
                     }
                     catch (ProtocolException ex)
                     {
-                        this.ViewBag.Error = string.Format("Unable to authenticate: {0}", ex.Message);
+                        Logger.Error("Unable to authenticate: {0}", ex.Message);
+                        this.ViewBag.Error = "Authentication failed";
                         return this.View("Login");
                     }
                 }
                 else
                 {
-                    this.ViewBag.Error = ("Invalid identifier");
+                    this.ViewBag.Error = "Invalid identifier";
                     return this.View("Login");
                 }
             }
@@ -90,6 +91,7 @@ namespace LearnDash.Controllers
                 {
                     case AuthenticationStatus.Authenticated:
                         Logger.Info("User succesfully authenticated");
+
                         // todo : create a simple parser of this data first tog et mail
                         var claimsResponse = response.GetExtension<FetchResponse>();
                         this.IssueAuthTicket(claimsResponse.Attributes[0].Values[0], true);
@@ -101,24 +103,38 @@ namespace LearnDash.Controllers
                             currentUser = new UserProfile
                                               {
                                                   UserId = claimsResponse.Attributes[0].Values[0],
-                                                  Dashboards = new List<LearningDashboard> {new LearningDashboard()}
+                                                  Dashboards = new List<LearningDashboard>
+                                                      {
+                                                          new LearningDashboard()
+                                                      }
                                               };
-                            this.userRepository.Add(currentUser);
+                            var id = this.userRepository.Add(currentUser);
+                            if (id < 0)
+                            {
+                                Logger.Warn("Authentication procedure failed on adding new user, redirecting to Login");
+                                this.ViewBag.Error = "Authentication failed";
+                                return this.View("Login");  
+                            }
                         }
 
-                        SessionManager.CurrentUser = currentUser;
+                        SessionManager.CurrentUserSession = new UserProfileSession
+                            {
+                                ID = currentUser.ID, 
+                                MainDashboardId = currentUser.Dashboards.First().ID,
+                                UserId = currentUser.UserId
+                            };
 
                         Logger.Info("Authentication procedure succesfull redirecting to Home/Index");
-                        return RedirectToAction("Index","Home");
+                        return this.RedirectToAction("Index", "Home");
 
                     case AuthenticationStatus.Canceled:
-                        Logger.Info("Authentication canceled");
-                        this.ViewBag.Error = "Canceled at provider";
-                        return View("Login");
+                        Logger.Warn("Authentication canceled : {0}",response.Exception.Message);
+                        this.ViewBag.Error = "Authentication failed";
+                        return this.View("Login");
                     case AuthenticationStatus.Failed:
-                        Logger.Info("Authentication failed");
-                        this.ViewBag.Error = response.Exception.Message;
-                        return View("Login");
+                        Logger.Error("Authentication failed : {0}",response.Exception.Message);
+                        this.ViewBag.Error = "Authentication failed";
+                        return this.View("Login");
                 }
             }
             return new EmptyResult();

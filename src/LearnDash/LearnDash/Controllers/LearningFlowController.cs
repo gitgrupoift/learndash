@@ -1,38 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
-using Castle.Core.Logging;
-using LearnDash.Dal;
-using LearnDash.Dal.Models;
-using LearnDash.Dal.NHibernate;
-using LearnDash.Services;
-
-namespace LearnDash.Controllers
+﻿namespace LearnDash.Controllers
 {
-    //[Authorize]
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Mvc;
+    using System.Web.Routing;
+    using Castle.Core.Logging;
+    using LearnDash.Dal;
+    using LearnDash.Dal.Models;
+    using LearnDash.Dal.NHibernate;
+    using LearnDash.Services;
+
+    [Authorize]
     public class LearningFlowController : Controller
     {
         public ILearningFlowService LearningFlowService { get; set; }
 
         public IRepository<LearningTask> LearningTaskRepository { get; set; }
+        public IRepository<UserProfile> UserRepository { get; set; } 
+
 
         public static NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
         //todo : should open default learing flow
         public ActionResult Index()
         {
-            return View();
+            return this.View();
         }
 
         [HttpGet]
         public ActionResult Edit(int id)
         {
             var flow = LearningFlowService.Get(id);
-            return View(flow);
-
+            if (flow != null)
+            {
+                return this.View(flow);
+            }
+            else
+            {
+                return this.View("Error", ErrorType.NotFound);
+            }
         }
 
         [HttpPost]
@@ -103,13 +111,31 @@ namespace LearnDash.Controllers
         }
 
         [HttpGet]
-        public ActionResult List(long id)
+        public ActionResult List()
         {
-            return View(id);
+            // refactor : here we are using GetByParameteres euqls which return IList unnecesary implement nhibernate Linq :X
+            var user = this.UserRepository.GetByParameterEqualsFilter("UserId", User.Identity.Name).SingleOrDefault();
+
+            if (user != null)
+            {
+                var flows = user.Dashboards.First().Flows.ToList();
+                return View(flows);
+            }
+            else
+            {
+                Logger.Warn("User '{0}' doesn't exist \r\nPropably session should be recycled and register procedure performed again.", User.Identity.Name);
+                return RedirectToAction("Logout", "Account");
+            }
         }
 
         [HttpPost]
         public ActionResult CompleteTask(int lastCompleteTaskId, int newCompleteTaskId)
+        {
+            return this.MakeNext(lastCompleteTaskId, newCompleteTaskId);
+        }
+
+        [HttpPost]
+        public ActionResult MakeNext(int lastCompleteTaskId, int newCompleteTaskId)
         {
             if (lastCompleteTaskId >= 0 && newCompleteTaskId >= 0)
             {

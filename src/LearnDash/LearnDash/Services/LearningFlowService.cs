@@ -1,20 +1,27 @@
-using System.Collections.Generic;
-using System.Linq;
-using LearnDash.Controllers;
-using LearnDash.Dal;
-using LearnDash.Dal.Models;
-using LearnDash.Dal.NHibernate;
-
 namespace LearnDash.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using LearnDash.Controllers;
+    using LearnDash.Dal;
+    using LearnDash.Dal.Models;
+    using LearnDash.Dal.NHibernate;
+
     public class LearningFlowService : ILearningFlowService
     {
-        public NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger(); 
-        public IRepository<LearningFlow> _flowRepo { get; set; }
-        public IRepository<LearningDashboard> _dashRepo { get; set; }
-        public IRepository<LearningTask> _tasksRepo { get; set; } 
+        private readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
-        //utest
+        public IRepository<LearningFlow> FlowRepo { get; set; }
+
+        public IRepository<LearningDashboard> DashRepo { get; set; }
+
+        public IRepository<LearningTask> TasksRepo { get; set; }
+
+        // utest
+
+        /// <summary>
+        /// This function sorts flow so that first element is the one with IsNext = true
+        /// </summary>
         public LearningFlow SortFlow(LearningFlow sourceFlow)
         {
             if (sourceFlow != null && sourceFlow.Tasks != null)
@@ -37,38 +44,38 @@ namespace LearnDash.Services
 
         public bool Update(LearningFlow flow)
         {
-            var result = _flowRepo.Update(flow);
+            var result = this.FlowRepo.Update(flow);
             return result;
         }
 
         public int? Add(LearningFlow flow)
         {
-            var currentDashboard = _dashRepo.GetById(1);
+            var currentDashboard = this.DashRepo.GetById(SessionManager.CurrentUserSession.MainDashboardId);
             currentDashboard.Flows.Add(flow);
-            _dashRepo.Update(currentDashboard);
+            this.DashRepo.Update(currentDashboard);
             return flow.ID;
         }
 
         public LearningFlow Get(int id)
         {
-            return SortFlow(_flowRepo.GetById(id));
+            return this.SortFlow(this.FlowRepo.GetById(id));
         }
 
         public List<LearningFlow> GetAll()
         {
-            return _flowRepo.GetAll().ToList();
+            return this.FlowRepo.GetAll().ToList();
         }
 
         public void Remove(int id)
         {
-            var learnFlow = _flowRepo.GetById(id);
+            var learnFlow = this.FlowRepo.GetById(id);
             if (learnFlow != null)
             {
-                _flowRepo.Remove(learnFlow);
+                this.FlowRepo.Remove(learnFlow);
             }
             else
             {
-                Logger.Warn("Remove method failed beacuse no learnFlow with id '{0}' exists", id);
+                this.logger.Warn("Remove method failed beacuse no learnFlow with id '{0}' exists", id);
             }
         }
     }

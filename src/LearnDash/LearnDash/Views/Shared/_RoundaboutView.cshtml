@@ -1,47 +1,17 @@
 ﻿@model LearnDash.Dal.Models.LearningFlow
 <link href="../../Content/roundabout.css" rel="stylesheet" type="text/css" />
-<div class="roundabout">
-    <ul>
-        <li class="flow-name"><span>@Model.Name</span></li>
-        @foreach(var task in Model.Tasks)
+<div class="flow-name">
+    <span>@Model.Name</span>
+</div>
+<div class="flow-task-container">
+        @foreach (var task in Model.Tasks)
         {
             var flowClass = "flow-task";
-            
+
             if (task.IsNext)
             {
                 flowClass += " flow-next";
             }
-            <li class="@flowClass" data-counter ="@task.TimesDone" data-id="@task.ID"><span>@task.Name</span></li>
+            <div class="@flowClass" data-id="@task.ID"><span>@task.Name</span></div>
         }
-    </ul>
 </div>
-
-<script>
-    var currentNextChild = 0;
-    
-    $(document).ready(function () {
-        initRoundAbout();
-    });
-
-    function initRoundAbout() {
-        $('.roundabout ul').roundabout({
-            tilt: 0,
-            minScale: 0.1,
-            minOpacity: 1,
-            minZ: 100,
-            maxZ: 6000,
-            duration: 400,
-            easing: 'easeOutQuad',
-            enableDrag: true,
-            dropEasing: 'easeOutBounce',
-            childSelector: '.flow-task',
-            dragFactor: 15,
-            dropCallback: function () {
-                $(this).roundabout("animateToChild", currentNextChild);
-            }
-        }, function () {
-            $(this).fadeTo(500, 1);
-        });
-    }
-    
-</script>

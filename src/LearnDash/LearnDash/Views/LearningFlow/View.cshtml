@@ -2,40 +2,67 @@
 
 @Html.Partial("_RoundaboutView", Model)
 
+<div class="clear-both"></div>
+<div>
+    <button id="btnComplete">Complete</button>
+</div>
 
-<button id="btnComplete">Complete</button>
 <script type="text/javascript">
-    $(function () {
+    var currentNextChildIndex = 0;
+    
+    var nextTask;
+    var currentTask;
+    
+    $(function() {
 
-        $("#btnComplete").click(function () {
+        // if there is only one task, hide complete button
+        if ($('.flow-task').length <= 1) {
+            $('#btnComplete').hide();
+        }
 
-            $("#btnComplete").hide();
-            currentNextChild++;
-            var current = $(".flow-next");
-            var next;
+        $('#btnComplete').click(function() {
 
-            var currentTimesDone = current.attr("data-counter");
-            current.attr("data-counter", ++currentTimesDone);
-            if (currentNextChild >= $('.roundabout ul li').length - 1) {
-                currentNextChild = 0;
-                next = $(".flow-task").first();
-                next.addClass("flow-next");
-                current.removeClass("flow-next");
+            // hide button so user is not able to click him again - could be replaced by loading overlay
+            $(this).hide();
+
+            currentTask = $('.flow-next');
+
+            if (IsTheLastTask()) {
+                SetFirstTaskAsNext();
+            } else {
+                SetNextTaskAsNext();
             }
-            else {
-                next = current.next();
-                next.addClass("flow-next");
-                current.removeClass("flow-next");
-            }
 
-            $('.roundabout ul').roundabout("animateToNextChild", function () {
-                $("#btnComplete").show();
-            });
-
-            var lastId = current.attr("data-id");
-            var newId = next.attr("data-id");
+            var lastId = currentTask.attr("data-id");
+            var newId = nextTask.attr("data-id");
 
             CompleteTask(lastId, newId, "@Url.Action("CompleteTask", "LearningFlow")");
+            
+            // todo : this has to be in succes function from ajax call
+            // if operation is finished show the complete button
+            $(this).show();
         });
-    })
+    });
+    
+    function IsTheLastTask() {
+        return currentNextChildIndex >= $('.flow-task').length - 1;
+    }
+    
+    function SetFirstTaskAsNext() {
+        currentNextChildIndex = 0;
+        nextTask = $(".flow-task").first();
+        ToogleNextClass(nextTask, currentTask);
+    }
+    
+    function SetNextTaskAsNext() {
+        currentNextChildIndex++;
+        nextTask = currentTask.next();
+        ToogleNextClass(nextTask, currentTask);
+    }
+    
+    function ToogleNextClass(next,current) {
+        next.addClass("flow-next");
+        current.removeClass("flow-next");
+    }
+
 </script>

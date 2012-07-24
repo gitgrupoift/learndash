@@ -16,25 +16,9 @@ namespace LearnDash.Controllers
     {
         public static NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         
-
-        public IRepository<UserProfile> userRepository { get; set; } 
-
         public ActionResult Index()
         {
-            // refactor : here we are using GetByParameteres euqls which return IList unnecesary implement nhibernate Linq :X
-            var user = this.userRepository.GetByParameterEqualsFilter("UserId", User.Identity.Name).SingleOrDefault();
-
-            if (user != null)
-            {
-                
-                var flows = user.Dashboards.First().Flows.ToList();                
-                return View(flows);
-            }
-            else
-            {
-                Logger.Warn("User '{0}' doesn't exist \r\nPropably session should be recycled and register procedure performed again.", User.Identity.Name);
-                return RedirectToAction("Logout", "Account");
-            }
+            return RedirectToAction("List", "LearningFlow");
         }
 
         public ActionResult About()

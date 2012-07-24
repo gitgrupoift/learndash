@@ -18,9 +18,9 @@
 //            {
 //                return false;
 //            }
-//            if (x is IModel && y is IModel)
+//            if (x is IDBModel && y is IDBModel)
 //            {
-//                return ((IModel)x).ID == ((IModel)y).ID;
+//                return ((IDBModel)x).ID == ((IDBModel)y).ID;
 //            }
 
 //            return x.Equals(y); 

@@ -1,44 +1,44 @@
 ﻿@model LearnDash.Dal.Models.LearningFlow
 @using LearnDash.Controllers
 <link href="../../Content/roundabout.css" rel="stylesheet" type="text/css" />
-
 <br />
 <br />
 <br />
-
 <!-- refactor delete unused span -->
-<div class="flow-name"><span>@Model.Name</span></div>
-
+<div class="flow-name">
+    <span>@Model.Name</span></div>
 <br />
 <br />
 <br />
-
 <ul class="flow-list">
-
-@foreach (var task in Model.Tasks)
-{
-    var flowClass = "flow-task";
-
-    if (task.IsNext)
+    @foreach (var task in Model.Tasks)
     {
-        flowClass += " flow-next";
-    }
-    
-  <li class="@flowClass" data-id="@task.ID" data-counter ="@task.TimesDone"><span>@task.Name</span>
-    <button class="btnRemoveTask">Delete Task</button>
-    <button class="btnMakeNext">MakeNext</button>
-  </li>
-}
-</ul>
+        var flowClass = "flow-task";
 
+        if (task.IsNext)
+        {
+            flowClass += " flow-next";
+        }
+    
+        <li class="@flowClass" data-id="@task.ID" data-counter ="@task.TimesDone"><span>@task.Name</span>
+            <button class="btnRemoveTask">
+                Delete Task</button>
+            <button class="btnMakeNext">
+                MakeNext</button>
+        </li>
+    }
+</ul>
 <div class="flow-menu">
     <input id="txtBoxTaskName" type="text" />
     <button id="btnAddTask">
         Add Task</button>
-    <button id="btnSaveFlow">
-        SaveFlow</button>
+@*    <button id="btnSaveFlow">
+        SaveFlow</button>*@
     <button id="btnClear">
         ClearFlow</button>
+</div>
+<div id="taskNameValidation" style="display: none;">
+    Task name is required!
 </div>
 <script type="text/javascript">
     $(function () {
@@ -49,44 +49,82 @@
         txtBoxtTaskName.focus().keypress(function(e) {
                 if(e.which == 13) {
                     btnAddTask.click();
-                    $(this).val("");
                 }
             });
 
         btnAddTask.click(function () {
             var taskName = txtBoxtTaskName.val();
-            var currentElementsCount = $('.flow-task').size();
-            var taskClass = "flow-task";
-            if (currentElementsCount <= 0) {
-                taskClass = taskClass + " flow-next";
-            }
-            var newElement = $("<li class='" + taskClass + "'><span>" + taskName + "</span><button class='btnRemoveTask'>Delete Task</button><button class='btnMakeNext'>MakeNext</button></li>");
-            $(".flow-list").append(newElement);
+            txtBoxtTaskName.val("");
+            $("#taskNameValidation").hide();
+            if(!isBlank(taskName)) {
+                var currentElementsCount = $('.flow-task').size();
+                var taskClass = "flow-task";
+                if (currentElementsCount <= 0) {
+                    taskClass = taskClass + " flow-next";
+                }
+                var newElement = $("<li class='" + taskClass + "'><span>" + taskName + "</span><button class='btnRemoveTask'>Delete Task</button><button class='btnMakeNext'>MakeNext</button></li>");
+                $(".flow-list").append(newElement);
+
+                $(".btnMakeNext").click(function () {
+                    var lastTask = $('.flow-task');
+                    var newTask = $(this).parent();
+                    lastTask.removeClass("flow-next");
+                    newTask.addClass("flow-next");
             
-            $(".btnRemoveTask").click(function () {
-                $(this).parent().remove();
-            });
+
+                    CompleteTask(lastTask.attr('data-id'), newTask.attr('data-id'), "@Url.Action("MakeNext", "LearningFlow")");
+                });
+
+                $(".btnRemoveTask").click(function () {
+                    var removedTask = $(this).parent();
+            
+                    if(removedTask.hasClass("flow-next")) {
+                        removedTask.next().addClass("flow-next");
+                    }
+                
+            removedTask.remove();
+            SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
+        });
+                
+                SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
+            }
+            else {
+                $("#taskNameValidation").show();     
+            }
         });
 
         InitButtons();
     });
     
     function InitButtons() {
-        $("#btnSaveFlow").click(function () {
-            SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
-        });
-
         $(".btnMakeNext").click(function () {
-            $('.flow-task').removeClass("flow-next");
-            $(this).parent().addClass("flow-next");
+            var lastTask = $('.flow-task');
+            var newTask = $(this).parent();
+            lastTask.removeClass("flow-next");
+            newTask.addClass("flow-next");
+            
+
+            CompleteTask(lastTask.attr('data-id'), newTask.attr('data-id'), "@Url.Action("MakeNext", "LearningFlow")");
         });
 
         $(".btnRemoveTask").click(function () {
-            $(this).parent().remove();
+            var removedTask = $(this).parent();
+            
+            if(removedTask.hasClass("flow-next")) {
+                removedTask.next().addClass("flow-next");
+            }
+                
+            removedTask.remove();
+            SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
         });
 
         $("#btnClear").click(function () {
             $('.flow-task').remove();
+            SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
         });
+    }
+    
+    function isBlank(str) {
+        return (!str || /^\s*$/.test(str));
     }
 </script>
