@@ -103,7 +103,10 @@ namespace LearnDash.Controllers
                             currentUser = new UserProfile
                                               {
                                                   UserId = claimsResponse.Attributes[0].Values[0],
-                                                  Dashboards = new List<LearningDashboard> {new LearningDashboard()}
+                                                  Dashboards = new List<LearningDashboard>
+                                                      {
+                                                          new LearningDashboard()
+                                                      }
                                               };
                             var id = this.userRepository.Add(currentUser);
                             if (id < 0)
@@ -114,7 +117,12 @@ namespace LearnDash.Controllers
                             }
                         }
 
-                        SessionManager.CurrentUser = currentUser;
+                        SessionManager.CurrentUserSession = new UserProfileSession
+                            {
+                                ID = currentUser.ID, 
+                                MainDashboardId = currentUser.Dashboards.First().ID,
+                                UserId = currentUser.UserId
+                            };
 
                         Logger.Info("Authentication procedure succesfull redirecting to Home/Index");
                         return this.RedirectToAction("Index", "Home");

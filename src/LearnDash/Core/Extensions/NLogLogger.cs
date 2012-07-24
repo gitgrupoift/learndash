@@ -21,7 +21,7 @@
             return string.Format("{0} \r\n   {1}", ex.Message, innerException);
         }
 
-        public static void ErrorExceptionsWithInner(this Logger logger,string message,Exception ex)
+        public static void ErrorExceptionsWithInner(this Logger logger, string message,Exception ex)
         {
             var innerExceptions = string.Empty;
 

@@ -198,6 +198,7 @@
       <DependentUpon>Error.aspx</DependentUpon>
     </Compile>
     <Compile Include="Services\IUserService.cs" />
+    <Compile Include="Services\UserService.cs" />
     <Compile Include="SessionFactoryProvider.cs" />
     <Compile Include="ISessionFactoryProvider.cs" />
     <Compile Include="Controllers\ErrorType.cs" />
@@ -214,6 +215,7 @@
     <Compile Include="Services\ILearningFlowService.cs" />
     <Compile Include="Services\LearningFlowService.cs" />
     <Compile Include="SessionManager.cs" />
+    <Compile Include="UserProfileSession.cs" />
     <Compile Include="Windsor\Installers\ControllersInstaller.cs" />
     <Compile Include="Windsor\Installers\NHibernateInstaller.cs" />
     <Compile Include="Windsor\Installers\RepositoryInstaller.cs" />

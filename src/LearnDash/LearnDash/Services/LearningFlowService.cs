@@ -50,7 +50,7 @@ namespace LearnDash.Services
 
         public int? Add(LearningFlow flow)
         {
-            var currentDashboard = this.DashRepo.GetById(3);
+            var currentDashboard = this.DashRepo.GetById(SessionManager.CurrentUserSession.MainDashboardId);
             currentDashboard.Flows.Add(flow);
             this.DashRepo.Update(currentDashboard);
             return flow.ID;
