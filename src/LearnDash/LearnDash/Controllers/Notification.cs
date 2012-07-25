@@ -11,10 +11,10 @@ namespace LearnDash.Controllers
         public NotificationType Type { get; set; }
         public DateTime NotificationTime { get; set; }
 
-        public Notification(NotificationType type, DateTime notificationType)
+        public Notification(NotificationType type)
         {
             Type = type;
-            NotificationTime = notificationType;
+            NotificationTime = DateTime.Now;
         }
 
         public static void Add(Notification Item)
