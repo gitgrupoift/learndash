@@ -61,35 +61,35 @@
                 var taskClass = "flow-task";
                 if (currentElementsCount <= 0) {
                     taskClass = taskClass + " flow-next";
-               
-                var newElement = $("<li class='" + taskClass + "'><span>" + taskName + "</span><button id='btnRemoveTask' class='btn btn-warning'><i class='icon-trash icon-white'></i></button><button id='btnMakeNext' class='btn btn-success'><i class='icon-ok icon-white'></i></button></li>");
-                $("#flow-list").append(newElement);
 
-                $("#btnMakeNext").click(function () {
-                    var lastTask = $('.flow-task');
-                    var newTask = $(this).parent();
-                    lastTask.removeClass("flow-next");
-                    newTask.addClass("flow-next");
-            
+                    var newElement = $("<li class='" + taskClass + "'><span>" + taskName + "</span><button id='btnRemoveTask' class='btn btn-warning'><i class='icon-trash icon-white'></i></button><button id='btnMakeNext' class='btn btn-success'><i class='icon-ok icon-white'></i></button></li>");
+                    $("#flow-list").append(newElement);
 
-                    CompleteTask(lastTask.attr('data-id'), newTask.attr('data-id'), "@Url.Action("MakeNext", "LearningFlow")");
-                });
+                    $("#btnMakeNext").click(function() {
+                        var lastTask = $('.flow-task');
+                        var newTask = $(this).parent();
+                        lastTask.removeClass("flow-next");
+                        newTask.addClass("flow-next");
 
-                $("#btnRemoveTask").click(function () {
-                    var removedTask = $(this).parent();
-            
-                    if(removedTask.hasClass("flow-next")) {
-                        removedTask.next().addClass("flow-next");
-                    }
-                
-            removedTask.remove();
-            SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
-        });
-                
-                SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
-            }
-            else {
-                $("#taskNameValidation").show();     
+
+                        CompleteTask(lastTask.attr('data-id'), newTask.attr('data-id'), "@Url.Action("MakeNext", "LearningFlow")");
+                    });
+
+                    $("#btnRemoveTask").click(function() {
+                        var removedTask = $(this).parent();
+
+                        if (removedTask.hasClass("flow-next")) {
+                            removedTask.next().addClass("flow-next");
+                        }
+
+                        removedTask.remove();
+                        SaveFlow('@Model.ID', "@Url.Action("Save", "LearningFlow")");
+                    });
+
+                    SaveFlow('@Model.ID', "@Url.Action("Save", "LearningFlow")");
+                } else {
+                    $("#taskNameValidation").show();
+                }
             }
         });
 
