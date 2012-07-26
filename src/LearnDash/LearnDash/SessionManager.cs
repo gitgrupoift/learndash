@@ -6,9 +6,12 @@
     using System.Web;
     using System.Web.Security;
 
+    using Castle.Windsor;
+
     using LearnDash.Controllers;
     using LearnDash.Dal.Models;
     using LearnDash.Dal.NHibernate;
+    using LearnDash.Services;
 
     public static class SessionManager
     {
@@ -17,6 +20,14 @@
 
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
+
+        public static IUserService UserService 
+        { 
+            get
+            {
+                return Container.Resolve<IUserService>();
+            } 
+        } 
 
 
         public static UserProfileSession CurrentUserSession
@@ -27,9 +38,15 @@
 
                 if (data == null)
                 {
-                    Logger.Error("No Current User in Session. \r\nThis value should be set in Account Controller on Logon.\n deleting authentication token.");
-
-                    FormsAuthentication.SignOut();
+                    Logger.Warn("No Current User in Session. \r\n Retrieving UserProfile linked with current authentication token.");
+                    var user = UserService.GetCurrentUser();
+                    data = new UserProfileSession
+                        {
+                            ID = user.ID,
+                            MainDashboardId = user.Dashboards.First().ID,
+                            UserId = user.UserId
+                        };
+                    HttpContext.Current.Session[CurrentUserKey] = data;
                 }
 
                 return data;
@@ -50,7 +67,9 @@
 
                 if (data == null)
                 {
-                    Logger.Error("No Current Notification in Session \r\n This Value should be set in Notification Method - Add while we add new notification");
+                    Logger.Warn("No Current Notification in Session \r\n Creating empty notification list.");
+                    data = new List<Notification>();
+                    HttpContext.Current.Session[CurrentListOfNotificationKey] = data;
                 }
 
                 return data;
@@ -62,6 +81,8 @@
                 HttpContext.Current.Session[CurrentListOfNotificationKey] = value;
             }
         }
+
+        internal static IWindsorContainer Container { private get; set; }
 
         private static T Session<T>(string key)
             where T : class

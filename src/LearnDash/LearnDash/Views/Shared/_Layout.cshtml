@@ -26,7 +26,7 @@
                     </ul>
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <ul class="nav" style="margin-left : 70px">
+                    <ul class="nav pull-right">
                         <li><a href="@Url.Action("Index", "Account")">@User.Identity.Name</a></li>
                         <li><a href="@Url.Action("Logout", "Account")">Logout</a></li>
                     </ul>
