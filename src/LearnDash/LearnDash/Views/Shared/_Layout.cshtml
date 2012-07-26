@@ -24,12 +24,15 @@
                         <li><a href="@Url.Action("About", "Home")">About</a></li>
                         <li><a href="@Url.Action("Contact", "Home")">Contact</a></li>
                     </ul>
-                </div>              
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <a class="loginInformation">Logged in as : @User.Identity.Name</a>
-                    <a href="@Url.Action("Logout", "Account")">">Logout</a>
+                    <ul class="nav" style="margin-left : 70px">
+                        <li><a href="@Url.Action("Index", "Account")">@User.Identity.Name</a></li>
+                        <li><a href="@Url.Action("Logout", "Account")">Logout</a></li>
+                    </ul>
                 }
+                </div>              
+                    
             </div>
         </div>
     </div>
