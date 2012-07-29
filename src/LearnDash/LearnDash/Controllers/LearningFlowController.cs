@@ -137,6 +137,15 @@
         [HttpPost]
         public ActionResult CompleteTask(int lastCompleteTaskId, int newCompleteTaskId)
         {
+            if (lastCompleteTaskId != 0 && newCompleteTaskId != 0)
+            {
+                Notification.Add(new Notification(NotificationType.SuccesfullyAdd));                
+            }
+            else
+            {
+                Notification.Add(new Notification(NotificationType.FailAdd));
+            }
+
             return this.MakeNext(lastCompleteTaskId, newCompleteTaskId);
         }
 
