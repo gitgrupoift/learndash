@@ -59,8 +59,11 @@
             if(!isBlank(taskName)) {
                 var currentElementsCount = $('.flow-task').size();
                 var taskClass = "flow-task";
+                
+                // if there are none tasks this task will be set as next
                 if (currentElementsCount <= 0) {
                     taskClass = taskClass + " flow-next";
+                }
 
                     var newElement = $("<li class='" + taskClass + "'><span>" + taskName + "</span><button id='btnRemoveTask' class='btn btn-warning'><i class='icon-trash icon-white'></i></button><button id='btnMakeNext' class='btn btn-success'><i class='icon-ok icon-white'></i></button></li>");
                     $("#flow-list").append(newElement);
@@ -90,7 +93,6 @@
                 } else {
                     $("#taskNameValidation").show();
                 }
-            }
         });
 
         InitButtons();
