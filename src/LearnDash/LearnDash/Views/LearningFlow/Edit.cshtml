@@ -21,10 +21,10 @@
         }
     
         <li class="@flowClass" data-id="@task.ID" data-counter ="@task.TimesDone"><span>@task.Name</span>
-            <button id="btnMakeNext" class="btn btn-success">
+            <button name="btnMakeNext" class="btn btn-success">
                 <i class="icon-ok icon-white"></i>
             </button>
-            <button id="btnRemoveTask" class="btn btn-warning">
+            <button name="btnRemoveTask" class="btn btn-warning">
                 <i class="icon-trash icon-white"></i>
             </button>
         </li>
@@ -65,10 +65,10 @@
                     taskClass = taskClass + " flow-next";
                 }
 
-                    var newElement = $("<li class='" + taskClass + "'><span>" + taskName + "</span><button id='btnRemoveTask' class='btn btn-warning'><i class='icon-trash icon-white'></i></button><button id='btnMakeNext' class='btn btn-success'><i class='icon-ok icon-white'></i></button></li>");
+                    var newElement = $("<li class='" + taskClass + "'><span>" + taskName + "</span><button name='btnMakeNext' class='btn btn-success'><i class='icon-ok icon-white'></i></button><button name='btnRemoveTask' class='btn btn-warning'><i class='icon-trash icon-white'></i></button></li>");
                     $("#flow-list").append(newElement);
 
-                    $("#btnMakeNext").click(function() {
+                    $("[name='btnMakeNext']").click(function() {
                         var lastTask = $('.flow-task');
                         var newTask = $(this).parent();
                         lastTask.removeClass("flow-next");
@@ -78,7 +78,7 @@
                         CompleteTask(lastTask.attr('data-id'), newTask.attr('data-id'), "@Url.Action("MakeNext", "LearningFlow")");
                     });
 
-                    $("#btnRemoveTask").click(function() {
+                    $("[name='btnRemoveTask']").click(function() {
                         var removedTask = $(this).parent();
 
                         if (removedTask.hasClass("flow-next")) {
@@ -99,7 +99,7 @@
     });
     
     function InitButtons() {
-        $("#btnMakeNext").click(function () {
+        $("[name='btnMakeNext']").click(function () {
             var lastTask = $('.flow-task');
             var newTask = $(this).parent();
             lastTask.removeClass("flow-next");
@@ -109,7 +109,7 @@
             CompleteTask(lastTask.attr('data-id'), newTask.attr('data-id'), "@Url.Action("MakeNext", "LearningFlow")");
         });
 
-        $("#btnRemoveTask").click(function () {
+        $("[name='btnRemoveTask']").click(function () {
             var removedTask = $(this).parent();
             
             if(removedTask.hasClass("flow-next")) {

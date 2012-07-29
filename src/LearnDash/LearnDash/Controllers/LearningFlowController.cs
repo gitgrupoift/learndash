@@ -129,6 +129,20 @@
         }
 
         [HttpPost]
+        public ActionResult AddTask(LearningTask task, int flowId)
+        {
+            var flow = LearningFlowService.Get(flowId);
+            if (flow != null)
+            {
+                flow.Tasks.Add(task);
+                LearningFlowService.Update(flow);
+                return this.Json(task.ID);
+            }
+
+            this.Json(Is.Fail.Message("Task Add Problem"));
+        }
+
+        [HttpPost]
         public ActionResult CompleteTask(int lastCompleteTaskId, int newCompleteTaskId)
         {
             return this.MakeNext(lastCompleteTaskId, newCompleteTaskId);

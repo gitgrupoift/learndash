@@ -35,9 +35,6 @@
             dataType : "json",
             contentType : 'application/json',
             success: function (data) {
-                var jsonData = $.parseJSON(data);
-                if (jsonData.items.length <= 0) {
-                }
             }
         });
     }
@@ -56,9 +53,6 @@
             dataType: "json",
             contentType: 'application/json',
             success: function (data) {
-                var jsonData = $.parseJSON(data);
-                if (jsonData.items.length <= 0) {
-                }
             }
         });
     }
