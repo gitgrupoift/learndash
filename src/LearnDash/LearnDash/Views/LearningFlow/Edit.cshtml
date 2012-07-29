@@ -10,7 +10,7 @@
 <br />
 <br />
 <br />
-<ul class="flow-list">
+<ul id="flow-list">
     @foreach (var task in Model.Tasks)
     {
         var flowClass = "flow-task";
@@ -21,23 +21,23 @@
         }
     
         <li class="@flowClass" data-id="@task.ID" data-counter ="@task.TimesDone"><span>@task.Name</span>
-            <button class="btnRemoveTask">
-                Delete Task</button>
-            <button class="btnMakeNext">
-                MakeNext</button>
+            <button id="btnMakeNext" class="btn btn-success">
+                <i class="icon-ok icon-white"></i>
+            </button>
+            <button id="btnRemoveTask" class="btn btn-warning">
+                <i class="icon-trash icon-white"></i>
+            </button>
         </li>
     }
 </ul>
-<div class="flow-menu">
+<div>
     <input id="txtBoxTaskName" type="text" />
-    <button id="btnAddTask">
-        Add Task</button>
-    @*    <button id="btnSaveFlow">
-        SaveFlow</button>*@
-    <button id="btnClear">
-        ClearFlow</button>
+    <button id="btnAddTask" class="btn btn-primary">
+        <i class="icon-plus icon-white"></i>Add Task</button>
+    <button id="btnClear" class="btn btn-danger">
+        <i class="icon-repeat icon-white"></i>Clear Flow</button>
 </div>
-<div id="taskNameValidation" style="display: none;">
+<div id="taskNameValidation" class="error" style="display: none;">
     Task name is required!
 </div>
 <script type="text/javascript">
@@ -61,35 +61,35 @@
                 var taskClass = "flow-task";
                 if (currentElementsCount <= 0) {
                     taskClass = taskClass + " flow-next";
+
+                    var newElement = $("<li class='" + taskClass + "'><span>" + taskName + "</span><button id='btnRemoveTask' class='btn btn-warning'><i class='icon-trash icon-white'></i></button><button id='btnMakeNext' class='btn btn-success'><i class='icon-ok icon-white'></i></button></li>");
+                    $("#flow-list").append(newElement);
+
+                    $("#btnMakeNext").click(function() {
+                        var lastTask = $('.flow-task');
+                        var newTask = $(this).parent();
+                        lastTask.removeClass("flow-next");
+                        newTask.addClass("flow-next");
+
+
+                        CompleteTask(lastTask.attr('data-id'), newTask.attr('data-id'), "@Url.Action("MakeNext", "LearningFlow")");
+                    });
+
+                    $("#btnRemoveTask").click(function() {
+                        var removedTask = $(this).parent();
+
+                        if (removedTask.hasClass("flow-next")) {
+                            removedTask.next().addClass("flow-next");
+                        }
+
+                        removedTask.remove();
+                        SaveFlow('@Model.ID', "@Url.Action("Save", "LearningFlow")");
+                    });
+
+                    SaveFlow('@Model.ID', "@Url.Action("Save", "LearningFlow")");
+                } else {
+                    $("#taskNameValidation").show();
                 }
-                var newElement = $("<li class='" + taskClass + "'><span>" + taskName + "</span><button class='btnRemoveTask'>Delete Task</button><button class='btnMakeNext'>MakeNext</button></li>");
-                $(".flow-list").append(newElement);
-
-                $(".btnMakeNext").click(function () {
-                    var lastTask = $('.flow-task');
-                    var newTask = $(this).parent();
-                    lastTask.removeClass("flow-next");
-                    newTask.addClass("flow-next");
-            
-
-                    CompleteTask(lastTask.attr('data-id'), newTask.attr('data-id'), "@Url.Action("MakeNext", "LearningFlow")");
-                });
-
-                $(".btnRemoveTask").click(function () {
-                    var removedTask = $(this).parent();
-            
-                    if(removedTask.hasClass("flow-next")) {
-                        removedTask.next().addClass("flow-next");
-                    }
-                
-            removedTask.remove();
-            SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
-        });
-                
-                SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
-            }
-            else {
-                $("#taskNameValidation").show();     
             }
         });
 
@@ -97,7 +97,7 @@
     });
     
     function InitButtons() {
-        $(".btnMakeNext").click(function () {
+        $("#btnMakeNext").click(function () {
             var lastTask = $('.flow-task');
             var newTask = $(this).parent();
             lastTask.removeClass("flow-next");
@@ -107,7 +107,7 @@
             CompleteTask(lastTask.attr('data-id'), newTask.attr('data-id'), "@Url.Action("MakeNext", "LearningFlow")");
         });
 
-        $(".btnRemoveTask").click(function () {
+        $("#btnRemoveTask").click(function () {
             var removedTask = $(this).parent();
             
             if(removedTask.hasClass("flow-next")) {

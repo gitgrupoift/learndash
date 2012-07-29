@@ -31,7 +31,7 @@ namespace LearnDash.Windsor
             {
                 var message = string.Format("The controller for path '{0}' could not be found.", requestContext.HttpContext.Request.Path);
                 Logger.Error(message);
-                throw new HttpException(message);
+                return base.GetControllerInstance(requestContext, controllerType);
             }
 
             return (IController)kernel.Resolve(controllerType);

@@ -46,8 +46,6 @@ namespace LearnDash
 
         protected void Application_Start()
         {
-           
-
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);
@@ -87,12 +85,14 @@ namespace LearnDash
                 new NHibernateInstaller(),
                 new RepositoryInstaller(),
                 new ControllersInstaller(),
-                new ServicesInstaller()
-                );
+                new ServicesInstaller());
 
             // binding mvc controller factory with new factory that uses windsor
             var controllerFactory = new WindsorControllerFactory(container.Kernel);
             ControllerBuilder.Current.SetControllerFactory(controllerFactory);
+
+            // add container to session manager, container is then used to resolve some services
+            SessionManager.Container = container;
         }
 
         protected void Application_End()

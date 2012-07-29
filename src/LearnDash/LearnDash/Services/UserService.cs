@@ -1,6 +1,7 @@
 namespace LearnDash.Services
 {
     using System.Linq;
+    using System.Web;
 
     using LearnDash.Dal.Models;
     using LearnDash.Dal.NHibernate;
@@ -13,8 +14,25 @@ namespace LearnDash.Services
 
         public UserProfile GetCurrentUser()
         {
-            var currentUser = this.UserRepo.GetByParameterEqualsFilter("UserId", SessionManager.CurrentUserSession.UserId).SingleOrDefault();
-            return currentUser;
+            if (HttpContext.Current != null)
+            {
+                if (HttpContext.Current.User.Identity.IsAuthenticated)
+                {
+                    var currentUser =
+                        this.UserRepo.GetByParameterEqualsFilter("UserId", HttpContext.Current.User.Identity.Name).SingleOrDefault();
+                    return currentUser;
+                }
+                else
+                {
+                    logger.Warn("User not authenticated! Cant get Current User. Possible error in code logic");
+                }
+            }
+            else
+            {
+                logger.Error("HttpContext missing! If this happens our logic is wrong we need to fix this asap!");
+            }
+
+            return null;
         }
     }
 }
