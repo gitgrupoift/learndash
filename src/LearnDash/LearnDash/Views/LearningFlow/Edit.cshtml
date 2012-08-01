@@ -64,49 +64,6 @@
                 if (currentElementsCount <= 0) {
                     taskClass = taskClass + " flow-next";
                 }
-
-                    var newElement = $("<li class='" + taskClass + "'><span>" + taskName + "</span><button name='btnMakeNext' class='btn btn-success'><i class='icon-ok icon-white'></i></button><button name='btnRemoveTask' class='btn btn-warning'><i class='icon-trash icon-white'></i></button></li>");
-                    $("#flow-list").append(newElement);
-
-                    $("[name='btnMakeNext']").click(function() {
-                        var lastTask = $('.flow-task');
-                        var newTask = $(this).parent();
-                        lastTask.removeClass("flow-next");
-                        newTask.addClass("flow-next");
-
-
-                        CompleteTask(lastTask.attr('data-id'), newTask.attr('data-id'), "@Url.Action("MakeNext", "LearningFlow")");
-                    });
-
-                    $("[name='btnRemoveTask']").click(function() {
-                        var removedTask = $(this).parent();
-
-                        if (removedTask.hasClass("flow-next")) {
-                            removedTask.next().addClass("flow-next");
-                        }
-
-
-                        
-                        removedTask.remove();
-                        var id = removedTask.attr('data-id');
-
-                            $.ajax({
-                                type: "POST",
-                                url: "@Url.Action("RemoveTask", "LearningFlow")",
-                                data: JSON.stringify({taskId : id,flowId : '@Model.ID'}),
-                                dataType : "json",
-                                contentType : 'application/json',
-                                success: function (data) {
-                                    if(data.isSuccess) {
-                                        // todo: show success notification
-                                    }
-                                    else {
-                                        // todo: show error notification
-                                    }
-                                }
-                            });
-                    });
-
                     $.ajax({
                         type: "POST",
                         url: "@Url.Action("AddTask", "LearningFlow")",
@@ -115,6 +72,45 @@
                         contentType : 'application/json',
                         success: function (data) {
                             if(data.isSuccess) {
+                                    var newElement = $("<li class='" + taskClass + "'><span>" + taskName + "</span><button name='btnMakeNext' class='btn btn-success'><i class='icon-ok icon-white'></i></button><button name='btnRemoveTask' class='btn btn-warning'><i class='icon-trash icon-white'></i></button></li>");
+                                    $("#flow-list").append(newElement);
+
+                                    $("[name='btnMakeNext']").click(function() {
+                                        var lastTask = $('.flow-task');
+                                        var newTask = $(this).parent();
+                                        lastTask.removeClass("flow-next");
+                                        newTask.addClass("flow-next");
+
+
+                                        CompleteTask(lastTask.attr('data-id'), newTask.attr('data-id'), "@Url.Action("MakeNext", "LearningFlow")");
+                                    });
+
+                                    $("[name='btnRemoveTask']").click(function() {
+                                        var removedTask = $(this).parent();
+
+                                        if (removedTask.hasClass("flow-next")) {
+                                            removedTask.next().addClass("flow-next");
+                                        }
+
+                                        var id = removedTask.attr('data-id');
+
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "@Url.Action("RemoveTask", "LearningFlow")",
+                                                data: JSON.stringify({taskId : id,flowId : '@Model.ID'}),
+                                                dataType : "json",
+                                                contentType : 'application/json',
+                                                success: function (data) {
+                                                    if(data.isSuccess) {
+                                                         removedTask.remove();
+                                                        // todo: show success notification
+                                                    }
+                                                    else {
+                                                        // todo: show error notification
+                                                    }
+                                                }
+                                            });
+                                    });
                                 // todo: show success notification
                             }
                             else {
@@ -148,9 +144,25 @@
             if(removedTask.hasClass("flow-next")) {
                 removedTask.next().addClass("flow-next");
             }
-                
-            removedTask.remove();
-            SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
+            
+            var id = removedTask.attr('data-id');
+            
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("RemoveTask", "LearningFlow")",
+                data: JSON.stringify({taskId : id,flowId : '@Model.ID'}),
+                dataType : "json",
+                contentType : 'application/json',
+                success: function (data) {
+                    if(data.isSuccess) {
+                            removedTask.remove();
+                        // todo: show success notification
+                    }
+                    else {
+                        // todo: show error notification
+                    }
+                }
+            });
         });
 
         $("#btnClear").click(function () {
