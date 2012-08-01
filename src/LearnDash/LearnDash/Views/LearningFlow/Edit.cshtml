@@ -89,7 +89,22 @@
                         SaveFlow('@Model.ID', "@Url.Action("Save", "LearningFlow")");
                     });
 
-                    SaveFlow('@Model.ID', "@Url.Action("Save", "LearningFlow")");
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("AddTask", "LearningFlow")",
+                        data: JSON.stringify({task : {Name : taskName},flowId : '@Model.ID'}),
+                        dataType : "json",
+                        contentType : 'application/json',
+                        success: function (data) {
+                            if(data.isSuccess) {
+                                // todo: show success notification
+                            }
+                            else {
+                                // todo: show error notification
+                            }
+                        }
+                    });
+                
                 } else {
                     $("#taskNameValidation").show();
                 }

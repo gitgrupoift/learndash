@@ -90,7 +90,7 @@ namespace LearnDash.Dal.NHibernate
             {
                 try
                 {
-                    Session.Update(item);
+                    Session.SaveOrUpdate(item);
                     transaction.Commit();
                     return true;
                 }

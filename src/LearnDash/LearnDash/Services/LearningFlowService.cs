@@ -58,7 +58,7 @@ namespace LearnDash.Services
 
         public LearningFlow Get(int id)
         {
-            return this.SortFlow(this.FlowRepo.GetById(id));
+            return this.FlowRepo.GetById(id);
         }
 
         public List<LearningFlow> GetAll()

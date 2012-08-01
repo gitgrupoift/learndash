@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
@@ -136,10 +137,11 @@
             {
                 flow.Tasks.Add(task);
                 LearningFlowService.Update(flow);
-                return this.Json(task.ID);
+                return this.Json(Is.Success.Message(task.ID.ToString()));
             }
 
-            this.Json(Is.Fail.Message("Task Add Problem"));
+            Logger.Warn("User tried to add task to non existing flow");
+            return this.Json(Is.Fail.Message("Flow doesn't exist"));
         }
 
         [HttpPost]
@@ -161,7 +163,7 @@
 
                 this.LearningTaskRepository.Update(lastTask);
                 this.LearningTaskRepository.Update(newTask);
-                return this.Json(Is.Success);
+                return this.Json(Is.Success.Empty);
             }
 
             Logger.Warn("Wrong data sent to the action \r\nparams: lTaskId - {0}\r\n nTaskId - {1} ", lastCompleteTaskId, newCompleteTaskId);
@@ -192,7 +194,7 @@
                     Notification.Add(new Notification(NotificationType.SuccesfullyEdited, DateTime.Now));
                 else
                     Notification.Add(new Notification(NotificationType.FailEdited, DateTime.Now));
-                return Json(Is.Success);
+                return Json(Is.Success.Empty);
             }
 
             Logger.Warn("Flow model not valid!. Propably client validation didn't worked out.");
@@ -202,14 +204,23 @@
 
     public static class Is
     {
-        public static object Success
+        public class Success
         {
-            get
+            public static object Empty
+            {
+                get
+                {
+                    return new { isSuccess = true, message = string.Empty };
+                }
+            }
+
+            public static object Message(string message)
             {
                 return new
-                           {
-                               isSuccess = true
-                           };
+                {
+                    isSuccess = true,
+                    message
+                };
             }
         }
 
@@ -219,7 +230,7 @@
             {
                 return new
                            {
-                               isSuccsess = false,
+                               isSuccess = false,
                                message
                            };
             }

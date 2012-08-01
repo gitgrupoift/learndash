@@ -13,17 +13,7 @@ namespace LearnDash.Dal.Models
         [Required(ErrorMessage = "Name is required")]
         public virtual string Name { get; set; }
 
-        private  ICollection<LearningTask> _tasks;
-        public virtual ICollection<LearningTask> Tasks
-        {
-            get
-            {
-                if(_tasks == null)
-                    _tasks = new Collection<LearningTask>();
-                return _tasks;
-            }
-            set { _tasks = value; }
-        }
+        public virtual ICollection<LearningTask> Tasks { get; set; }
 
         [Obsolete("Dont use this.Has to be defined for the json serializer")]
         public LearningFlow()
