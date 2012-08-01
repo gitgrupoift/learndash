@@ -145,6 +145,26 @@
         }
 
         [HttpPost]
+        public ActionResult RemoveTask(int taskId, int flowId)
+        {
+            var flow = LearningFlowService.Get(flowId);
+            if (flow != null)
+            {
+                if (flow.Tasks.Any(t => t.ID == taskId))
+                {
+                    LearningFlowService.RemoveTask(flow, taskId);
+                    return this.Json(Is.Success.Empty);
+                }
+
+                Logger.Warn("User tried to remove non exisitng task");
+                return this.Json(Is.Fail.Message("Task doesn't exist"));
+            }
+
+            Logger.Warn("User tried to remove task from non existing flow");
+            return this.Json(Is.Fail.Message("Flow doesn't exist"));
+        }
+
+        [HttpPost]
         public ActionResult CompleteTask(int lastCompleteTaskId, int newCompleteTaskId)
         {
             return this.MakeNext(lastCompleteTaskId, newCompleteTaskId);

@@ -15,5 +15,7 @@ namespace LearnDash.Services
         List<LearningFlow> GetAll();
 
         void Remove(int id);
+
+        void RemoveTask(LearningFlow flow, int taskId);
     }
 }

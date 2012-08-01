@@ -78,5 +78,12 @@ namespace LearnDash.Services
                 this.logger.Warn("Remove method failed beacuse no learnFlow with id '{0}' exists", id);
             }
         }
+
+        public void RemoveTask(LearningFlow flow, int taskId)
+        {
+            var task = TasksRepo.GetById(taskId);
+            flow.Tasks.Remove(task);
+            this.Update(flow);
+        }
     }
 }
