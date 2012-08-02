@@ -1,15 +1,8 @@
 ﻿@model LearnDash.Dal.Models.LearningFlow
 @using LearnDash.Controllers
 <link href="../../Content/roundabout.css" rel="stylesheet" type="text/css" />
-<br />
-<br />
-<br />
-<!-- refactor delete unused span -->
 <div class="flow-name">
     <span>@Model.Name</span></div>
-<br />
-<br />
-<br />
 <ul id="flow-list">
     @foreach (var task in Model.Tasks)
     {
@@ -42,92 +35,18 @@
 </div>
 <script type="text/javascript">
     $(function () {
-
-        var btnAddTask = $("#btnAddTask");
-        var txtBoxtTaskName = $("#txtBoxTaskName");
-
-        txtBoxtTaskName.focus().keypress(function(e) {
+        $("#txtBoxTaskName").focus().keypress(function(e) {
                 if(e.which == 13) {
-                    btnAddTask.click();
+                    $("#btnAddTask").click();
                 }
             });
 
-        btnAddTask.click(function () {
-            var taskName = txtBoxtTaskName.val();
-            txtBoxtTaskName.val("");
-            $("#taskNameValidation").hide();
-            if(!isBlank(taskName)) {
-                var currentElementsCount = $('.flow-task').size();
-                var taskClass = "flow-task";
-                
-                // if there are none tasks this task will be set as next
-                if (currentElementsCount <= 0) {
-                    taskClass = taskClass + " flow-next";
-                }
-                    $.ajax({
-                        type: "POST",
-                        url: "@Url.Action("AddTask", "LearningFlow")",
-                        data: JSON.stringify({task : {Name : taskName},flowId : '@Model.ID'}),
-                        dataType : "json",
-                        contentType : 'application/json',
-                        success: function (data) {
-                            if(data.isSuccess) {
-                                    var newElement = $("<li class='" + taskClass + "'><span>" + taskName + "</span><button name='btnMakeNext' class='btn btn-success'><i class='icon-ok icon-white'></i></button><button name='btnRemoveTask' class='btn btn-warning'><i class='icon-trash icon-white'></i></button></li>");
-                                    $("#flow-list").append(newElement);
-
-                                    $("[name='btnMakeNext']").click(function() {
-                                        var lastTask = $('.flow-task');
-                                        var newTask = $(this).parent();
-                                        lastTask.removeClass("flow-next");
-                                        newTask.addClass("flow-next");
-
-
-                                        CompleteTask(lastTask.attr('data-id'), newTask.attr('data-id'), "@Url.Action("MakeNext", "LearningFlow")");
-                                    });
-
-                                    $("[name='btnRemoveTask']").click(function() {
-                                        var removedTask = $(this).parent();
-
-                                        if (removedTask.hasClass("flow-next")) {
-                                            removedTask.next().addClass("flow-next");
-                                        }
-
-                                        var id = removedTask.attr('data-id');
-
-                                            $.ajax({
-                                                type: "POST",
-                                                url: "@Url.Action("RemoveTask", "LearningFlow")",
-                                                data: JSON.stringify({taskId : id,flowId : '@Model.ID'}),
-                                                dataType : "json",
-                                                contentType : 'application/json',
-                                                success: function (data) {
-                                                    if(data.isSuccess) {
-                                                         removedTask.remove();
-                                                        // todo: show success notification
-                                                    }
-                                                    else {
-                                                        // todo: show error notification
-                                                    }
-                                                }
-                                            });
-                                    });
-                                // todo: show success notification
-                            }
-                            else {
-                                // todo: show error notification
-                            }
-                        }
-                    });
-                
-                } else {
-                    $("#taskNameValidation").show();
-                }
-        });
-
-        InitButtons();
+        InitMenuButtons();
+        InitTaskButtons();
     });
     
-    function InitButtons() {
+
+    function InitTaskButtons() {
         $("[name='btnMakeNext']").click(function () {
             var lastTask = $('.flow-task');
             var newTask = $(this).parent();
@@ -164,11 +83,55 @@
                 }
             });
         });
+    }
 
+    function InitMenuButtons() {
         $("#btnClear").click(function () {
             $('.flow-task').remove();
             SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
         });
+        var btnAddTask = $("#btnAddTask");
+        
+             btnAddTask.click(function () {
+            var txtVoxTaskName = $("#txtBoxTaskName");
+            var taskName = txtVoxTaskName.val();
+            txtVoxTaskName.val("");
+            
+            $("#taskNameValidation").hide();
+            
+            if(isBlank(taskName)) {
+                $("#taskNameValidation").show();
+                return;
+            }
+            
+            var currentElementsCount = $('.flow-task').size();
+            var taskClass = "flow-task";
+                
+            // if there are none tasks this task will be set as next
+            if (currentElementsCount <= 0) {
+                taskClass = taskClass + " flow-next";
+            }
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("AddTask", "LearningFlow")",
+                    data: JSON.stringify({task : {Name : taskName},flowId : '@Model.ID'}),
+                    dataType : "json",
+                    contentType : 'application/json',
+                    success: function (data) {
+                        if(data.isSuccess) {
+                            var newElement = $("<li class='" + taskClass + "' data-id='"+data.message+"' ><span>" + taskName + "</span><button name='btnMakeNext' class='btn btn-success'><i class='icon-ok icon-white'></i></button><button name='btnRemoveTask' class='btn btn-warning'><i class='icon-trash icon-white'></i></button></li>");
+                            $("#flow-list").append(newElement);
+
+                            InitTaskButtons();
+                            // todo: show success notification
+                        }
+                        else {
+                            // todo: show error notification
+                        }
+                    }
+                });
+        });
+
     }
     
     function isBlank(str) {
