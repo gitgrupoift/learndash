@@ -23,15 +23,15 @@
         </li>
     }
 </ul>
-<div>
-    <input id="txtBoxTaskName" type="text" />
+<div class="control-group">
+    <div class="controls">
+        <input id="txtBoxTaskName" type="text" />
+        <span id="taskNameValidation" class="help-inline" style="display:none;">Task name required</span>
+    </div>
     <button id="btnAddTask" class="btn btn-primary">
         <i class="icon-plus icon-white"></i>Add Task</button>
     <button id="btnClear" class="btn btn-danger">
         <i class="icon-repeat icon-white"></i>Clear Flow</button>
-</div>
-<div id="taskNameValidation" class="error" style="display: none;">
-    Task name is required!
 </div>
 <script type="text/javascript">
     $(function () {
@@ -99,8 +99,10 @@
             txtVoxTaskName.val("");
             
             $("#taskNameValidation").hide();
+            $(".control-group").removeClass("error");
             
             if(isBlank(taskName)) {
+                $(".control-group").addClass("error");
                 $("#taskNameValidation").show();
                 return;
             }
