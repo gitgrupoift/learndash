@@ -4,11 +4,14 @@ namespace LearnDash.Controllers
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Principal;
     using System.Web;
+    using System.Web.ClientServices;
     using System.Web.Mvc;
     using System.Web.Security;
     using Castle.Core.Logging;
     using DotNetOpenAuth.Messaging;
+    using DotNetOpenAuth.OAuth.ChannelElements;
     using DotNetOpenAuth.OpenId;
     using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
     using DotNetOpenAuth.OpenId.RelyingParty;
@@ -24,9 +27,11 @@ namespace LearnDash.Controllers
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
-            
-            Logger.Trace("User Logged out");
 
+            // need to do this beacuse even if we do signout there is still data available for this user in this get
+            HttpContext.User = null;
+
+            Logger.Trace("User Logged out");
             return this.View();
         }
 
