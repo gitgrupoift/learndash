@@ -59,7 +59,7 @@
             }
 
             Logger.Warn("Flow model not valid!. Propably client validation didn't worked out.");
-            return View();
+            return View(flow);
         }
 
 
@@ -165,28 +165,31 @@
         }
 
         [HttpPost]
-        public ActionResult CompleteTask(int lastCompleteTaskId, int newCompleteTaskId)
+        public ActionResult CompleteTask(int flowID, int newCompleteTaskId)
         {
-            return this.MakeNext(lastCompleteTaskId, newCompleteTaskId);
+            return this.MakeNext(flowID, newCompleteTaskId);
         }
 
         [HttpPost]
-        public ActionResult MakeNext(int lastCompleteTaskId, int newCompleteTaskId)
+        public ActionResult MakeNext(int flowID, int newCompleteTaskId)
         {
-            if (lastCompleteTaskId >= 0 && newCompleteTaskId >= 0)
+            if (flowID >= 0 && newCompleteTaskId >= 0)
             {
-                var lastTask = this.LearningTaskRepository.GetById(lastCompleteTaskId);
-                var newTask = this.LearningTaskRepository.GetById(newCompleteTaskId);
+                var flow = this.LearningFlowService.Get(flowID);
 
-                lastTask.IsNext = false;
-                newTask.IsNext = true;
+                var task = flow.Tasks.First(t => t.ID == newCompleteTaskId);
+                task.IsNext = true;
 
-                this.LearningTaskRepository.Update(lastTask);
-                this.LearningTaskRepository.Update(newTask);
+                foreach (var learningTask in flow.Tasks.Where(t => t.ID != newCompleteTaskId).ToList())
+                {
+                    learningTask.IsNext = false;
+                }
+
+                this.LearningFlowService.Update(flow);
                 return this.Json(Is.Success.Empty);
             }
 
-            Logger.Warn("Wrong data sent to the action \r\nparams: lTaskId - {0}\r\n nTaskId - {1} ", lastCompleteTaskId, newCompleteTaskId);
+            Logger.Warn("Wrong data sent to the action \r\nparams: flowId - {0}\r\n nTaskId - {1} ", flowID, newCompleteTaskId);
             return this.Json(Is.Fail.Message("Wrong data sent"));
         }
 

@@ -26,17 +26,16 @@
             $(this).hide();
 
             currentTask = $('.flow-next');
-
-            if (IsTheLastTask()) {
-                SetFirstTaskAsNext();
-            } else {
-                SetNextTaskAsNext();
-            }
-
-            var lastId = currentTask.attr("data-id");
             var newId = nextTask.attr("data-id");
 
-            CompleteTask(lastId, newId, "@Url.Action("CompleteTask", "LearningFlow")");
+            CompleteTask('@Model.ID', newId, "@Url.Action("CompleteTask", "LearningFlow")",
+                function () {
+                    if (IsTheLastTask()) {
+                        SetFirstTaskAsNext();
+                    } else {
+                        SetNextTaskAsNext();
+                    }
+                });
             
             // todo : this has to be in succes function from ajax call
             // if operation is finished show the complete button

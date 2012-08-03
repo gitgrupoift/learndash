@@ -50,11 +50,12 @@
         $("[name='btnMakeNext']").click(function () {
             var lastTask = $('.flow-task');
             var newTask = $(this).parent();
-            lastTask.removeClass("flow-next");
-            newTask.addClass("flow-next");
             
-
-            CompleteTask(lastTask.attr('data-id'), newTask.attr('data-id'), "@Url.Action("MakeNext", "LearningFlow")");
+            CompleteTask('@Model.ID',newTask.attr('data-id'), "@Url.Action("MakeNext", "LearningFlow")",
+                function () {
+                    lastTask.removeClass("flow-next");
+                    newTask.addClass("flow-next");
+                });
         });
 
         $("[name='btnRemoveTask']").click(function () {
@@ -74,7 +75,7 @@
                 contentType : 'application/json',
                 success: function (data) {
                     if(data.isSuccess) {
-                            removedTask.remove();
+                        removedTask.remove();
                         // todo: show success notification
                     }
                     else {
