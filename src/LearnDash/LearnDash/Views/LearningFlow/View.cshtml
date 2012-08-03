@@ -8,8 +8,6 @@
 </div>
 
 <script type="text/javascript">
-    var currentNextChildIndex = 0;
-    
     var nextTask;
     var currentTask;
     
@@ -26,37 +24,35 @@
             $(this).hide();
 
             currentTask = $('.flow-next');
+
+            SetNextTask();
+
             var newId = nextTask.attr("data-id");
 
             CompleteTask('@Model.ID', newId, "@Url.Action("CompleteTask", "LearningFlow")",
-                function () {
-                    if (IsTheLastTask()) {
-                        SetFirstTaskAsNext();
-                    } else {
-                        SetNextTaskAsNext();
-                    }
-                });
+                function() {
+                    $('#btnComplete').show();
+            });
+
             
             // todo : this has to be in succes function from ajax call
             // if operation is finished show the complete button
-            $(this).show();
         });
     });
     
-    function IsTheLastTask() {
-        return currentNextChildIndex >= $('.flow-task').length - 1;
-    }
-    
     function SetFirstTaskAsNext() {
-        currentNextChildIndex = 0;
         nextTask = $(".flow-task").first();
         ToogleNextClass(nextTask, currentTask);
     }
     
-    function SetNextTaskAsNext() {
-        currentNextChildIndex++;
+    function SetNextTask() {
         nextTask = currentTask.next();
-        ToogleNextClass(nextTask, currentTask);
+        if(nextTask.length > 0) {
+            ToogleNextClass(nextTask, currentTask);
+        }
+        else {
+            SetFirstTaskAsNext();
+        }
     }
     
     function ToogleNextClass(next,current) {
