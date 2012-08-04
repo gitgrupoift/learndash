@@ -135,8 +135,11 @@
             var flow = LearningFlowService.Get(flowId);
             if (flow != null)
             {
+                task.Name = Server.HtmlEncode(task.Name);
+
                 flow.Tasks.Add(task);
                 LearningFlowService.Update(flow);
+
                 return this.Json(Is.Success.Message(task.ID.ToString()));
             }
 
