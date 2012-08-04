@@ -17,18 +17,19 @@ namespace LearnDash.Controllers
     using DotNetOpenAuth.OpenId.RelyingParty;
     using LearnDash.Dal.Models;
     using LearnDash.Dal.NHibernate;
+    using LearnDash.Services;
 
     public class AccountController : Controller
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        public IRepository<UserProfile> userRepository { get; set; } 
+        public IRepository<UserProfile> UserRepository { get; set; }
 
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
 
-            // need to do this beacuse even if we do signout there is still data available for this user in this get
+            // need to do this beacuse even if we do signout there is still data available for this user in context
             HttpContext.User = null;
 
             Logger.Trace("User Logged out");
@@ -52,97 +53,92 @@ namespace LearnDash.Controllers
         {
             var openid = new OpenIdRelyingParty();
             var response = openid.GetResponse();
-            
-            // Initial operation
+
             if (response == null)
             {
-                Logger.Trace("Sending request to the open id provider");
+                return this.OpenIdRequest(openid);
+            }
+            else
+            {
+                return this.OpenIdResponse(response);
+            }
+        }
 
-                // Step 1 - Send the request to the OpenId provider server
-                Identifier id;
-                if (Identifier.TryParse(Request.Form["openid_identifier"], out id))
+        private ActionResult OpenIdResponse(IAuthenticationResponse response)
+        {
+            Logger.Trace("Received response from open id provider");
+
+            // Step 2: OpenID Provider sending assertion response
+            switch (response.Status)
+            {
+                case AuthenticationStatus.Authenticated:
+                    Logger.Info("User succesfully authenticated");
+
+                    var userId = OpenIdService.ParseResponse(response);
+                    var currentUser = this.UserRepository.GetByParameterEqualsFilter("UserId", userId).SingleOrDefault();
+                    if (currentUser == null)
+                    {
+                        Logger.Info("New user. Creating new profile with UserId - {0}", userId);
+                        currentUser = new UserProfile
+                            {
+                                UserId = userId,
+                                Dashboards = new List<LearningDashboard>()
+                            };
+
+                        var id = this.UserRepository.Add(currentUser);
+                        if (id < 0)
+                        {
+                            Logger.Warn("Authentication procedure failed on adding new user, redirecting to Login");
+                            this.ViewBag.Error = "Authentication failed";
+                            return this.View("Login");
+                        }
+                    }
+
+                    this.IssueAuthTicket(currentUser.UserId, true);
+
+                    SessionManager.CurrentUserSession = new UserProfileSession
+                        {
+                            ID = currentUser.ID,
+                            MainDashboardId = currentUser.Dashboards.First().ID,
+                            UserId = currentUser.UserId
+                        };
+
+                    Logger.Info("Authentication procedure succesfull redirecting to Home/Index");
+                    return this.RedirectToAction("Index", "Home");
+
+                case AuthenticationStatus.Canceled:
+                case AuthenticationStatus.Failed:
+                    Logger.Error("Authentication failed : {0}", response.Exception.Message);
+                    this.ViewBag.Error = "Authentication failed";
+                    return this.View("Login");
+            }
+
+            return new EmptyResult();
+        }
+
+        private ActionResult OpenIdRequest(OpenIdRelyingParty openid)
+        {
+            var openIdIdentifier = this.Request.Form["openid_identifier"];
+            Identifier id;
+            if (Identifier.TryParse(openIdIdentifier, out id))
+            {
+                try
                 {
-                    try
-                    {
-                        var req = openid.CreateRequest(Request.Form["openid_identifier"]);
-
-                        var fetch = new FetchRequest();
-                        fetch.Attributes.Add(new AttributeRequest(WellKnownAttributes.Contact.Email, true));
-                        fetch.Attributes.Add(new AttributeRequest(WellKnownAttributes.Name.Alias, true));
-                        req.AddExtension(fetch);
-
-                        return req.RedirectingResponse.AsActionResult();
-                    }
-                    catch (ProtocolException ex)
-                    {
-                        Logger.Error("Unable to authenticate: {0}", ex.Message);
-                        this.ViewBag.Error = "Authentication failed";
-                        return this.View("Login");
-                    }
+                    return OpenIdService.SendRequest(openid, id);
                 }
-                else
+                catch (ProtocolException ex)
                 {
-                    this.ViewBag.Error = "Invalid identifier";
+                    Logger.Error("OpenIdRequestError: {0}", ex.Message);
+                    this.ViewBag.Error = "Authentication failed";
                     return this.View("Login");
                 }
             }
-            // OpenId redirection callback
             else
             {
-                Logger.Trace("Received request from open id provider");
-
-                // Step 2: OpenID Provider sending assertion response
-                switch (response.Status)
-                {
-                    case AuthenticationStatus.Authenticated:
-                        Logger.Info("User succesfully authenticated");
-
-                        // todo : create a simple parser of this data first tog et mail
-                        var claimsResponse = response.GetExtension<FetchResponse>();
-                        this.IssueAuthTicket(claimsResponse.Attributes[0].Values[0], true);
-
-                        var currentUser = this.userRepository.GetByParameterEqualsFilter("UserId", claimsResponse.Attributes[0].Values[0]).SingleOrDefault();
-                        if (currentUser == null)
-                        {
-                            Logger.Info("Detected new user. Creating new profile with UserId - {0}", claimsResponse.Attributes[0].Values[0]);
-                            currentUser = new UserProfile
-                                              {
-                                                  UserId = claimsResponse.Attributes[0].Values[0],
-                                                  Dashboards = new List<LearningDashboard>
-                                                      {
-                                                          new LearningDashboard()
-                                                      }
-                                              };
-                            var id = this.userRepository.Add(currentUser);
-                            if (id < 0)
-                            {
-                                Logger.Warn("Authentication procedure failed on adding new user, redirecting to Login");
-                                this.ViewBag.Error = "Authentication failed";
-                                return this.View("Login");  
-                            }
-                        }
-
-                        SessionManager.CurrentUserSession = new UserProfileSession
-                            {
-                                ID = currentUser.ID, 
-                                MainDashboardId = currentUser.Dashboards.First().ID,
-                                UserId = currentUser.UserId
-                            };
-
-                        Logger.Info("Authentication procedure succesfull redirecting to Home/Index");
-                        return this.RedirectToAction("Index", "Home");
-
-                    case AuthenticationStatus.Canceled:
-                        Logger.Warn("Authentication canceled : {0}",response.Exception.Message);
-                        this.ViewBag.Error = "Authentication failed";
-                        return this.View("Login");
-                    case AuthenticationStatus.Failed:
-                        Logger.Error("Authentication failed : {0}",response.Exception.Message);
-                        this.ViewBag.Error = "Authentication failed";
-                        return this.View("Login");
-                }
+                Logger.Error("Openid_identifier parse error.\r\nThis value should be in the Form Request.\r\nPossible error in View.");
+                this.ViewBag.Error = "Authentication error";
+                return this.View("Login");
             }
-            return new EmptyResult();
         }
 
         private void IssueAuthTicket(string userId, bool rememberMe)
