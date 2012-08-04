@@ -10,6 +10,9 @@
     <link href="@System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/Content/twitterbootstrap/bootstrapcss")" rel="stylesheet" type="text/css" />
     <script src="@System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/Content/twitterbootstrap/bootstrapjs")"></script>
     <script src="@System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/Scripts/customjs")"></script>
+    <script src="@System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/Content/noty/js/layouts/top.js")"></script>
+    <script src="@System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/Content/noty/js/themes/default.js")"></script>    
+    
 </head>
 <body>
     <div class="navbar navbar-fixed-top">
@@ -36,7 +39,7 @@
             </div>
         </div>
     </div>
-      <div class="notification-box">
+      <div class="noty_message">
                   @Html.Partial("_Notification", SessionManager.ListOfNotifications,new ViewDataDictionary());
                 </div>
     <div class="container">

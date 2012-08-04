@@ -232,6 +232,21 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\img\google.png" />
+    <Content Include="Content\noty\js\jquery.noty.js" />
+    <Content Include="Content\noty\js\layouts\bottom.js" />
+    <Content Include="Content\noty\js\layouts\bottomCenter.js" />
+    <Content Include="Content\noty\js\layouts\bottomLeft.js" />
+    <Content Include="Content\noty\js\layouts\bottomRight.js" />
+    <Content Include="Content\noty\js\layouts\center.js" />
+    <Content Include="Content\noty\js\layouts\centerLeft.js" />
+    <Content Include="Content\noty\js\layouts\centerRight.js" />
+    <Content Include="Content\noty\js\layouts\inline.js" />
+    <Content Include="Content\noty\js\layouts\top.js" />
+    <Content Include="Content\noty\js\layouts\topCenter.js" />
+    <Content Include="Content\noty\js\layouts\topLeft.js" />
+    <Content Include="Content\noty\js\layouts\topRight.js" />
+    <Content Include="Content\noty\js\promise.js" />
+    <Content Include="Content\noty\js\themes\default.js" />
     <Content Include="Content\roundabout.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
