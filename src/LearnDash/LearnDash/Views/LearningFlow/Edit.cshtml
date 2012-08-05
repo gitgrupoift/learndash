@@ -48,6 +48,7 @@
 
     function InitTaskButtons() {
         $("[name='btnMakeNext']").click(function () {
+            showLoadingOverlay();
             var lastTask = $('.flow-task');
             var newTask = $(this).parent();
             
@@ -55,10 +56,12 @@
                 function () {
                     lastTask.removeClass("flow-next");
                     newTask.addClass("flow-next");
+                    hideLoadingOverlay();
                 });
         });
 
         $("[name='btnRemoveTask']").click(function () {
+            showLoadingOverlay();
             var removedTask = $(this).parent();
             
             if(removedTask.hasClass("flow-next")) {
@@ -81,6 +84,7 @@
                     else {
                         // todo: show error notification
                     }
+                    hideLoadingOverlay();
                 }
             });
         });
@@ -92,8 +96,8 @@
             SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
         });
         var btnAddTask = $("#btnAddTask");
-        
-             btnAddTask.click(function () {
+            btnAddTask.click(function () {
+            showLoadingOverlay();
             var txtVoxTaskName = $("#txtBoxTaskName");
             var taskName = txtVoxTaskName.val();
             txtVoxTaskName.val("");
@@ -134,6 +138,7 @@
                         else {
                             // todo: show error notification
                         }
+                        hideLoadingOverlay();
                     }
                 });
         });

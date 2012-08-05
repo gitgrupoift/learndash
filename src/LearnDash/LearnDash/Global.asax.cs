@@ -59,6 +59,7 @@ namespace LearnDash
             bundle.AddFile("~/Scripts/jquery.event.drop-2.0.min.js");
             bundle.AddFile("~/Scripts/learningflow.js");
             bundle.AddFile("~/Scripts/userecho.js");
+            bundle.AddFile("~/Scripts/layout.js");
             BundleTable.Bundles.Add(bundle);
 
             bundle = new Bundle("~/Content/twitterbootstrap/bootstrapcss");

@@ -40,7 +40,12 @@
                   @Html.Partial("_Notification", SessionManager.ListOfNotifications,new ViewDataDictionary());
                 </div>
     <div class="container">
+    <div id="main-container" class="container">
         @RenderBody()
+        <div id='loadingOverlay' style='display: none; position: absolute; background: #fff;
+            z-index: 9999'>
+            <img id='imgLoad' style='position: absolute;' src='~/Content/img/ajax-loader-big.gif' />
+        </div>
     </div>
 </body>
 </html>

@@ -20,6 +20,7 @@
 
         $('#btnComplete').click(function() {
 
+            showLoadingOverlay();
             // hide button so user is not able to click him again - could be replaced by loading overlay
             $(this).hide();
 
@@ -30,13 +31,21 @@
             var newId = nextTask.attr("data-id");
 
             CompleteTask('@Model.ID', newId, "@Url.Action("CompleteTask", "LearningFlow")",
-                function() {
-                    $('#btnComplete').show();
+                function(data) {
+                    if(data.isSuccess) {
+                        $('#btnComplete').show();
+                        // todo : this has to be in succes function from ajax call
+                        // if operation is finished show the complete button
+                    }
+                    else {
+                        
+                    }
+                    hideLoadingOverlay();
+
             });
 
             
-            // todo : this has to be in succes function from ajax call
-            // if operation is finished show the complete button
+
         });
     });
     

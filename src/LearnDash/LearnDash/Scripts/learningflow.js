@@ -52,10 +52,6 @@
             data: JSON.stringify(data),
             dataType: "json",
             contentType: 'application/json',
-            success: function (data) {
-                if (data.isSuccess) {
-                    func();
-                }
-            }
+            success: func
         });
     }
