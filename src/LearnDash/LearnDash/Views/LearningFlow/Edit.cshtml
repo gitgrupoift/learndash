@@ -13,13 +13,15 @@
             flowClass += " flow-next";
         }
     
-        <li class="@flowClass" data-id="@task.ID" data-counter ="@task.TimesDone"><span>@task.Name</span>
-            <button name="btnMakeNext" class="btn btn-success">
-                <i class="icon-ok icon-white"></i>
-            </button>
-            <button name="btnRemoveTask" class="btn btn-warning">
+        <li class="@flowClass" data-id="@task.ID" data-counter ="@task.TimesDone">
+            <span style="float:left;">@task.Name</span>
+            <button style="float:right;" name="btnRemoveTask" class="btn btn-warning">
                 <i class="icon-trash icon-white"></i>
             </button>
+            <button style="float:right;" name="btnMakeNext" class="btn btn-success">
+                <i class="icon-ok icon-white"></i>
+            </button>
+            <div style="clear:both;"></div>
         </li>
     }
 </ul>
@@ -56,6 +58,10 @@
                 function () {
                     lastTask.removeClass("flow-next");
                     newTask.addClass("flow-next");
+
+                    lastTask.children("[name='btnMakeNext']").show();
+                    newTask.children("[name='btnMakeNext']").hide();
+
                     hideLoadingOverlay();
                 });
         });
@@ -88,6 +94,9 @@
                 }
             });
         });
+
+
+        $(".flow-next").children("[name='btnMakeNext']").hide();
     }
 
     function InitMenuButtons() {
@@ -129,7 +138,7 @@
                     contentType : 'application/json',
                     success: function (data) {
                         if(data.isSuccess) {
-                            var newElement = $("<li class='" + taskClass + "' data-id='"+data.message+"' ><span>" + escape(taskName) + "</span><button name='btnMakeNext' class='btn btn-success'><i class='icon-ok icon-white'></i></button><button name='btnRemoveTask' class='btn btn-warning'><i class='icon-trash icon-white'></i></button></li>");
+                            var newElement = $("<li class='" + taskClass + "' data-id='"+data.message+"' ><span style='float:left'>" + escape(taskName) + "</span><button style='float:right' name='btnMakeNext' class='btn btn-success'><i class='icon-ok icon-white'></i></button><button style='float:right' name='btnRemoveTask' class='btn btn-warning'><i class='icon-trash icon-white'></i></button><div style='clear:both;'></div></li>");
                             $("#flow-list").append(newElement);
 
                             InitTaskButtons();
