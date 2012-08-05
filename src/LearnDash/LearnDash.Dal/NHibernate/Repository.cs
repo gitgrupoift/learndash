@@ -63,10 +63,11 @@ namespace LearnDash.Dal.NHibernate
             return addedItemId;
         }
 
-        public void Remove(T item)
+        public bool Remove(T item)
         {
             using (var transaction = Session.BeginTransaction())
             {
+                var result = true;
                 try
                 {
                     Session.Delete(item);
@@ -76,11 +77,13 @@ namespace LearnDash.Dal.NHibernate
                 {
                     Logger.ErrorExceptionsWithInner("Remove Method", ex);
                     transaction.Rollback();
+                    result = false;
                 }
                 finally
                 {
                     transaction.Dispose();
                 }
+                return result;
             }
         }
 

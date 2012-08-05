@@ -66,16 +66,17 @@ namespace LearnDash.Services
             return this.FlowRepo.GetAll().ToList();
         }
 
-        public void Remove(int id)
+        public bool Remove(int id)
         {
             var learnFlow = this.FlowRepo.GetById(id);
             if (learnFlow != null)
             {
-                this.FlowRepo.Remove(learnFlow);
+                return this.FlowRepo.Remove(learnFlow);
             }
             else
             {
                 this.logger.Warn("Remove method failed beacuse no learnFlow with id '{0}' exists", id);
+                return false;
             }
         }
 

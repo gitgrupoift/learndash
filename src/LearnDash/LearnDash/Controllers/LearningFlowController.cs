@@ -108,8 +108,14 @@
         [HttpPost]
         public ActionResult Remove(LearningFlow flow)
         {
-            LearningFlowService.Remove(flow.ID);
-            return RedirectToAction("Index", "Home");
+            if (this.LearningFlowService.Remove(flow.ID))
+            {
+                return this.RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return View("Error", ErrorType.Internal);
+            }
         }
 
         [HttpGet]
