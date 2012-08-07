@@ -9,7 +9,7 @@ namespace LearnDash.Dal.NHibernate
     {
         T GetById(int id);
         int? Add(T item);
-        void Remove(T item);
+        bool Remove(T item);
         bool Update(T item);
         int GetCount();
         IList<T> GetAll();

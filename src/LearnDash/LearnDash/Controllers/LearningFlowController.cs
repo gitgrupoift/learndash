@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
+    using System.Threading;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Routing;
@@ -49,19 +51,16 @@
             if (ModelState.IsValid)
             {
                 var state = LearningFlowService.Update(flow);
-                if (state)
-                {
-                    Notification.Add(new Notification(NotificationType.SuccesfullyEdited));
-                }
-                else
-                {
-                    Notification.Add(new Notification(NotificationType.FailEdited));
-                }
+                if (state)                
+                    Notification.Add(new Notification(NotificationType.SuccesfullyEdited, DateTime.Now));                
+                else                
+                    Notification.Add(new Notification(NotificationType.FailEdited, DateTime.Now));
+                
                 return View(flow);
             }
 
             Logger.Warn("Flow model not valid!. Propably client validation didn't worked out.");
-            return View();
+            return View(flow);
         }
 
 
@@ -78,14 +77,11 @@
             {
                 newFlow.Tasks = new List<LearningTask>();
                 var id = LearningFlowService.Add(newFlow);
-                if (id != null)
-                {
-                    Notification.Add(new Notification(NotificationType.SuccesfullyAdd));
-                }
-                else
-                {
-                    Notification.Add(new Notification(NotificationType.FailAdd));
-                }
+                if (id != null)                
+                    Notification.Add(new Notification(NotificationType.SuccesfullyAdd, DateTime.Now));                
+                else                
+                    Notification.Add(new Notification(NotificationType.FailAdd, DateTime.Now));
+                
                 return RedirectToAction("Edit", new { id });
             }
 
@@ -112,8 +108,14 @@
         [HttpPost]
         public ActionResult Remove(LearningFlow flow)
         {
-            LearningFlowService.Remove(flow.ID);
-            return RedirectToAction("Index", "Home");
+            if (this.LearningFlowService.Remove(flow.ID))
+            {
+                return this.RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return View("Error", ErrorType.Internal);
+            }
         }
 
         [HttpGet]
@@ -134,52 +136,70 @@
             }
         }
 
-        //[HttpPost]
-        //public ActionResult AddTask(LearningTask task, int flowId)
-        //{
-        //    var flow = LearningFlowService.Get(flowId);
-        //    if (flow != null)
-        //    {
-        //        flow.Tasks.Add(task);
-        //        LearningFlowService.Update(flow);
-        //        return this.Json(task.ID);
-        //    }
-
-        //    this.Json(Is.Fail.Message("Task Add Problem"));
-        //}
-
         [HttpPost]
-        public ActionResult CompleteTask(int lastCompleteTaskId, int newCompleteTaskId)
+        public ActionResult AddTask(LearningTask task, int flowId)
         {
-            if (lastCompleteTaskId != 0 && newCompleteTaskId != 0)
+            var flow = LearningFlowService.Get(flowId);
+            if (flow != null)
             {
-                Notification.Add(new Notification(NotificationType.SuccesfullyAdd));                
-            }
-            else
-            {
-                Notification.Add(new Notification(NotificationType.FailAdd));
+                task.Name = Server.HtmlEncode(task.Name);
+
+                flow.Tasks.Add(task);
+                LearningFlowService.Update(flow);
+
+                return this.Json(Is.Success.Message(task.ID.ToString()));
             }
 
-            return this.MakeNext(lastCompleteTaskId, newCompleteTaskId);
+            Logger.Warn("User tried to add task to non existing flow");
+            return this.Json(Is.Fail.Message("Flow doesn't exist"));
         }
 
         [HttpPost]
-        public ActionResult MakeNext(int lastCompleteTaskId, int newCompleteTaskId)
+        public ActionResult RemoveTask(int taskId, int flowId)
         {
-            if (lastCompleteTaskId >= 0 && newCompleteTaskId >= 0)
+            var flow = LearningFlowService.Get(flowId);
+            if (flow != null)
             {
-                var lastTask = this.LearningTaskRepository.GetById(lastCompleteTaskId);
-                var newTask = this.LearningTaskRepository.GetById(newCompleteTaskId);
+                if (flow.Tasks.Any(t => t.ID == taskId))
+                {
+                    LearningFlowService.RemoveTask(flow, taskId);
+                    return this.Json(Is.Success.Empty);
+                }
 
-                lastTask.IsNext = false;
-                newTask.IsNext = true;
-
-                this.LearningTaskRepository.Update(lastTask);
-                this.LearningTaskRepository.Update(newTask);
-                return this.Json(Is.Success);
+                Logger.Warn("User tried to remove non exisitng task");
+                return this.Json(Is.Fail.Message("Task doesn't exist"));
             }
 
-            Logger.Warn("Wrong data sent to the action \r\nparams: lTaskId - {0}\r\n nTaskId - {1} ", lastCompleteTaskId, newCompleteTaskId);
+            Logger.Warn("User tried to remove task from non existing flow");
+            return this.Json(Is.Fail.Message("Flow doesn't exist"));
+        }
+
+        [HttpPost]
+        public ActionResult CompleteTask(int flowID, int newCompleteTaskId)
+        {
+            return this.MakeNext(flowID, newCompleteTaskId);
+        }
+
+        [HttpPost]
+        public ActionResult MakeNext(int flowID, int newCompleteTaskId)
+        {
+            if (flowID >= 0 && newCompleteTaskId >= 0)
+            {
+                var flow = this.LearningFlowService.Get(flowID);
+
+                var task = flow.Tasks.First(t => t.ID == newCompleteTaskId);
+                task.IsNext = true;
+
+                foreach (var learningTask in flow.Tasks.Where(t => t.ID != newCompleteTaskId).ToList())
+                {
+                    learningTask.IsNext = false;
+                }
+
+                this.LearningFlowService.Update(flow);
+                return this.Json(Is.Success.Empty);
+            }
+
+            Logger.Warn("Wrong data sent to the action \r\nparams: flowId - {0}\r\n nTaskId - {1} ", flowID, newCompleteTaskId);
             return this.Json(Is.Fail.Message("Wrong data sent"));
         }
 
@@ -204,14 +224,10 @@
             {
                 var state = LearningFlowService.Update(flow);
                 if (state)
-                {
-                    Notification.Add(new Notification(NotificationType.SuccesfullyEdited));
-                }
+                    Notification.Add(new Notification(NotificationType.SuccesfullyEdited, DateTime.Now));
                 else
-                {
-                    Notification.Add(new Notification(NotificationType.FailEdited));
-                }
-                return Json(Is.Success);
+                    Notification.Add(new Notification(NotificationType.FailEdited, DateTime.Now));
+                return Json(Is.Success.Empty);
             }
 
             Logger.Warn("Flow model not valid!. Propably client validation didn't worked out.");
@@ -221,14 +237,23 @@
 
     public static class Is
     {
-        public static object Success
+        public class Success
         {
-            get
+            public static object Empty
+            {
+                get
+                {
+                    return new { isSuccess = true, message = string.Empty };
+                }
+            }
+
+            public static object Message(string message)
             {
                 return new
-                           {
-                               isSuccess = true
-                           };
+                {
+                    isSuccess = true,
+                    message
+                };
             }
         }
 
@@ -238,7 +263,7 @@
             {
                 return new
                            {
-                               isSuccsess = false,
+                               isSuccess = false,
                                message
                            };
             }

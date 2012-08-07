@@ -58,7 +58,7 @@ namespace LearnDash.Services
 
         public LearningFlow Get(int id)
         {
-            return this.SortFlow(this.FlowRepo.GetById(id));
+            return this.FlowRepo.GetById(id);
         }
 
         public List<LearningFlow> GetAll()
@@ -66,17 +66,25 @@ namespace LearnDash.Services
             return this.FlowRepo.GetAll().ToList();
         }
 
-        public void Remove(int id)
+        public bool Remove(int id)
         {
             var learnFlow = this.FlowRepo.GetById(id);
             if (learnFlow != null)
             {
-                this.FlowRepo.Remove(learnFlow);
+                return this.FlowRepo.Remove(learnFlow);
             }
             else
             {
                 this.logger.Warn("Remove method failed beacuse no learnFlow with id '{0}' exists", id);
+                return false;
             }
+        }
+
+        public void RemoveTask(LearningFlow flow, int taskId)
+        {
+            var task = TasksRepo.GetById(taskId);
+            flow.Tasks.Remove(task);
+            this.Update(flow);
         }
     }
 }

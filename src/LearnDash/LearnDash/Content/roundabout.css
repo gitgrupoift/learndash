@@ -15,6 +15,48 @@
     border-radius: 15px;
 }
 
+.flow-name span
+{
+    line-height: 3;
+    font-size: 22px;
+}
+
+.flow-next
+{
+    background-color: lightgreen !important;
+}
+
+.flow-task span
+{
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+    position: relative;
+    top: 40%;
+    color: navy;
+}
+
+.clear-both {
+    clear: both;
+}
+
+#flow-list {
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+#flow-list li {
+    list-style-type: none;
+    padding: 0px;
+    margin-top : 10px;
+    border-bottom: dotted;
+    border-width: 1px;
+}
+
+
+
+/* View */
 .flow-task-container
 {
     margin-top: 10px;
@@ -39,33 +81,4 @@
     float: left;
     margin-left: 25px;
     margin-top: 10px;
-}
-
-.flow-name span
-{
-    line-height: 3;
-    font-size: 22px;
-}
-
-.flow-next
-{
-    background-color: lightgreen !important;
-}
-
-.flow-task
-{
-    text-align: center;
-}
-
-.flow-task span
-{
-    font-size: 25px;
-    font-weight: bold;
-    position: relative;
-    top: 40%;
-    color: navy;
-}
-
-.clear-both {
-    clear: both;
 }

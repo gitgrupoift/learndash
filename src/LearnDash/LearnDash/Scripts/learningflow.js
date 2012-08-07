@@ -40,9 +40,9 @@
     }
 
 
-    function CompleteTask(lastId, newId, url) {
+    function CompleteTask(flowId,newId, url, func) {
         var data = {
-            lastCompleteTaskId: lastId,
+            flowId : flowId, 
             newCompleteTaskId: newId
         };
 
@@ -52,7 +52,6 @@
             data: JSON.stringify(data),
             dataType: "json",
             contentType: 'application/json',
-            success: function (data) {
-            }
+            success: func
         });
     }
