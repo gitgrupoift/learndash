@@ -3,7 +3,9 @@
 <div class="flow-name">
     <span>@Model.Name</span>
 </div>
-<div class="flow-task-container">
+@if (Model != null && Model.Tasks != null && Model.Tasks.Count > 0)
+{
+    <div class="flow-task-container">
         @foreach (var task in Model.Tasks)
         {
             var flowClass = "flow-task";
@@ -14,4 +16,9 @@
             }
             <div class="@flowClass" data-id="@task.ID"><span>@task.Name</span></div>
         }
-</div>
+    </div>
+}
+else
+{
+    <div class="alert alert-info"><strong>Ooops!</strong> no items in this flow</div>
+}
