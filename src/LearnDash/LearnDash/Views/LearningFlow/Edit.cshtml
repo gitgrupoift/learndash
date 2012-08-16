@@ -71,7 +71,14 @@
             var removedTask = $(this).parent();
             
             if(removedTask.hasClass("flow-next")) {
-                removedTask.next().addClass("flow-next");
+
+                var nextTask = removedTask.next();
+                if(nextTask.length>0) {
+                    nextTask.addClass("flow-next");   
+                }
+                else {
+                    removedTask.prev().addClass("flow-next");
+                }
             }
             
             var id = removedTask.attr('data-id');
