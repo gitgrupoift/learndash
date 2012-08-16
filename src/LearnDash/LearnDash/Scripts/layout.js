@@ -15,6 +15,11 @@
     $("#loadingOverlay").fadeIn();
 }
 
-function hideLoadingOverlay() {
-    $("#loadingOverlay").delay(200).fadeOut();
+function hideLoadingOverlay(func) {
+    if (func) {
+        $("#loadingOverlay").fadeOut(200, func);
+    }
+    else {
+        $("#loadingOverlay").fadeOut(200);
+    }
 }

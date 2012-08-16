@@ -39,6 +39,7 @@
     $(function () {
         $("#txtBoxTaskName").focus().keypress(function(e) {
                 if(e.which == 13) {
+                    $("#txtBoxTaskName").blur();
                     $("#btnAddTask").click();
                 }
             });
@@ -124,7 +125,7 @@
             if(isBlank(taskName)) {
                 $(".control-group").addClass("error");
                 $("#taskNameValidation").show();
-                hideLoadingOverlay();
+                hideLoadingOverlay(function() { $("#txtBoxTaskName").focus() });
                 return;
             }
             
@@ -155,7 +156,7 @@
                         else {
                             // todo: show error notification
                         }
-                        hideLoadingOverlay();
+                        hideLoadingOverlay(function() { $("#txtBoxTaskName").focus() });
                     }
                 });
         });
