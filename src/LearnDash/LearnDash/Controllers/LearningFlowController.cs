@@ -52,9 +52,9 @@
             {
                 var state = LearningFlowService.Update(flow);
                 if (state)                
-                    Notification.Add(new Notification(NotificationType.SuccesfullyEdited, DateTime.Now));                
+                    Notification.Add(new Notification(NotificationType.SuccesfullyEdited));                
                 else                
-                    Notification.Add(new Notification(NotificationType.FailEdited, DateTime.Now));
+                    Notification.Add(new Notification(NotificationType.FailEdited));
                 
                 return View(flow);
             }
@@ -78,9 +78,9 @@
                 newFlow.Tasks = new List<LearningTask>();
                 var id = LearningFlowService.Add(newFlow);
                 if (id != null)                
-                    Notification.Add(new Notification(NotificationType.SuccesfullyAdd, DateTime.Now));                
+                    Notification.Add(new Notification(NotificationType.SuccesfullyAdd));                
                 else                
-                    Notification.Add(new Notification(NotificationType.FailAdd, DateTime.Now));
+                    Notification.Add(new Notification(NotificationType.FailAdd));
                 
                 return RedirectToAction("Edit", new { id });
             }
@@ -224,9 +224,9 @@
             {
                 var state = LearningFlowService.Update(flow);
                 if (state)
-                    Notification.Add(new Notification(NotificationType.SuccesfullyEdited, DateTime.Now));
+                    Notification.Add(new Notification(NotificationType.SuccesfullyEdited));
                 else
-                    Notification.Add(new Notification(NotificationType.FailEdited, DateTime.Now));
+                    Notification.Add(new Notification(NotificationType.FailEdited));
                 return Json(Is.Success.Empty);
             }
 

@@ -13,7 +13,7 @@ namespace LearnDash.Dal.NHibernate
 {
     public static class DataAccess
     {
-        private const string TestConnString = "Data Source=.\\SQLEXPRESS;Initial Catalog=LearnDash;Integrated Security=SSPI";
+        private const string TestConnString = "Data Source=localhost.\\SQLEXPRESS;Initial Catalog=LearnDash;Integrated Security=SSPI";
 
         private static string ConnectionString
         {

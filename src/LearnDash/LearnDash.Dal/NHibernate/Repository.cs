@@ -7,6 +7,7 @@ using NHibernate;
 using NHibernate.Criterion;
 using Core.Extensions;
 
+
 namespace LearnDash.Dal.NHibernate
 {
     public class Repository<T> : IRepository<T> where T : class
@@ -58,6 +59,7 @@ namespace LearnDash.Dal.NHibernate
                 finally
                 {
                     transaction.Dispose();
+                    
                 }
             }
             return addedItemId;
