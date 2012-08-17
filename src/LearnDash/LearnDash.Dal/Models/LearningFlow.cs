@@ -20,6 +20,7 @@ namespace LearnDash.Dal.Models
         {
             
         }
+
         public LearningFlow(string name)
         {
             Name = name;

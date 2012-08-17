@@ -12,11 +12,14 @@
 
     });
 
-    function openIdUrl(site) {
+    function openIdUrl(provider) {
         var value = "";
 
-        if (site == "google") {
+        if (provider == "google") {
             value = "https://www.google.com/accounts/o8/id";
+        }
+        else if (provider == "testaccount") {
+            value = "testaccount";
         }
 
         if (value) {
@@ -45,7 +48,7 @@
                     <img height="20" width="20" src="@Url.Content("/Content/img/google.png")"  title="Google" style="cursor: pointer" />
                     Google
                 </a>
-                <a onclick="openIdUrl('anonymous')" class="btn">
+                <a onclick="openIdUrl('testaccount')" class="btn">
                     <img height="20" width="20" src="@Url.Content("/Content/img/anonymous.png")"  title="Anonymous" style="cursor: pointer" />
                     Test Account
                 </a>

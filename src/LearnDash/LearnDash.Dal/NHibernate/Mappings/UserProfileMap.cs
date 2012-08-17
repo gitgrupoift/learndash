@@ -14,7 +14,7 @@
             Id(x => x.ID);
             Map(x => x.UserId).Unique();
 
-            HasMany(x => x.Dashboards).Cascade.SaveUpdate().LazyLoad();
+            HasMany(x => x.Dashboards).KeyColumn("UserProfileId").Not.Inverse().Cascade.AllDeleteOrphan().LazyLoad();
         }
     }
 }

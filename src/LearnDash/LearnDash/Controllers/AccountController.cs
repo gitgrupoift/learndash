@@ -21,11 +21,14 @@ namespace LearnDash.Controllers
 
     public class AccountController : Controller
     {
+        private const string SpecialHiddenPassword = "";
+        private const string TestAccountIdentifier = "testaccount";
+
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        private static readonly string SpecialHiddenPassword = "alphatest";
-
         public IRepository<UserProfile> UserRepository { get; set; }
+
+        public IRepository<LearningDashboard> LearningDashbordRepository { get; set; }
 
         public ActionResult Logout()
         {
@@ -53,28 +56,27 @@ namespace LearnDash.Controllers
         [AcceptVerbs(HttpVerbs.Post | HttpVerbs.Get), ValidateInput(false)]
         public ActionResult OpenIdLogOn()
         {
+            var openid = new OpenIdRelyingParty();
+            var response = openid.GetResponse();
 
-                var openid = new OpenIdRelyingParty();
-                var response = openid.GetResponse();
-
-                if (response == null)
+            if (response == null)
+            {
+                var password = this.Request.Form["passwordBox"];
+                if (password == SpecialHiddenPassword)
                 {
-                    var password = this.Request.Form["passwordBox"];
-                    if (password == SpecialHiddenPassword)
-                    {
-                        return this.OpenIdRequest(openid);
-                    }
-                    else
-                    {
-                        Logger.Error("Wrong password in alpha version");
-                        this.ViewBag.Error = "Incorrect password please contact us if you want to participate in alpha tests.";
-                        return this.View("Login");
-                    }
+                    return this.OpenIdRequest(openid);
                 }
                 else
                 {
-                    return this.OpenIdResponse(response);
+                    Logger.Error("Wrong password in alpha version");
+                    this.ViewBag.Error = "Incorrect password please contact us if you want to participate in alpha tests.";
+                    return this.View("Login");
                 }
+            }
+            else
+            {
+                return this.OpenIdResponse(response);
+            }
         }
 
         private ActionResult OpenIdResponse(IAuthenticationResponse response)
@@ -88,33 +90,12 @@ namespace LearnDash.Controllers
                     Logger.Info("User succesfully authenticated");
 
                     var userId = OpenIdService.ParseResponse(response);
-                    var currentUser = this.UserRepository.GetByParameterEqualsFilter("UserId", userId).SingleOrDefault();
-                    if (currentUser == null)
+                    var loginResult = this.PerformLoginProcedure(userId);
+                    if (!loginResult)
                     {
-                        Logger.Info("New user. Creating new profile with UserId - {0}", userId);
-                        currentUser = new UserProfile
-                            {
-                                UserId = userId,
-                                Dashboards = new List<LearningDashboard>()
-                            };
-
-                        var id = this.UserRepository.Add(currentUser);
-                        if (id < 0)
-                        {
-                            Logger.Warn("Authentication procedure failed on adding new user, redirecting to Login");
-                            this.ViewBag.Error = "Authentication failed";
-                            return this.View("Login");
-                        }
+                        this.ViewBag.Error = "Authentication failed";
+                        return this.View("Login");
                     }
-
-                    this.IssueAuthTicket(currentUser.UserId, true);
-
-                    SessionManager.CurrentUserSession = new UserProfileSession
-                        {
-                            ID = currentUser.ID,
-                            MainDashboardId = currentUser.Dashboards.First().ID,
-                            UserId = currentUser.UserId
-                        };
 
                     Logger.Info("Authentication procedure succesfull redirecting to Home/Index");
                     return this.RedirectToAction("Index", "Home");
@@ -132,25 +113,85 @@ namespace LearnDash.Controllers
         private ActionResult OpenIdRequest(OpenIdRelyingParty openid)
         {
             var openIdIdentifier = this.Request.Form["openid_identifier"];
-            Identifier id;
-            if (Identifier.TryParse(openIdIdentifier, out id))
+
+            if (openIdIdentifier == TestAccountIdentifier)
             {
-                try
-                {
-                    return OpenIdService.SendRequest(openid, id);
-                }
-                catch (ProtocolException ex)
-                {
-                    Logger.Error("OpenIdRequestError: {0}", ex.Message);
-                    this.ViewBag.Error = "Authentication failed";
-                    return this.View("Login");
-                }
+                return this.LoginAsTestUser();
             }
             else
             {
-                Logger.Error("Openid_identifier parse error.\r\nThis value should be in the Form Request.\r\nPossible error in View.");
-                this.ViewBag.Error = "Authentication error";
+                Identifier id;
+                if (Identifier.TryParse(openIdIdentifier, out id))
+                {
+                    try
+                    {
+                        return OpenIdService.SendRequest(openid, id);
+                    }
+                    catch (ProtocolException ex)
+                    {
+                        Logger.Error("OpenIdRequestError: {0}", ex.Message);
+                        this.ViewBag.Error = "Authentication failed";
+                        return this.View("Login");
+                    }
+                }
+                else
+                {
+                    Logger.Error(
+                        "Openid_identifier parse error.\r\nThis value should be in the Form Request.\r\nPossible error in View.");
+                    this.ViewBag.Error = "Authentication error";
+                    return this.View("Login");
+                }
+            }
+        }
+
+        private bool PerformLoginProcedure(string userId)
+        {
+            var currentUser = this.UserRepository.GetByParameterEqualsFilter("UserId", userId).SingleOrDefault();
+            if (currentUser == null)
+            {
+                Logger.Info("New user. Creating new profile with UserId - {0}", userId);
+                currentUser = new UserProfile
+                    {
+                        UserId = userId,
+                        Dashboards = new List<LearningDashboard>
+                        {
+                            new LearningDashboard()
+                        }
+                    };
+
+                var id = this.UserRepository.Add(currentUser);
+                if (id < 0)
+                {
+                    Logger.Warn("Authentication procedure failed on adding new user, redirecting to Login");
+                    return false;
+                }
+            }
+
+            this.IssueAuthTicket(currentUser.UserId, true);
+
+            SessionManager.CurrentUserSession = new UserProfileSession
+                {
+                    ID = currentUser.ID,
+                    MainDashboardId = currentUser.Dashboards.First().ID,
+                    UserId = currentUser.UserId
+                };
+
+            return true;
+        }
+
+        private ActionResult LoginAsTestUser()
+        {
+            var loginResult = this.PerformLoginProcedure("testuser");
+            if (!loginResult)
+            {
+                Logger.Error("Logging as test user failed");
+                this.ViewBag.Error = "Authentication failed";
                 return this.View("Login");
+            }
+            else
+            {
+                Logger.Info("Authentication procedure succesfull redirecting to Home/Index");
+                return this.RedirectToAction("Index", "Home");
             }
         }
 

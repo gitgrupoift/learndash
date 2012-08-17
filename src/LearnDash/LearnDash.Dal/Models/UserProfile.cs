@@ -18,6 +18,6 @@ namespace LearnDash.Dal.Models
         /// <summary>
         /// Each user can have many dashboards. Initiali we are supporting only one.
         /// </summary>
-        public virtual IList<LearningDashboard> Dashboards { get; set; }
+        public virtual ICollection<LearningDashboard> Dashboards { get; set; }
     }
 }
