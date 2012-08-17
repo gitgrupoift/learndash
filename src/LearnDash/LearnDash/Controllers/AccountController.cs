@@ -23,6 +23,8 @@ namespace LearnDash.Controllers
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
+        private static readonly string SpecialHiddenPassword = "alphatest";
+
         public IRepository<UserProfile> UserRepository { get; set; }
 
         public ActionResult Logout()
@@ -51,17 +53,28 @@ namespace LearnDash.Controllers
         [AcceptVerbs(HttpVerbs.Post | HttpVerbs.Get), ValidateInput(false)]
         public ActionResult OpenIdLogOn()
         {
-            var openid = new OpenIdRelyingParty();
-            var response = openid.GetResponse();
 
-            if (response == null)
-            {
-                return this.OpenIdRequest(openid);
-            }
-            else
-            {
-                return this.OpenIdResponse(response);
-            }
+                var openid = new OpenIdRelyingParty();
+                var response = openid.GetResponse();
+
+                if (response == null)
+                {
+                    var password = this.Request.Form["passwordBox"];
+                    if (password == SpecialHiddenPassword)
+                    {
+                        return this.OpenIdRequest(openid);
+                    }
+                    else
+                    {
+                        Logger.Error("Wrong password in alpha version");
+                        this.ViewBag.Error = "Incorrect password please contact us if you want to participate in alpha tests.";
+                        return this.View("Login");
+                    }
+                }
+                else
+                {
+                    return this.OpenIdResponse(response);
+                }
         }
 
         private ActionResult OpenIdResponse(IAuthenticationResponse response)

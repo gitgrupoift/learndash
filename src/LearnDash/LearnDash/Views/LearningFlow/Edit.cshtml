@@ -125,7 +125,7 @@
             if(isBlank(taskName)) {
                 $(".control-group").addClass("error");
                 $("#taskNameValidation").show();
-                hideLoadingOverlay(function() { $("#txtBoxTaskName").focus() });
+                hideLoadingOverlay(function() { $("#txtBoxTaskName").focus()});
                 return;
             }
             
