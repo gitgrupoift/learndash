@@ -23,3 +23,14 @@ function hideLoadingOverlay(func) {
         $("#loadingOverlay").fadeOut(200);
     }
 }
+
+
+function generateNoty(type, message) {
+    $('div#notyContainer').noty({
+        text: message,
+        type: type,
+        dismissQueue: false,
+        layout: 'TopCenter',
+        theme: 'default'
+    });
+}

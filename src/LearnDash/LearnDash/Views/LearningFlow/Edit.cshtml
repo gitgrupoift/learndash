@@ -93,10 +93,10 @@
                 success: function (data) {
                     if(data.isSuccess) {
                         removedTask.remove();
-                        // todo: show success notification
+                        generateNoty('success', 'Task removed sucessfully!');
                     }
                     else {
-                        // todo: show error notification
+                        generateNoty('error', 'Encountered error!');
                     }
                     hideLoadingOverlay();
                 }
@@ -151,10 +151,10 @@
                             $("#flow-list").append(newElement);
 
                             InitTaskButtons();
-                            // todo: show success notification
+                            generateNoty('success', 'Task sucessfully added!');
                         }
                         else {
-                            // todo: show error notification
+                            generateNoty('error', 'Encountered error!');
                         }
                         hideLoadingOverlay(function() { $("#txtBoxTaskName").focus() });
                     }

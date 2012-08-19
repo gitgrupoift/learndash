@@ -71,9 +71,12 @@ namespace LearnDash
             bundle.AddFile("~/Content/twitterbootstrap/js/bootstrap.js");
             BundleTable.Bundles.Add(bundle);
 
-            bundle = new Bundle("~/Scripts/noty");            
-            bundle.AddFile("~/Scripts/noty/jquery.noty.js");                  
-            bundle.AddFile("~/Scripts/noty/layouts/inline.js");            
+            bundle = new Bundle("~/Content/notyjs");
+            bundle.AddFile("~/Content/noty/jquery.noty.js");
+            bundle.AddFile("~/Content/noty/layouts/top.js");
+            bundle.AddFile("~/Content/noty/layouts/inline.js");
+            bundle.AddFile("~/Content/noty/layouts/topcenter.js");
+            bundle.AddFile("~/Content/noty/themes/default.js");
             BundleTable.Bundles.Add(bundle);
 
             Logger.Info("Application start finished");

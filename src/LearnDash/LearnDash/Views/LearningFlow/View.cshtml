@@ -34,11 +34,10 @@
                 function(data) {
                     if(data.isSuccess) {
                         $('#btnComplete').show();
-                        // todo : this has to be in succes function from ajax call
-                        // if operation is finished show the complete button
+                        generateNoty('success', 'Task completed');
                     }
                     else {
-                        
+                        generateNoty('error', 'Encountered error!');
                     }
                     hideLoadingOverlay();
 
