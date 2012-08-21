@@ -13,19 +13,11 @@
     return task;
 }
 
-    function SaveFlow(flowId,url) {
+    function ClearFlow(flowId, url, func) {
         var flowName = $(".flow-name span").html();
-        var flowTasks = new Array();
-
-        $(".flow-task").each(function () {
-            var newFlowTask = CreateTask($(this));
-            flowTasks.push(newFlowTask);
-        });
-
         var learningFlow = {
             Id    : flowId,
-            Name  : flowName,
-            Tasks : flowTasks
+            Name  : flowName
         };
 
         $.ajax({
@@ -34,13 +26,15 @@
             data: JSON.stringify(learningFlow),
             dataType : "json",
             contentType : 'application/json',
-            success: function (data) {
-            }
+            success: func
         });
     }
 
+    function CompleteTask(flowId, newId, url, func) {
+        MakeNext(flowId, newId, url, func);
+    }
 
-    function CompleteTask(flowId,newId, url, func) {
+    function MakeNext(flowId, newId, url, func) {
         var data = {
             flowId : flowId, 
             newCompleteTaskId: newId

@@ -54,15 +54,20 @@
             showLoadingOverlay();
             var lastTask = $('.flow-task');
             var newTask = $(this).parent();
-            
-            CompleteTask('@Model.ID',newTask.attr('data-id'), "@Url.Action("MakeNext", "LearningFlow")",
-                function () {
-                    lastTask.removeClass("flow-next");
-                    newTask.addClass("flow-next");
 
-                    lastTask.children("[name='btnMakeNext']").show();
-                    newTask.children("[name='btnMakeNext']").hide();
+            MakeNext('@Model.ID',newTask.attr('data-id'), "@Url.Action("MakeNext", "LearningFlow")",
+                function (data) {
+                    if(data.isSuccess) {
+                        lastTask.removeClass("flow-next");
+                        newTask.addClass("flow-next");
 
+                        lastTask.children("[name='btnMakeNext']").show();
+                        newTask.children("[name='btnMakeNext']").hide();
+                        generateNoty('success', 'Task set as next');
+                    }
+                    else {
+                        generateNoty('error', 'Encountered error!');
+                    }
                     hideLoadingOverlay();
                 });
         });
@@ -100,7 +105,7 @@
                     }
                     hideLoadingOverlay();
                 }
-            });
+            });         
         });
 
 
@@ -109,8 +114,19 @@
 
     function InitMenuButtons() {
         $("#btnClear").click(function () {
-            $('.flow-task').remove();
-            SaveFlow('@Model.ID',"@Url.Action("Save", "LearningFlow")");
+            showLoadingOverlay();
+            ClearFlow('@Model.ID',"@Url.Action("Clear", "LearningFlow")",
+            function (data) {
+                    if(data.isSuccess) {
+                        $('.flow-task').remove();
+                        generateNoty('success', 'Flow Cleared!');
+                    }
+                    else {
+                        generateNoty('error', 'Encountered error!');
+                    }
+                    hideLoadingOverlay();
+                }
+            );
         });
         var btnAddTask = $("#btnAddTask");
             btnAddTask.click(function () {

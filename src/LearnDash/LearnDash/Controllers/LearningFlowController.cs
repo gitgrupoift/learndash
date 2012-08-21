@@ -55,19 +55,19 @@
                     Notification.Add(new Notification(NotificationType.SuccesfullyEdited));                
                 else                
                     Notification.Add(new Notification(NotificationType.FailEdited));
-                
-                return View(flow);
+
+                return this.View(flow);
             }
 
             Logger.Warn("Flow model not valid!. Propably client validation didn't worked out.");
-            return View(flow);
+            return this.View(flow);
         }
 
 
         [HttpGet]
         public ActionResult Add()
         {
-            return View();
+            return this.View();
         }
 
         [HttpPost]
@@ -81,12 +81,12 @@
                     Notification.Add(new Notification(NotificationType.SuccesfullyAdd));                
                 else                
                     Notification.Add(new Notification(NotificationType.FailAdd));
-                
-                return RedirectToAction("Edit", new { id });
+
+                return this.RedirectToAction("Edit", new { id });
             }
 
             Logger.Warn("Flow model not valid!. Propably client validation didn't worked out.");
-            return View();
+            return this.View();
         }
 
         [HttpGet]
@@ -95,14 +95,13 @@
             var flow = LearningFlowService.Get(id);
             if (flow != null)
             {
-                return View(flow);
+                return this.View(flow);
             }
             else
             {
                 Logger.Warn("Unable to remove flow beacuse it wasn't found in DB. Possible error. Beacuse flow is visible in view but not visible in DB.");
-                return View("Error", ErrorType.NotFound);
+                return this.View("Error", ErrorType.NotFound);
             }
-
         }
 
         [HttpPost]
@@ -114,7 +113,7 @@
             }
             else
             {
-                return View("Error", ErrorType.Internal);
+                return this.View("Error", ErrorType.Internal);
             }
         }
 
@@ -127,12 +126,12 @@
             if (user != null)
             {
                 var flows = user.Dashboards.First().Flows.ToList();
-                return View(flows);
+                return this.View(flows);
             }
             else
             {
                 Logger.Warn("User '{0}' doesn't exist \r\nPropably session should be recycled and register procedure performed again.", User.Identity.Name);
-                return RedirectToAction("Logout", "Account");
+                return this.RedirectToAction("Logout", "Account");
             }
         }
 
@@ -218,20 +217,17 @@
         }
 
         [HttpPost]
-        public ActionResult Save(LearningFlow flow)
+        public ActionResult Clear(LearningFlow flow)
         {
-            if (ModelState.IsValid)
+            var state = LearningFlowService.Update(flow);
+            if (state)
             {
-                var state = LearningFlowService.Update(flow);
-                if (state)
-                    Notification.Add(new Notification(NotificationType.SuccesfullyEdited));
-                else
-                    Notification.Add(new Notification(NotificationType.FailEdited));
-                return Json(Is.Success.Empty);
+                return this.Json(Is.Success.Empty);
             }
-
-            Logger.Warn("Flow model not valid!. Propably client validation didn't worked out.");
-            return Json(Is.Fail.Message("Save Failed"));
+            else
+            {
+                return this.Json(Is.Fail.Message("Clear Failed"));
+            }
         }
     }
 
