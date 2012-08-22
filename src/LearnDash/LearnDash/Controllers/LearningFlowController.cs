@@ -51,10 +51,14 @@
             if (ModelState.IsValid)
             {
                 var state = LearningFlowService.Update(flow);
-                if (state)                
-                    Notification.Add(new Notification(NotificationType.SuccesfullyEdited));                
-                else                
-                    Notification.Add(new Notification(NotificationType.FailEdited));
+                if (state)
+                {
+                    Notification.Notify(NotificationType.Success, "Edit Successfull");
+                }
+                else
+                {
+                    Notification.Notify(NotificationType.Fail, "Edit Failed");
+                }
 
                 return this.View(flow);
             }
@@ -77,10 +81,15 @@
             {
                 newFlow.Tasks = new List<LearningTask>();
                 var id = LearningFlowService.Add(newFlow);
-                if (id != null)                
-                    Notification.Add(new Notification(NotificationType.SuccesfullyAdd));                
-                else                
-                    Notification.Add(new Notification(NotificationType.FailAdd));
+
+                if (id > 0)
+                {
+                    Notification.Notify(NotificationType.Success, "Adding new flow successfull");
+                }
+                else
+                {
+                    Notification.Notify(NotificationType.Fail, "Adding new flow failed");
+                }
 
                 return this.RedirectToAction("Edit", new { id });
             }

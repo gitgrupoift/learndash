@@ -11,6 +11,28 @@
     <script src="@System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/Content/twitterbootstrap/bootstrapjs")"></script>
     <script src="@System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/Scripts/customjs")"></script>
     <script src="@System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/Content/notyjs")"></script>
+    
+    @if (SessionManager.ListOfNotifications != null && SessionManager.ListOfNotifications.Count > 0)
+    {
+        <script type="text/javascript">
+            $(function() {
+                @foreach(var notification in SessionManager.ListOfNotifications)
+                {
+                    switch(notification.Type)
+                    {
+                        case NotificationType.Success:
+                            this.WriteLiteral(string.Format("generateNoty(\'success\',\'{0}\')", notification.Message));
+                            break;
+                        case NotificationType.Fail:
+                            this.WriteLiteral(string.Format("generateNoty(\'error\',\'{0}\')", notification.Message));
+                            break;
+                    }
+                }
+                @{ SessionManager.ListOfNotifications.Clear(); }
+            });
+        </script>
+    }
+
 </head>
 <body>
     <div class="navbar navbar-fixed-top">
