@@ -80,10 +80,14 @@
 
                 var nextTask = removedTask.next();
                 if(nextTask.length>0) {
-                    nextTask.addClass("flow-next");   
+                    nextTask.addClass("flow-next");
+                    nextTask.children("[name='btnMakeNext']").hide();
                 }
                 else {
-                    removedTask.prev().addClass("flow-next");
+                    var previousTask = removedTask.prev();
+                    previousTask.addClass("flow-next");
+                    previousTask.children("[name='btnMakeNext']").hide();
+                    
                 }
             }
             
