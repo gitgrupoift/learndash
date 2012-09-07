@@ -29,7 +29,7 @@ function generateNoty(type, message) {
         text: message,
         type: type,
         timeout: 500,
-        dismissQueue: false,
+        dismissQueue: true,
         layout: 'TopCenter',
         theme: 'default'
     });
