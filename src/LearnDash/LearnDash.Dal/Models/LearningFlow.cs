@@ -11,6 +11,7 @@ namespace LearnDash.Dal.Models
         [Required]
         public virtual int ID { get; set; }
         [Required(ErrorMessage = "Name is required")]
+        [StringLength(50, ErrorMessage = "Learning flow name can have only 50 characters.")]
         public virtual string Name { get; set; }
 
         public virtual ICollection<LearningTask> Tasks { get; set; }

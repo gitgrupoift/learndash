@@ -167,14 +167,14 @@
                     contentType : 'application/json',
                     success: function (data) {
                         if(data.isSuccess) {
-                            var newElement = $("<li class='" + taskClass + "' data-id='"+data.message+"' ><span style='float:left'>" + escape(taskName) + "</span><button style='float:right' name='btnMakeNext' class='btn btn-success'><i class='icon-ok icon-white'></i></button><button style='float:right' name='btnRemoveTask' class='btn btn-warning'><i class='icon-trash icon-white'></i></button><div style='clear:both;'></div></li>");
+                            var newElement = $("<li class='" + taskClass + "' data-id='"+data.message+"' ><span style='float:left'>" + escape(taskName).replace(/%20/g," ") + "</span><button style='float:right' name='btnMakeNext' class='btn btn-success'><i class='icon-ok icon-white'></i></button><button style='float:right' name='btnRemoveTask' class='btn btn-warning'><i class='icon-trash icon-white'></i></button><div style='clear:both;'></div></li>");
                             $("#flow-list").append(newElement);
 
                             InitTaskButtons();
                             generateNoty('success', 'Task sucessfully added!');
                         }
                         else {
-                            generateNoty('error', 'Encountered error!');
+                            generateNoty('error', 'Encountered error! - ' + data.message);
                         }
                         hideLoadingOverlay(function() { $("#txtBoxTaskName").focus();});
                     }

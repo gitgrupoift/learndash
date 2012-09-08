@@ -25,6 +25,7 @@ namespace LearnDash.Dal.Models
         /// Name is displayed on the learning flow interface.
         /// </summary>
         [Required(ErrorMessage = "Name is required")]
+        [StringLength(50, ErrorMessage = "Task name can have only 50 characters.")]
         public virtual string Name { get; set; }
 
         /// <summary>

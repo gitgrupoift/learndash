@@ -64,6 +64,7 @@
             }
 
             Logger.Warn("Flow model not valid!. Propably client validation didn't worked out.");
+            Notification.Notify(NotificationType.Fail, "Validation Failed!");
             return this.View(flow);
         }
 
@@ -95,6 +96,7 @@
             }
 
             Logger.Warn("Flow model not valid!. Propably client validation didn't worked out.");
+            Notification.Notify(NotificationType.Fail, "Validation Failed!");
             return this.View();
         }
 
@@ -147,19 +149,25 @@
         [HttpPost]
         public ActionResult AddTask(LearningTask task, int flowId)
         {
-            var flow = LearningFlowService.Get(flowId);
-            if (flow != null)
+            if (ModelState.IsValid)
             {
-                task.Name = Server.HtmlEncode(task.Name);
+                var flow = LearningFlowService.Get(flowId);
+                if (flow != null)
+                {
+                    task.Name = Server.HtmlEncode(task.Name);
 
-                flow.Tasks.Add(task);
-                LearningFlowService.Update(flow);
+                    flow.Tasks.Add(task);
+                    LearningFlowService.Update(flow);
 
-                return this.Json(Is.Success.Message(task.ID.ToString()));
+                    return this.Json(Is.Success.Message(task.ID.ToString()));
+                }
+
+                Logger.Warn("User tried to add task to non existing flow");
+                return this.Json(Is.Fail.Message("Flow doesn't exist"));
             }
 
-            Logger.Warn("User tried to add task to non existing flow");
-            return this.Json(Is.Fail.Message("Flow doesn't exist"));
+            Logger.Warn("Add Task - Validation Fail");
+            return this.Json(Is.Fail.Message("Valdiation Failed"));
         }
 
         [HttpPost]
