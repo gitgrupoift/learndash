@@ -1,6 +1,6 @@
 ﻿@model LearnDash.Dal.Models.LearningFlow
 
-@Html.Partial("_RoundaboutView", Model)
+@Html.Partial("_LinearListView", Model)
 
 <div class="clear-both"></div>
 <div>
@@ -29,8 +29,9 @@
             SetNextTask();
 
             var newId = nextTask.attr("data-id");
+            var currentId = currentTask.attr("data-id");
 
-            CompleteTask('@Model.ID', newId, "@Url.Action("CompleteTask", "LearningFlow")",
+            CompleteTask('@Model.ID', newId, currentId, "@Url.Action("CompleteTask", "LearningFlow")",
                 function(data) {
                     if(data.isSuccess) {
                         $('#btnComplete').show();

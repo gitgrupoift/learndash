@@ -232,6 +232,7 @@
     <Compile Include="Windsor\WindsorControllerFactory.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\isotope.css" />
     <Content Include="Content\img\ajax-loader-big.gif" />
     <Content Include="Content\img\anonymous.png" />
     <Content Include="Content\img\google.png" />
@@ -292,6 +293,7 @@
     <Content Include="Scripts\jquery-ui-1.8.11.min.js" />
     <Content Include="Scripts\jquery.event.drag-2.0.min.js" />
     <Content Include="Scripts\jquery.event.drop-2.0.min.js" />
+    <Content Include="Scripts\jquery.isotope.min.js" />
     <Content Include="Scripts\jquery.roundabout.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
@@ -355,7 +357,7 @@
     <Content Include="Views\LearningFlow\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Shared\_RoundaboutView.cshtml" />
+    <Content Include="Views\Shared\_LinearListView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\LearningFlow\List.cshtml" />
@@ -386,6 +388,12 @@
   <ItemGroup>
     <Content Include="Views\Shared\_Notification.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\LearningFlow\ViewTest.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_DinamicListView.cshtml" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -403,7 +411,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>49322</DevelopmentServerPort>
+          <DevelopmentServerPort>56698</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost/LearnDash</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
