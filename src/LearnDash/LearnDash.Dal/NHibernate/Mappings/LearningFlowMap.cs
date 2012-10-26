@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using FluentNHibernate.Mapping;
 using LearnDash.Dal.Models;
 
@@ -11,6 +9,8 @@ namespace LearnDash.Dal.NHibernate.Mappings
         {
             Id(x => x.ID);
             Map(x => x.Name);
+            Map(x => x.FlowType);
+
             HasMany(x => x.Tasks).KeyColumn("LearningFlowId").Not.Inverse().Cascade.AllDeleteOrphan().Not.LazyLoad();
         }
     }

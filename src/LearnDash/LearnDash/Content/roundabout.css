@@ -26,6 +26,11 @@
     background-color: lightgreen !important;
 }
 
+.flow-selected
+{
+    background-color: yellow !important;
+}
+
 .flow-task span
 {
     text-align: center;
@@ -81,4 +86,18 @@
     float: left;
     margin-left: 25px;
     margin-top: 10px;
+}
+
+.flow-task-container-dynamic div 
+{
+    background-color: lightblue;
+    font-weight: bold;
+    text-align: center;
+    z-index: 260;
+    border-color: #222;
+    opacity: 0.8;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    border-style: solid;
+    list-style-type: none;
 }

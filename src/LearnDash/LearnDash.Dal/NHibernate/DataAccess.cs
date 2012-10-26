@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Web.Configuration;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
@@ -13,7 +10,7 @@ namespace LearnDash.Dal.NHibernate
 {
     public static class DataAccess
     {
-        private const string TestConnString = "Data Source=localhost.\\SQLEXPRESS;Initial Catalog=LearnDash;Integrated Security=SSPI";
+        public const string TestConnString = "Data Source=localhost\\SQLEXPRESS;Initial Catalog=LearnDash;Integrated Security=SSPI";
 
         private static string ConnectionString
         {

@@ -60,6 +60,11 @@ namespace LearnDash
             bundle.AddFile("~/Scripts/learningflow.js");
             bundle.AddFile("~/Scripts/userecho.js");
             bundle.AddFile("~/Scripts/layout.js");
+            bundle.AddFile("~/Scripts/jquery.isotope.min.js");
+            BundleTable.Bundles.Add(bundle);
+
+            bundle = new Bundle("~/Content/customcss");
+            bundle.AddFile("~/Content/isotope.css");
             BundleTable.Bundles.Add(bundle);
 
             bundle = new Bundle("~/Content/twitterbootstrap/bootstrapcss");

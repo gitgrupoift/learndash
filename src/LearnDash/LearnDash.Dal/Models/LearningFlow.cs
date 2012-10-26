@@ -1,10 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-
 namespace LearnDash.Dal.Models
 {
+    using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+
+
+    public enum FlowType
+    {
+        All = 0,
+        Static = 1,
+        Dynamic = 2
+    }
 
     public class LearningFlow : IDBModel
     {
@@ -15,6 +21,8 @@ namespace LearnDash.Dal.Models
         public virtual string Name { get; set; }
 
         public virtual ICollection<LearningTask> Tasks { get; set; }
+
+        public virtual FlowType FlowType { get; set; }
 
         [Obsolete("Dont use this.Has to be defined for the json serializer")]
         public LearningFlow()

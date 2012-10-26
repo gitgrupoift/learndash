@@ -1,6 +1,5 @@
 namespace Core
 {
-    using System;
     using System.Configuration;
 
     public static class Settings

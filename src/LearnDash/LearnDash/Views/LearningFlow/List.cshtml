@@ -1,4 +1,5 @@
-﻿@model List<LearnDash.Dal.Models.LearningFlow>
+﻿@using LearnDash.Dal.Models
+@model List<LearnDash.Dal.Models.LearningFlow>
 <ul class="nav nav-pills nav-stacked">
     @foreach (var flow in Model)
     {
@@ -7,7 +8,16 @@
            href="#">
             @flow.Name<b class="caret"></b></a>
             <ul class="dropdown-menu">
-                <li><a href="@Url.Action("View", "LearningFlow", new { id = @flow.ID }, null)">View</a></li>
+
+               @if (flow.FlowType == FlowType.Static)
+                {
+                    <li><a href="@Url.Action("View", "LearningFlow", new {id = @flow.ID}, null)">View</a></li>
+                }
+                else
+                {
+                    <li><a href="@Url.Action("ViewTest", "LearningFlow", new {id = @flow.ID}, null)">View</a></li>
+                }
+
                 <li><a href="@Url.Action("Edit", "LearningFlow", new { id = @flow.ID }, null)">Edit</a></li>
                 <li><a href="@Url.Action("Remove", "LearningFlow", new { id = @flow.ID }, null)">Remove</a></li>
             </ul>

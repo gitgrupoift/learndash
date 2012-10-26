@@ -30,8 +30,32 @@
         });
     }
 
-    function CompleteTask(flowId, newId, url, func) {
-        MakeNext(flowId, newId, url, func);
+    function CompleteTask(flowId, newId, currId, url, func) {
+
+        var data;    
+
+        if (newId) {
+            data = {
+                flowId: flowId,
+                newCompleteTaskId: newId,
+                currentCompleteTaskId: currId
+            };
+        }
+        else {
+            data = {
+                flowId: flowId,
+                currentCompleteTaskId: currId
+            };
+        }
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: JSON.stringify(data),
+            dataType: "json",
+            contentType: 'application/json',
+            success: func
+        });
     }
 
     function MakeNext(flowId, newId, url, func) {

@@ -1,18 +1,11 @@
 ﻿namespace LearnDash.Controllers
 {
-    using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Linq;
-    using System.Threading;
-    using System.Web;
     using System.Web.Mvc;
-    using System.Web.Routing;
-    using Castle.Core.Logging;
-    using LearnDash.Dal;
-    using LearnDash.Dal.Models;
-    using LearnDash.Dal.NHibernate;
-    using LearnDash.Services;
+    using Dal.Models;
+    using Dal.NHibernate;
+    using Services;
 
     [Authorize]
     public class LearningFlowController : Controller
@@ -25,7 +18,7 @@
 
         public static NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        //todo : should open default learing flow
+        //todo : should open default learing flowq
         public ActionResult Index()
         {
             return this.View();
@@ -191,9 +184,48 @@
         }
 
         [HttpPost]
-        public ActionResult CompleteTask(int flowID, int newCompleteTaskId)
+        public ActionResult CompleteTask(int flowID, int newCompleteTaskId, int currentCompleteTaskId)
         {
-            return this.MakeNext(flowID, newCompleteTaskId);
+            if (flowID >= 0 && newCompleteTaskId >= 0)
+            {
+                var flow = this.LearningFlowService.Get(flowID);
+
+                var task = flow.Tasks.First(t => t.ID == newCompleteTaskId);
+                var currentTask = flow.Tasks.First(t => t.ID == currentCompleteTaskId);
+
+                currentTask.TimesDone = currentTask.TimesDone + 1;
+                task.IsNext = true;
+
+                foreach (var learningTask in flow.Tasks.Where(t => t.ID != newCompleteTaskId).ToList())
+                {
+                    learningTask.IsNext = false;
+                }
+
+                this.LearningFlowService.Update(flow);
+                return this.Json(Is.Success.Empty);
+            }
+
+            Logger.Warn("Wrong data sent to the action \r\nparams: flowId - {0}\r\n nTaskId - {1} ", flowID, newCompleteTaskId);
+            return this.Json(Is.Fail.Message("Wrong data sent"));
+        }
+
+        [HttpPost]
+        public ActionResult CompleteTask1(int flowID, int currentCompleteTaskId)
+        {
+            if (flowID >= 0)
+            {
+                var flow = this.LearningFlowService.Get(flowID);
+
+                var currentTask = flow.Tasks.First(t => t.ID == currentCompleteTaskId);
+
+                currentTask.TimesDone = currentTask.TimesDone + 1;
+
+                this.LearningFlowService.Update(flow);
+                return this.Json(Is.Success.Empty);
+            }
+
+            Logger.Warn("Wrong data sent to the action \r\nparams: flowId - {0}\r\n nTaskId - {1} ", flowID, currentCompleteTaskId);
+            return this.Json(Is.Fail.Message("Wrong data sent"));
         }
 
         [HttpPost]
@@ -222,6 +254,21 @@
         public ActionResult View(int id)
         {
             var flow = this.LearningFlowService.Get(id);
+            if (flow != null)
+            {
+                return this.View(flow);
+            }
+            else
+            {
+                Logger.Warn("Requested flow with id - {0} that doesn't exist", id);
+                return this.View("Error", ErrorType.NotFound);
+            }
+        }
+
+        public ActionResult ViewTest(int id)
+        {
+            var flow = this.LearningFlowService.Get(id);
+
             if (flow != null)
             {
                 return this.View(flow);

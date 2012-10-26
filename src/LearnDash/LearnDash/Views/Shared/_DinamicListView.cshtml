@@ -1,0 +1,132 @@
+﻿@model LearnDash.Dal.Models.LearningFlow
+<link href="../../Content/roundabout.css" rel="stylesheet" type="text/css" />
+<div class="flow-name">
+    <span>@Model.Name</span>
+</div>
+@if (Model != null && Model.Tasks != null && Model.Tasks.Count > 0)
+{
+    <div class="flow-task-container-dynamic">
+        @foreach (var task in Model.Tasks)
+        {
+            <div class="flow-task" style="height:100px;width:100px" data-id="@task.ID" data-timesdone="@task.TimesDone"><span>@task.Name</span></div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info"><strong>Ooops!</strong> no items in this flow</div>
+}
+
+
+<script type="text/javascript">
+
+    $(function () {
+
+        AdjustSize();
+        InitIsotope();
+
+        $(".flow-task").hover(
+            function () {
+                $(this).addClass("flow-selected");
+                $(this).find("span").append("<button onclick='Complete(this)'>Ok</button>");
+            },
+            function () {
+                $(this).removeClass("flow-selected");
+                $(this).find("button").remove();
+            }
+        );
+
+        $(".flow-task").click(function () {
+            $(".flow-task").removeClass("flow-next");
+            $(this).addClass("flow-next");
+        });
+    });
+
+
+    function Complete(task) {
+            var $completedTask = $(task).parent().parent();
+            var timesDone = parseInt($completedTask.attr("data-timesdone"));
+            $completedTask.attr("data-timesdone", timesDone + 1);
+            var currentId = $completedTask.attr('data-id');
+
+            CompleteTask('@Model.ID', null, currentId, "@Url.Action("CompleteTask1", "LearningFlow")",
+                function(data) {
+                    if(data.isSuccess) {
+                        $('#btnComplete').show();
+                        generateNoty('success', 'Task completed');
+                        AdjustSize();
+                        InitIsotope();
+                    }
+                    else {
+                        generateNoty('error', 'Encountered error!');
+                    }
+                    hideLoadingOverlay();
+            });
+    }
+    
+    @if (Model != null && Model.Tasks != null && Model.Tasks.Count > 0)
+    {
+        var maxTimesDone = @Model.Tasks.Max(x => x.TimesDone);
+        var minTimesDone = @Model.Tasks.Min(x => x.TimesDone);
+    }
+
+    function AdjustSize() {
+        
+            $(".flow-task").each(function() {
+                var $thistask = $(this);
+                var timesDone = $thistask.attr("data-timesdone");
+                var value1 = 0;
+                var value2 = 0;
+
+                switch (timesDone)
+                {
+                    case "6":
+                        value1 = 0;
+                        value2 = 0;
+                        break;
+                    case "5":
+                        value1 = 0;
+                        value2 = 1;
+                        break;
+                    case "4":
+                        value1 = 1;
+                        value2 = 1;
+                        break;
+                    case "3":
+                        value1 = 1;
+                        value2 = 2;
+                        break;
+                    case "2":
+                        value1 = 2;
+                        value2 = 2;
+                        break;
+                    case "1":
+                        value1 = 2;
+                        value2 = 3;
+                        break;
+                    case "0":
+                        value1 = 3;
+                        value2 = 3;
+                        break;
+                }
+                
+                var max = 400;
+                var width = max / Math.pow(2, value1);
+                var height = max / Math.pow(2, value2);
+                var maxFont = 24;
+                var fontSize = maxFont - (value2 * 5);
+
+                $thistask.width(width);
+                $thistask.height(height);
+                $thistask.find("span").css("font-size", fontSize);
+        });
+    }
+    
+    function InitIsotope() {
+        $('.flow-task-container-dynamic').isotope({
+            itemSelector: '.flow-task',
+            layoutMode: 'masonry'
+        });
+    }
+
+</script>
