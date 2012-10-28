@@ -9,7 +9,7 @@
             @Html.ValidationMessageFor(model=>model.Name)
             
             @Html.LabelFor(model => model.FlowType)
-            @Html.DropDownListFor(model => model.FlowType, (SelectList)this.ViewBag.FlowTypes)
+            @Html.DropDownListFor(model => model.FlowType, this.ViewBag.FlowTypes as SelectList)
             @Html.ValidationMessageFor(model => model.FlowType)
         </div>
         <div>

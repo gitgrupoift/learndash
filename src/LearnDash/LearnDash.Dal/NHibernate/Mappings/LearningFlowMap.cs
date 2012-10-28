@@ -9,7 +9,7 @@ namespace LearnDash.Dal.NHibernate.Mappings
         {
             Id(x => x.ID);
             Map(x => x.Name);
-            Map(x => x.FlowType);
+            Map(x => x.FlowType).CustomType<FlowType>();
 
             HasMany(x => x.Tasks).KeyColumn("LearningFlowId").Not.Inverse().Cascade.AllDeleteOrphan().Not.LazyLoad();
         }
