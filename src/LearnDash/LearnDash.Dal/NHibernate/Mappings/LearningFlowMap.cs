@@ -1,8 +1,8 @@
-using FluentNHibernate.Mapping;
-using LearnDash.Dal.Models;
-
 namespace LearnDash.Dal.NHibernate.Mappings
 {
+    using FluentNHibernate.Mapping;
+    using Models;
+
     public class LearningFlowMap : ClassMap<LearningFlow>
     {
         public LearningFlowMap()
