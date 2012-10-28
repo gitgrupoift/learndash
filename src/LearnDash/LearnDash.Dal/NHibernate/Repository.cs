@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Castle.Core.Logging;
 using NHibernate;
 using NHibernate.Criterion;
 using Core.Extensions;
-
 
 namespace LearnDash.Dal.NHibernate
 {
