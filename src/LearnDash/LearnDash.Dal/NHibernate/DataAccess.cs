@@ -96,7 +96,5 @@ namespace LearnDash.Dal.NHibernate
         {
             new SchemaUpdate(Configuration).Execute(true, true);
         }
-
     }
-
 }
