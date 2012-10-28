@@ -1,5 +1,4 @@
 ﻿@model LearnDash.Dal.Models.LearningFlow
-@using LearnDash.Controllers
 
 @using (Html.BeginForm())
 {
@@ -8,6 +7,10 @@
             @Html.LabelFor(model => model.Name)
             @Html.TextBoxFor(model => model.Name)
             @Html.ValidationMessageFor(model=>model.Name)
+            
+            @Html.LabelFor(model => model.FlowType)
+            @Html.DropDownListFor(model => model.FlowType, (SelectList)this.ViewBag.FlowTypes)
+            @Html.ValidationMessageFor(model => model.FlowType)
         </div>
         <div>
             <button class="btn btn-success" type="submit"><i class="icon-plus icon-white"></i> Add</button>

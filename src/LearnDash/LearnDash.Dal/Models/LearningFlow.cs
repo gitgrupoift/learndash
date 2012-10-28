@@ -7,7 +7,6 @@ namespace LearnDash.Dal.Models
 
     public enum FlowType
     {
-        All = 0,
         Static = 1,
         Dynamic = 2
     }
