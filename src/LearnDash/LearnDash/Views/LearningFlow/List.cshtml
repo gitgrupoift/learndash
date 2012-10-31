@@ -1,27 +1,24 @@
 ﻿@using LearnDash.Dal.Models
-@model List<LearnDash.Dal.Models.LearningFlow>
+@model List<LearningFlow>
 <ul class="nav nav-pills nav-stacked">
     @foreach (var flow in Model)
     {
-        <li class="dropdown"><a class="dropdown-toggle"
-           data-toggle="dropdown"
-           href="#">
-            @flow.Name<b class="caret"></b></a>
+        <li class="dropdown">
+            @if (flow.FlowType == FlowType.Static)
+            {
+                <a style="display:inline;margin-bottom: 5px" href="@Url.Action("View", "LearningFlow", new {id = @flow.ID}, null)">@flow.Name</a>
+            }
+            else
+            {
+                <a style="display:inline;margin-bottom: 5px" href="@Url.Action("ViewTest", "LearningFlow", new {id = @flow.ID}, null)">@flow.Name</a>
+            }
+            <a style="display:inline" class="dropdown-toggle"data-toggle="dropdown"href="#"><b class="caret"></b></a>
             <ul class="dropdown-menu">
-
-               @if (flow.FlowType == FlowType.Static)
-                {
-                    <li><a href="@Url.Action("View", "LearningFlow", new {id = @flow.ID}, null)">View</a></li>
-                }
-                else
-                {
-                    <li><a href="@Url.Action("ViewTest", "LearningFlow", new {id = @flow.ID}, null)">View</a></li>
-                }
-
                 <li><a href="@Url.Action("Edit", "LearningFlow", new { id = @flow.ID }, null)">Edit</a></li>
                 <li><a href="@Url.Action("Remove", "LearningFlow", new { id = @flow.ID }, null)">Remove</a></li>
             </ul>
         </li>
+        <br />
     }
 </ul>
 <a href='@Url.Action("Add", "LearningFlow")' class = "btn btn-primary"><i class="icon-plus icon-white">
