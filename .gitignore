@@ -4,6 +4,9 @@
 *.Publish.xml
 *.png
 *.dotcover
+*.pubxml
+*Debug.config
+*Release.config
 
 obj
 bin
