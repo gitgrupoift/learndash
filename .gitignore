@@ -7,7 +7,7 @@
 *.pubxml
 *Debug.config
 *Release.config
-
+*.log
 obj
 bin
 Bin
