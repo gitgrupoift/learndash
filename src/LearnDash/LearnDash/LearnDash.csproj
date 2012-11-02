@@ -366,7 +366,7 @@
     <Content Include="Views\LearningFlow\Add.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\LearningFlow\Edit.cshtml" />
+    <Content Include="Views\LearningFlow\EditItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_LinearListView.cshtml" />
@@ -386,6 +386,7 @@
   <ItemGroup>
     <Content Include="NLog.config">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -408,6 +409,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\mfranc.com.pubxml" />
+    <Content Include="Views\LearningFlow\Edit.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

@@ -14,7 +14,8 @@
             }
             <a style="display:inline" class="dropdown-toggle"data-toggle="dropdown"href="#"><b class="caret"></b></a>
             <ul class="dropdown-menu">
-                <li><a href="@Url.Action("Edit", "LearningFlow", new { id = @flow.ID }, null)">Edit</a></li>
+                <li><a href="@Url.Action("Edit", "LearningFlow", new { id = @flow.ID }, null)">Edit Flow</a></li>
+                <li><a href="@Url.Action("EditItems", "LearningFlow", new { id = @flow.ID }, null)">Edit Items</a></li>
                 <li><a href="@Url.Action("Remove", "LearningFlow", new { id = @flow.ID }, null)">Remove</a></li>
             </ul>
         </li>

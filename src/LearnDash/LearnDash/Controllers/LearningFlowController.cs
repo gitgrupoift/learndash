@@ -40,6 +40,7 @@ namespace LearnDash.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
+            this.ViewBag.FlowTypes = new LearningFlow().FlowType.ToSelectList();
             var flow = LearningFlowService.Get(id);
             if (flow != null)
             {
@@ -53,6 +54,47 @@ namespace LearnDash.Controllers
 
         [HttpPost]
         public ActionResult Edit(LearningFlow flow)
+        {
+            this.ViewBag.FlowTypes = new LearningFlow().FlowType.ToSelectList();
+            if (ModelState.IsValid)
+            {
+                var lastFlow = LearningFlowService.Get(flow.ID);
+                lastFlow.Name = flow.Name;
+
+                var state = LearningFlowService.Update(lastFlow);
+                if (state)
+                {
+                    Notification.Notify(NotificationType.Success, "Edit Successfull");
+                }
+                else
+                {
+                    Notification.Notify(NotificationType.Fail, "Edit Failed");
+                }
+
+                return this.View(flow);
+            }
+
+            Logger.Warn("Flow model not valid!. Propably client validation didn't worked out.");
+            Notification.Notify(NotificationType.Fail, "Validation Failed!");
+            return this.View(flow);
+        }
+
+        [HttpGet]
+        public ActionResult EditItems(int id)
+        {
+            var flow = LearningFlowService.Get(id);
+            if (flow != null)
+            {
+                return this.View(flow);
+            }
+            else
+            {
+                return this.View("Error", ErrorType.NotFound);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult EditItems(LearningFlow flow)
         {
             if (ModelState.IsValid)
             {
@@ -73,9 +115,6 @@ namespace LearnDash.Controllers
             Notification.Notify(NotificationType.Fail, "Validation Failed!");
             return this.View(flow);
         }
-
-
-
 
         [HttpGet]
         public ActionResult Add()
@@ -102,7 +141,7 @@ namespace LearnDash.Controllers
                     Notification.Notify(NotificationType.Fail, "Adding new flow failed");
                 }
 
-                return this.RedirectToAction("Edit", new { id });
+                return this.RedirectToAction("EditItems", new { id });
             }
 
             Logger.Warn("Flow model not valid!. Propably client validation didn't worked out.");
