@@ -49,7 +49,7 @@ else
             $completedTask.attr("data-timesdone", timesDone + 1);
             var currentId = $completedTask.attr('data-id');
 
-            CompleteTask('@Model.ID', null, currentId, "@Url.Action("CompleteTask1", "LearningFlow")",
+            CompleteTask('@Model.ID', null, currentId, "@Url.Action("CompleteTask", "LearningFlow")",
                 function(data) {
                     if(data.isSuccess) {
                         $('#btnComplete').show();
