@@ -4,14 +4,7 @@
     @foreach (var flow in Model)
     {
         <li class="dropdown">
-            @if (flow.FlowType == FlowType.Static)
-            {
-                <a style="display:inline;margin-bottom: 5px" href="@Url.Action("View", "LearningFlow", new {id = @flow.ID}, null)">@flow.Name</a>
-            }
-            else
-            {
-                <a style="display:inline;margin-bottom: 5px" href="@Url.Action("ViewTest", "LearningFlow", new {id = @flow.ID}, null)">@flow.Name</a>
-            }
+            <a style="display:inline;margin-bottom: 5px" href="@Url.Action("View", "LearningFlow", new {id = @flow.ID}, null)">@flow.Name</a>
             <a style="display:inline" class="dropdown-toggle"data-toggle="dropdown"href="#"><b class="caret"></b></a>
             <ul class="dropdown-menu">
                 <li><a href="@Url.Action("Edit", "LearningFlow", new { id = @flow.ID }, null)">Edit Flow</a></li>

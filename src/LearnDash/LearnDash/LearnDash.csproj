@@ -399,12 +399,6 @@
     <Content Include="Views\Account\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Shared\_Notification.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\LearningFlow\ViewTest.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Shared\_DinamicListView.cshtml" />
   </ItemGroup>
   <ItemGroup>

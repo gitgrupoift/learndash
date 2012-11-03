@@ -22,3 +22,68 @@ else
 {
     <div class="alert alert-info"><strong>Ooops!</strong> no items in this flow</div>
 }
+
+<div class="clear-both"></div>
+<div>
+    <button id="btnComplete" class="btn-large btn-success" style="margin-top:10%;margin-left: 50px"><i class="icon-ok icon-white"></i>  Complete</button>
+</div>
+
+<script type="text/javascript">
+    var nextTask;
+    var currentTask;
+    
+    $(function() {
+
+        // if there is only one task, hide complete button
+        if ($('.flow-task').length <= 1) {
+            $('#btnComplete').hide();
+        }
+
+        $('#btnComplete').click(function() {
+
+            showLoadingOverlay();
+            // hide button so user is not able to click him again - could be replaced by loading overlay
+            $(this).hide();
+
+            currentTask = $('.flow-next');
+
+            SetNextTask();
+
+            var newId = nextTask.attr("data-id");
+            var currentId = currentTask.attr("data-id");
+
+            CompleteTask('@Model.ID', newId, currentId, "@Url.Action("CompleteTaskAndMakeNewNext", "LearningFlow")",
+                function(data) {
+                    if(data.isSuccess) {
+                        $('#btnComplete').show();
+                        generateNoty('success', 'Task completed');
+                    }
+                    else {
+                        generateNoty('error', 'Encountered error!');
+                    }
+                    hideLoadingOverlay();
+            });
+        });
+    });
+    
+    function SetFirstTaskAsNext() {
+        nextTask = $(".flow-task").first();
+        ToogleNextClass(nextTask, currentTask);
+    }
+    
+    function SetNextTask() {
+        nextTask = currentTask.next();
+        if(nextTask.length > 0) {
+            ToogleNextClass(nextTask, currentTask);
+        }
+        else {
+            SetFirstTaskAsNext();
+        }
+    }
+    
+    function ToogleNextClass(next,current) {
+        next.addClass("flow-next");
+        current.removeClass("flow-next");
+    }
+
+</script>
