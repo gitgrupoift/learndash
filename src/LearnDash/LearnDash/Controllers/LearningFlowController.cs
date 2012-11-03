@@ -240,7 +240,7 @@ namespace LearnDash.Controllers
         }
 
         [HttpPost]
-        public ActionResult CompleteTask(int flowID, int newCompleteTaskId, int currentCompleteTaskId)
+        public ActionResult CompleteTaskAndMakeNewNext(int flowID, int newCompleteTaskId, int currentCompleteTaskId)
         {
             if (flowID >= 0 && newCompleteTaskId >= 0)
             {
@@ -266,7 +266,7 @@ namespace LearnDash.Controllers
         }
 
         [HttpPost]
-        public ActionResult CompleteTask1(int flowID, int currentCompleteTaskId)
+        public ActionResult CompleteTask(int flowID, int currentCompleteTaskId)
         {
             if (flowID >= 0)
             {

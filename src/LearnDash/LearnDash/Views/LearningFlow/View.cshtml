@@ -31,7 +31,7 @@
             var newId = nextTask.attr("data-id");
             var currentId = currentTask.attr("data-id");
 
-            CompleteTask('@Model.ID', newId, currentId, "@Url.Action("CompleteTask", "LearningFlow")",
+            CompleteTask('@Model.ID', newId, currentId, "@Url.Action("CompleteTaskAndMakeNewNext", "LearningFlow")",
                 function(data) {
                     if(data.isSuccess) {
                         $('#btnComplete').show();
