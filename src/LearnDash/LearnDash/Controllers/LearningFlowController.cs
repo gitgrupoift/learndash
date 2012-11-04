@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LearnDash.Controllers
+﻿namespace LearnDash.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -8,17 +6,6 @@ namespace LearnDash.Controllers
     using Dal.Models;
     using Dal.NHibernate;
     using Services;
-
-    public static class EnumExtension
-    {
-        public static SelectList ToSelectList<TEnum>(this TEnum enumObj)
-        {
-            var values = from TEnum e in Enum.GetValues(typeof(TEnum))
-                         select new { Id = e, Name = e.ToString() };
-
-            return new SelectList(values, "Id", "Name", enumObj);
-        }
-    }
 
     [Authorize]
     public class LearningFlowController : Controller

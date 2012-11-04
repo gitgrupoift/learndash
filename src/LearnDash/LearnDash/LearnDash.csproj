@@ -210,6 +210,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnumExtension.cs" />
     <Compile Include="Error.aspx.cs">
       <DependentUpon>Error.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -355,9 +356,6 @@
       <Project>{C5C3035B-84D5-4E9F-A990-52BF9DEEEDB1}</Project>
       <Name>LearnDash.Dal</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\LearningFlow\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\LearningFlow\View.cshtml" />
