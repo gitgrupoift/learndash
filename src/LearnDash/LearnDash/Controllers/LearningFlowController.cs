@@ -31,10 +31,9 @@ namespace LearnDash.Controllers
 
         public static NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        //todo : should open default learing flowq
         public ActionResult Index()
         {
-            return this.View();
+            return this.RedirectToAction("List");
         }
 
         [HttpGet]
