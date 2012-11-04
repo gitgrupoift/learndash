@@ -36,17 +36,19 @@
 </div>
 <script type="text/javascript">
     $(function () {
-        $("#txtBoxTaskName").focus().keypress(function(e) {
-                if(e.which == 13) {
-                    $("#txtBoxTaskName").blur();
-                    $("#btnAddTask").click();
-                }
-            });
-
+        InitKeyboardEvents();
         InitMenuButtons();
         InitTaskButtons();
     });
     
+    function InitKeyboardEvents() {
+        $("#txtBoxTaskName").focus().keypress(function (e) {
+            if (e.which == 13) {
+                $("#txtBoxTaskName").blur();
+                $("#btnAddTask").click();
+            }
+        });
+    }
 
     function InitTaskButtons() {
         $("[name='btnMakeNext']").click(function () {
@@ -76,7 +78,6 @@
             var removedTask = $(this).parent();
             
             if(removedTask.hasClass("flow-next")) {
-
                 var nextTask = removedTask.next();
                 if(nextTask.length>0) {
                     nextTask.addClass("flow-next");
@@ -131,13 +132,17 @@
                 }
             );
         });
+        
         var btnAddTask = $("#btnAddTask");
-            btnAddTask.click(function () {
+        btnAddTask.click(function () {
             showLoadingOverlay();
-            var txtVoxTaskName = $("#txtBoxTaskName");
-            var taskName = ClearSpecialCharacters(txtVoxTaskName.val());
-            txtVoxTaskName.val("");
             
+            // get value and clear textBox
+            var txtBoxTaskName = $("#txtBoxTaskName");
+            var taskName = ClearSpecialCharacters(txtBoxTaskName.val());
+            txtBoxTaskName.val("");
+            
+            // task name validation
             $("#taskNameValidation").hide();
             $(".control-group").removeClass("error");
             
@@ -150,7 +155,6 @@
             
             var currentElementsCount = $('.flow-task').size();
             var taskClass = "flow-task";
-
 
             var isNext = false;
             // if there are none tasks this task will be set as next
@@ -166,7 +170,7 @@
                     contentType : 'application/json',
                     success: function (data) {
                         if(data.isSuccess) {
-                            var newElement = $("<li class='" + taskClass + "' data-id='" + data.message + "' ><span style='float:left'>" + taskName + "</span><button style='float:right' name='btnMakeNext' class='btn btn-success'><i class='icon-ok icon-white'></i></button><button style='float:right' name='btnRemoveTask' class='btn btn-warning'><i class='icon-trash icon-white'></i></button><div style='clear:both;'></div></li>");
+                            var newElement = GenerateNewTask(taskClass, data.message, taskName);
                             $("#flow-list").append(newElement);
 
                             InitTaskButtons();
@@ -180,6 +184,10 @@
                 });
         });
 
+    }
+    
+    function GenerateNewTask(taskClass, taskId, taskName) {
+        return $("<li class='" + taskClass + "' data-id='" + taskId + "' ><span style='float:left'>" + taskName + "</span><button style='float:right' name='btnMakeNext' class='btn btn-success'><i class='icon-ok icon-white'></i></button><button style='float:right' name='btnRemoveTask' class='btn btn-warning'><i class='icon-trash icon-white'></i></button><div style='clear:both;'></div></li>")
     }
     
     function ClearSpecialCharacters(value) {
