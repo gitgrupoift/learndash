@@ -3,9 +3,9 @@
 
     @if (Model.FlowType == FlowType.Static)
     {
-        @Html.Partial("_LinearListView", Model)
+        @Html.Partial("ListViews/_LinearListView", Model)
     }
     else
     {
-        @Html.Partial("_DinamicListView", Model)
+        @Html.Partial("ListViews/_DinamicListView", Model)
     }
