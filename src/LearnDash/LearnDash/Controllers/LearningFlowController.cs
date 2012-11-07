@@ -57,7 +57,7 @@
                     Notification.Notify(NotificationType.Fail, "Edit Failed");
                 }
 
-                return this.View(flow);
+                return this.RedirectToAction("List");
             }
 
             Logger.Warn("Flow model not valid!. Propably client validation didn't worked out.");

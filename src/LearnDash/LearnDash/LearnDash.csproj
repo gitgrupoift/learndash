@@ -218,6 +218,7 @@
     <Compile Include="Error.aspx.designer.cs">
       <DependentUpon>Error.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Is.cs" />
     <Compile Include="Services\IUserService.cs" />
     <Compile Include="Services\OpenIdService.cs" />
     <Compile Include="Services\UserService.cs" />
