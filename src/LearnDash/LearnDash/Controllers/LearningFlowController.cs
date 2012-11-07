@@ -307,21 +307,6 @@
             }
         }
 
-        public ActionResult ViewTest(int id)
-        {
-            var flow = this.LearningFlowService.Get(id);
-
-            if (flow != null)
-            {
-                return this.View(flow);
-            }
-            else
-            {
-                Logger.Warn("Requested flow with id - {0} that doesn't exist", id);
-                return this.View("Error", ErrorType.NotFound);
-            }
-        }
-
         [HttpPost]
         public ActionResult Clear(LearningFlow flow)
         {
