@@ -30,6 +30,26 @@ namespace Core
             {
                 return ConfigurationManager.AppSettings[key] ?? string.Empty;
             }
+
+            public static bool VerifySettings()
+            {
+                if(Settings.Redis.UseLocalRedis)
+                {
+                    if(string.IsNullOrWhiteSpace(RedisLocalHost))
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                   if(string.IsNullOrWhiteSpace(RedisExternalHost) || string.IsNullOrWhiteSpace(RedisExternalHost))
+                   {
+                       return false;
+                   }
+                }
+
+                return true;
+            }
         }
     }
 }
