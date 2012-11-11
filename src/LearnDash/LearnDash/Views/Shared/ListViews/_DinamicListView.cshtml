@@ -26,12 +26,13 @@ else
 
         $(".flow-task").hover(
             function () {
-                $(this).addClass("flow-selected");
-                $(this).find("span").append("<button onclick='Complete(this)'>Ok</button>");
+                $(this).addClass("flow-selected").click(
+                 function () {
+                    Complete(this);
+                });
             },
             function () {
-                $(this).removeClass("flow-selected");
-                $(this).find("button").remove();
+                $(this).removeClass("flow-selected").unbind("click");
             }
         );
 
@@ -43,7 +44,7 @@ else
 
 
     function Complete(task) {
-            var $completedTask = $(task).parent().parent();
+            var $completedTask = $(task);
             var timesDone = parseInt($completedTask.attr("data-timesdone"));
             $completedTask.attr("data-timesdone", timesDone + 1);
             var currentId = $completedTask.attr('data-id');
@@ -51,7 +52,6 @@ else
             CompleteTask('@Model.ID', null, currentId, "@Url.Action("CompleteTask", "LearningFlow")",
                 function(data) {
                     if(data.isSuccess) {
-                        $('#btnComplete').show();
                         generateNoty('success', 'Task completed');
                         AdjustSize();
                         InitIsotope();
