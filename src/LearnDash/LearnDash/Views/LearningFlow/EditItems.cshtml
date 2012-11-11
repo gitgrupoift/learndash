@@ -1,7 +1,8 @@
 ﻿@model LearnDash.Dal.Models.LearningFlow
 <link href="../../Content/roundabout.css" rel="stylesheet" type="text/css" />
 <div class="flow-name">
-    <span>@Model.Name</span></div>
+    <span>@Model.Name</span>
+</div>
 <ul id="flow-list">
     @foreach (var task in Model.Tasks)
     {
@@ -13,34 +14,58 @@
         }
     
         <li class="@flowClass" data-id="@task.ID">
-            <span style="float:left;">@task.Name</span>
-            <button style="float:right;" name="btnRemoveTask" class="btn btn-warning">
+            <span style="float: left;">@task.Name</span>
+            <button style="float: right;" name="btnRemoveTask" class="btn btn-warning">
                 <i class="icon-trash icon-white"></i>
             </button>
-            <button style="float:right;" name="btnMakeNext" class="btn btn-success">
+            <button style="float: right;" name="btnChangeName" class="btn btn-info">
+                <i class="icon-pencil icon-white"></i>
+            </button>
+            <button style="float: right;" name="btnMakeNext" class="btn btn-success">
                 <i class="icon-ok icon-white"></i>
             </button>
-            <div style="clear:both;"></div>
+            <div style="clear: both;"></div>
         </li>
     }
 </ul>
 <div class="control-group">
     <div class="controls">
         <input id="txtBoxTaskName" type="text" />
-        <span id="taskNameValidation" class="help-inline" style="display:none;">Task name required</span>
+        <span id="taskNameValidation" class="help-inline" style="display: none;">Task name required</span>
     </div>
     <button id="btnAddTask" class="btn btn-primary">
         <i class="icon-plus icon-white"></i>Add Task</button>
     <button id="btnClear" class="btn btn-danger">
         <i class="icon-repeat icon-white"></i>Clear Flow</button>
 </div>
+
+<div id="dialog-name-change" title="Rename Item">
+    <form>
+        <fieldset>
+            <label>Item Name</label>
+            <input type="text" id="newItemName" />
+        </fieldset>
+    </form>
+</div>
+
+
 <script type="text/javascript">
     $(function () {
         InitKeyboardEvents();
         InitMenuButtons();
         InitTaskButtons();
+        InitDialogs();
     });
-    
+
+    function InitDialogs() {
+        $("#dialog-name-change").dialog({
+            autoOpen: false,
+            height: 200,
+            width: 350,
+            modal: true,
+        });
+    }
+
     function InitKeyboardEvents() {
         $("#txtBoxTaskName").focus().keypress(function (e) {
             if (e.which == 13) {
@@ -51,14 +76,32 @@
     }
 
     function InitTaskButtons() {
+
+        $("[name='btnChangeName']").click(function () {
+            var taskToEdit = $(this).parent();
+
+            $("#dialog-name-change").dialog("option", "buttons",
+                {
+                    Ok: function () {
+                        taskToEdit.children("span").text($("#newItemName").val());
+                        $("#newItemName").val('');
+                        $(this).dialog("close");
+                    },
+                    Cancel: function () {
+                        $(this).dialog("close");
+                    }
+                });
+            $("#dialog-name-change").dialog("open");
+        });
+
         $("[name='btnMakeNext']").click(function () {
             showLoadingOverlay();
             var lastTask = $('.flow-task');
             var newTask = $(this).parent();
 
-            MakeNext('@Model.ID',newTask.attr('data-id'), "@Url.Action("MakeNext", "LearningFlow")",
+            MakeNext('@Model.ID', newTask.attr('data-id'), "@Url.Action("MakeNext", "LearningFlow")",
                 function (data) {
-                    if(data.isSuccess) {
+                    if (data.isSuccess) {
                         lastTask.removeClass("flow-next-text");
                         newTask.addClass("flow-next-text");
 
@@ -76,10 +119,10 @@
         $("[name='btnRemoveTask']").click(function () {
             showLoadingOverlay();
             var removedTask = $(this).parent();
-            
+
             if (removedTask.hasClass("flow-next-text")) {
                 var nextTask = removedTask.next();
-                if(nextTask.length>0) {
+                if (nextTask.length > 0) {
                     nextTask.addClass("flow-next-text");
                     nextTask.children("[name='btnMakeNext']").hide();
                 }
@@ -87,20 +130,20 @@
                     var previousTask = removedTask.prev();
                     previousTask.addClass("flow-next-text");
                     previousTask.children("[name='btnMakeNext']").hide();
-                    
+
                 }
             }
-            
+
             var id = removedTask.attr('data-id');
-            
+
             $.ajax({
                 type: "POST",
                 url: "@Url.Action("RemoveTask", "LearningFlow")",
-                data: JSON.stringify({taskId : id,flowId : '@Model.ID'}),
-                dataType : "json",
-                contentType : 'application/json',
+                data: JSON.stringify({ taskId: id, flowId: '@Model.ID' }),
+                dataType: "json",
+                contentType: 'application/json',
                 success: function (data) {
-                    if(data.isSuccess) {
+                    if (data.isSuccess) {
                         removedTask.remove();
                         generateNoty('success', 'Task removed sucessfully!');
                     }
@@ -109,7 +152,7 @@
                     }
                     hideLoadingOverlay();
                 }
-            });         
+            });
         });
 
 
@@ -119,40 +162,40 @@
     function InitMenuButtons() {
         $("#btnClear").click(function () {
             showLoadingOverlay();
-            ClearFlow('@Model.ID',"@Url.Action("Clear", "LearningFlow")",
+            ClearFlow('@Model.ID', "@Url.Action("Clear", "LearningFlow")",
             function (data) {
-                    if(data.isSuccess) {
-                        $('.flow-task').remove();
-                        generateNoty('success', 'Flow Cleared!');
-                    }
-                    else {
-                        generateNoty('error', 'Encountered error!');
-                    }
-                    hideLoadingOverlay();
+                if (data.isSuccess) {
+                    $('.flow-task').remove();
+                    generateNoty('success', 'Flow Cleared!');
                 }
+                else {
+                    generateNoty('error', 'Encountered error!');
+                }
+                hideLoadingOverlay();
+            }
             );
         });
-        
+
         var btnAddTask = $("#btnAddTask");
         btnAddTask.click(function () {
             showLoadingOverlay();
-            
+
             // get value and clear textBox
             var txtBoxTaskName = $("#txtBoxTaskName");
             var taskName = ClearSpecialCharacters(txtBoxTaskName.val());
             txtBoxTaskName.val("");
-            
+
             // task name validation
             $("#taskNameValidation").hide();
             $(".control-group").removeClass("error");
-            
-            if(isBlank(taskName)) {
+
+            if (isBlank(taskName)) {
                 $(".control-group").addClass("error");
                 $("#taskNameValidation").show();
-                hideLoadingOverlay(function() { $("#txtBoxTaskName").focus()});
+                hideLoadingOverlay(function () { $("#txtBoxTaskName").focus() });
                 return;
             }
-            
+
             var currentElementsCount = $('.flow-task').size();
             var taskClass = "flow-task";
 
@@ -162,34 +205,34 @@
                 taskClass = taskClass + " flow-next-text";
                 isNext = true;
             }
-                $.ajax({
-                    type: "POST",
-                    url: "@Url.Action("AddTask", "LearningFlow")",
-                    data: JSON.stringify({task : {Name : taskName,IsNext : isNext},flowId : '@Model.ID'}),
-                    dataType : "json",
-                    contentType : 'application/json',
-                    success: function (data) {
-                        if(data.isSuccess) {
-                            var newElement = GenerateNewTask(taskClass, data.message, taskName);
-                            $("#flow-list").append(newElement);
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddTask", "LearningFlow")",
+                data: JSON.stringify({ task: { Name: taskName, IsNext: isNext }, flowId: '@Model.ID' }),
+                dataType: "json",
+                contentType: 'application/json',
+                success: function (data) {
+                    if (data.isSuccess) {
+                        var newElement = GenerateNewTask(taskClass, data.message, taskName);
+                        $("#flow-list").append(newElement);
 
-                            InitTaskButtons();
-                            generateNoty('success', 'Task sucessfully added!');
-                        }
-                        else {
-                            generateNoty('error', 'Encountered error! - ' + data.message);
-                        }
-                        hideLoadingOverlay(function() { $("#txtBoxTaskName").focus();});
+                        InitTaskButtons();
+                        generateNoty('success', 'Task sucessfully added!');
                     }
-                });
+                    else {
+                        generateNoty('error', 'Encountered error! - ' + data.message);
+                    }
+                    hideLoadingOverlay(function () { $("#txtBoxTaskName").focus(); });
+                }
+            });
         });
 
     }
-    
+
     function GenerateNewTask(taskClass, taskId, taskName) {
         return $("<li class='" + taskClass + "' data-id='" + taskId + "' ><span style='float:left'>" + taskName + "</span><button style='float:right' name='btnMakeNext' class='btn btn-success'><i class='icon-ok icon-white'></i></button><button style='float:right' name='btnRemoveTask' class='btn btn-warning'><i class='icon-trash icon-white'></i></button><div style='clear:both;'></div></li>")
     }
-    
+
     function ClearSpecialCharacters(value) {
         return value.replace(/[<>]/g, "");
     }

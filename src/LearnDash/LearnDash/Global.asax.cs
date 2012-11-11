@@ -65,6 +65,7 @@ namespace LearnDash
 
             bundle = new Bundle("~/Content/customcss");
             bundle.AddFile("~/Content/isotope.css");
+            bundle.AddFile("~/Content/themes/black-tie/jquery-ui-1.9.1.custom.css");
             BundleTable.Bundles.Add(bundle);
 
             bundle = new Bundle("~/Content/twitterbootstrap/bootstrapcss");
