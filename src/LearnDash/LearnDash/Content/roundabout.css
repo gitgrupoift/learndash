@@ -26,6 +26,11 @@
     background-color: lightgreen !important;
 }
 
+.flow-next-text span
+{
+    color: lightgreen !important;
+}
+
 .flow-selected
 {
     background-color: yellow !important;

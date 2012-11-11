@@ -9,7 +9,7 @@
 
         if (task.IsNext)
         {
-            flowClass += " flow-next";
+            flowClass += " flow-next-text";
         }
     
         <li class="@flowClass" data-id="@task.ID">
@@ -59,8 +59,8 @@
             MakeNext('@Model.ID',newTask.attr('data-id'), "@Url.Action("MakeNext", "LearningFlow")",
                 function (data) {
                     if(data.isSuccess) {
-                        lastTask.removeClass("flow-next");
-                        newTask.addClass("flow-next");
+                        lastTask.removeClass("flow-next-text");
+                        newTask.addClass("flow-next-text");
 
                         lastTask.children("[name='btnMakeNext']").show();
                         newTask.children("[name='btnMakeNext']").hide();
@@ -77,15 +77,15 @@
             showLoadingOverlay();
             var removedTask = $(this).parent();
             
-            if(removedTask.hasClass("flow-next")) {
+            if (removedTask.hasClass("flow-next-text")) {
                 var nextTask = removedTask.next();
                 if(nextTask.length>0) {
-                    nextTask.addClass("flow-next");
+                    nextTask.addClass("flow-next-text");
                     nextTask.children("[name='btnMakeNext']").hide();
                 }
                 else {
                     var previousTask = removedTask.prev();
-                    previousTask.addClass("flow-next");
+                    previousTask.addClass("flow-next-text");
                     previousTask.children("[name='btnMakeNext']").hide();
                     
                 }
@@ -113,7 +113,7 @@
         });
 
 
-        $(".flow-next").children("[name='btnMakeNext']").hide();
+        $(".flow-next-text").children("[name='btnMakeNext']").hide();
     }
 
     function InitMenuButtons() {
@@ -159,7 +159,7 @@
             var isNext = false;
             // if there are none tasks this task will be set as next
             if (currentElementsCount <= 0) {
-                taskClass = taskClass + " flow-next";
+                taskClass = taskClass + " flow-next-text";
                 isNext = true;
             }
                 $.ajax({
