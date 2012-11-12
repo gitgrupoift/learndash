@@ -79,12 +79,35 @@
 
         $("[name='btnChangeName']").click(function () {
             var taskToEdit = $(this).parent();
+            $("#newItemName").val(taskToEdit.children("span").text());
 
             $("#dialog-name-change").dialog("option", "buttons",
                 {
                     Ok: function () {
-                        taskToEdit.children("span").text($("#newItemName").val());
-                        $("#newItemName").val('');
+                        var itemName = $("#newItemName").val();
+                        if (itemName !== '') {
+                            var id = taskToEdit.attr("data-id");
+                            $.ajax({
+                                type: "POST",
+                                url: "@Url.Action("RenameItem", "LearningFlow")",
+                                data: JSON.stringify({ taskId: id, itemName: itemName }),
+                                dataType: "json",
+                                contentType: 'application/json',
+                                success: function(data) {
+                                    if (data.isSuccess) {
+                                        taskToEdit.children("span").text(itemName);
+                                        $("#newItemName").val('');
+                                        generateNoty('success', 'Item Renamed');
+                                    } else {
+                                        generateNoty('error', 'Encountered error!');
+                                    }
+                                    hideLoadingOverlay();
+                                }
+                            });
+                        } else {
+                            generateNoty('error', 'Item name cannot be empty');
+                        }
+
                         $(this).dialog("close");
                     },
                     Cancel: function () {
@@ -94,12 +117,12 @@
             $("#dialog-name-change").dialog("open");
         });
 
-        $("[name='btnMakeNext']").click(function () {
-            showLoadingOverlay();
-            var lastTask = $('.flow-task');
-            var newTask = $(this).parent();
+            $("[name='btnMakeNext']").click(function () {
+                showLoadingOverlay();
+                var lastTask = $('.flow-task');
+                var newTask = $(this).parent();
 
-            MakeNext('@Model.ID', newTask.attr('data-id'), "@Url.Action("MakeNext", "LearningFlow")",
+                MakeNext('@Model.ID', newTask.attr('data-id'), "@Url.Action("MakeNext", "LearningFlow")",
                 function (data) {
                     if (data.isSuccess) {
                         lastTask.removeClass("flow-next-text");
@@ -114,31 +137,31 @@
                     }
                     hideLoadingOverlay();
                 });
-        });
+            });
 
-        $("[name='btnRemoveTask']").click(function () {
-            showLoadingOverlay();
-            var removedTask = $(this).parent();
+            $("[name='btnRemoveTask']").click(function () {
+                showLoadingOverlay();
+                var removedTask = $(this).parent();
 
-            if (removedTask.hasClass("flow-next-text")) {
-                var nextTask = removedTask.next();
-                if (nextTask.length > 0) {
-                    nextTask.addClass("flow-next-text");
-                    nextTask.children("[name='btnMakeNext']").hide();
+                if (removedTask.hasClass("flow-next-text")) {
+                    var nextTask = removedTask.next();
+                    if (nextTask.length > 0) {
+                        nextTask.addClass("flow-next-text");
+                        nextTask.children("[name='btnMakeNext']").hide();
+                    }
+                    else {
+                        var previousTask = removedTask.prev();
+                        previousTask.addClass("flow-next-text");
+                        previousTask.children("[name='btnMakeNext']").hide();
+
+                    }
                 }
-                else {
-                    var previousTask = removedTask.prev();
-                    previousTask.addClass("flow-next-text");
-                    previousTask.children("[name='btnMakeNext']").hide();
 
-                }
-            }
+                var id = removedTask.attr('data-id');
 
-            var id = removedTask.attr('data-id');
-
-            $.ajax({
-                type: "POST",
-                url: "@Url.Action("RemoveTask", "LearningFlow")",
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("RemoveTask", "LearningFlow")",
                 data: JSON.stringify({ taskId: id, flowId: '@Model.ID' }),
                 dataType: "json",
                 contentType: 'application/json',

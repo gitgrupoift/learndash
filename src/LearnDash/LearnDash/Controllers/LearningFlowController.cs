@@ -1,4 +1,6 @@
-﻿namespace LearnDash.Controllers
+﻿using LearnDash.JsonHelpers;
+
+namespace LearnDash.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -319,6 +321,33 @@
             {
                 return this.Json(Is.Fail.Message("Clear Failed"));
             }
+        }
+
+        public ActionResult RenameItem(int taskId, string itemName)
+        {
+            if(taskId < 0 || string.IsNullOrWhiteSpace(itemName))
+            {
+                Logger.Error("Incorrect parametere \r\n taskId : {0} \r\n itemName : {1}", taskId, itemName);
+                return this.Json(Is.Fail.Message(string.Empty));
+            }
+
+            var item = LearningTaskRepository.GetById(taskId);
+            if(item == null)
+            {
+                Logger.Error("No Learning item exists for taskId : {0} ", taskId);
+                return this.Json(Is.Fail.Message(string.Empty));
+            }
+
+            item.Name = itemName;
+
+            var result = LearningTaskRepository.Update(item);
+            if(!result)
+            {
+                return this.Json(Is.Fail.Message(string.Empty));
+            }
+
+            Logger.Info("Item Successfully renamed");
+            return this.Json(Is.Success.Message("Update successfull"));
         }
     }
 }
