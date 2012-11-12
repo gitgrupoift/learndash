@@ -12,14 +12,14 @@
     <script src="@System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/Scripts/customjs")"></script>
     <link href="@System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/Content/customcss")" rel="stylesheet" type="text/css" />
     <script src="@System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/Content/notyjs")"></script>
-    
+
     @if (SessionManager.ListOfNotifications != null && SessionManager.ListOfNotifications.Count > 0)
     {
         <script type="text/javascript">
-            $(function() {
-                @foreach(var notification in SessionManager.ListOfNotifications)
+            $(function () {
+                @foreach (var notification in SessionManager.ListOfNotifications)
                 {
-                    switch(notification.Type)
+                    switch (notification.Type)
                     {
                         case NotificationType.Success:
                             this.WriteLiteral(string.Format("generateNoty(\'success\',\'{0}\')", notification.Message));
@@ -59,13 +59,10 @@
             </div>
         </div>
     </div>
-    <div id="notyContainer">
-    </div>
     <div class="container">
         <div id="main-container" class="container">
             @RenderBody()
-            <div id='loadingOverlay' style='display: none; position: absolute; background: #fff;
-                z-index: 9999'>
+            <div id='loadingOverlay' style='display: none; position: absolute; background: #fff; z-index: 9999'>
                 <img id='imgLoad' style='position: absolute;' src='~/Content/img/ajax-loader-big.gif' />
             </div>
         </div>

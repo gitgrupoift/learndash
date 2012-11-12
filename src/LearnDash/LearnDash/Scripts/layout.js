@@ -25,12 +25,11 @@ function hideLoadingOverlay(func) {
 }
 
 function generateNoty(type, message) {
-    $('div#notyContainer').noty({
+    noty({
         text: message,
         type: type,
-        timeout: 500,
+        timeout: 1000,
         dismissQueue: true,
-        layout: 'TopCenter',
         theme: 'default'
     });
 }
