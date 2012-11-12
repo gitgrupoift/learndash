@@ -4,20 +4,15 @@ namespace LearnDash.Controllers
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Security.Principal;
     using System.Web;
-    using System.Web.ClientServices;
     using System.Web.Mvc;
     using System.Web.Security;
-    using Castle.Core.Logging;
     using DotNetOpenAuth.Messaging;
-    using DotNetOpenAuth.OAuth.ChannelElements;
     using DotNetOpenAuth.OpenId;
-    using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
     using DotNetOpenAuth.OpenId.RelyingParty;
-    using LearnDash.Dal.Models;
-    using LearnDash.Dal.NHibernate;
-    using LearnDash.Services;
+    using Dal.Models;
+    using Dal.NHibernate;
+    using Services;
 
     public class AccountController : Controller
     {

@@ -1,18 +1,10 @@
 ﻿namespace LearnDash.Services
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web;
     using System.Web.Mvc;
-    using System.Web.Security;
-
     using DotNetOpenAuth.Messaging;
     using DotNetOpenAuth.OpenId;
     using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
     using DotNetOpenAuth.OpenId.RelyingParty;
-
-    using LearnDash.Dal.Models;
 
     public static class OpenIdService
     {
@@ -20,7 +12,7 @@
 
         public static ActionResult SendRequest(OpenIdRelyingParty openid, Identifier openIdIdentifier)
         {
-            Logger.Trace("Sending request to the open id provider");
+            Logger.Info("Sending request to the open id provider");
 
             var req = openid.CreateRequest(openIdIdentifier);
 

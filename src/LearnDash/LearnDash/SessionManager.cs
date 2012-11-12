@@ -1,17 +1,12 @@
 ﻿namespace LearnDash
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web;
-    using System.Web.Security;
-
     using Castle.Windsor;
 
-    using LearnDash.Controllers;
-    using LearnDash.Dal.Models;
-    using LearnDash.Dal.NHibernate;
-    using LearnDash.Services;
+    using Controllers;
+    using Services;
 
     public static class SessionManager
     {

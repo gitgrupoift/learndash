@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Castle.Core.Logging;
-using LearnDash.Dal;
-using LearnDash.Dal.Models;
-using LearnDash.Dal.NHibernate;
-using System.Threading;
+﻿using System.Web.Mvc;
 
 namespace LearnDash.Controllers
 {

@@ -3,8 +3,8 @@ namespace LearnDash.Services
     using System.Linq;
     using System.Web;
 
-    using LearnDash.Dal.Models;
-    using LearnDash.Dal.NHibernate;
+    using Dal.Models;
+    using Dal.NHibernate;
 
     public class UserService : IUserService
     {

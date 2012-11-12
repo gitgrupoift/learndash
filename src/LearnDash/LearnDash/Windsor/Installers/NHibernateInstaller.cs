@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Web;
     using System.Web.Configuration;
     using Castle.Facilities.TypedFactory;
@@ -11,12 +10,9 @@
     using Castle.Windsor;
     using FluentNHibernate.Cfg;
     using FluentNHibernate.Cfg.Db;
-    using LearnDash.Dal.NHibernate;
-    using LearnDash.Dal.NHibernate.Mappings;
+    using Dal.NHibernate;
+    using Dal.NHibernate.Mappings;
     using NHibernate;
-    using NHibernate.Dialect;
-    using NHibernate.Exceptions;
-
     using NLog;
 
     using Environment = NHibernate.Cfg.Environment;
@@ -40,6 +36,8 @@
 
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
+            logger.Info("Installing NHibernate in container");
+
             container.Register(Component.For<ISessionFactory>()
                                    .UsingFactoryMethod(k => BuildSessionFactory()));
 
@@ -51,6 +49,8 @@
                                         .UsingFactoryMethod(k => k.ResolveAll<ISessionFactory>()));
 
             HttpContext.Current.Application[SessionFactoryProvider.Key] = container.Resolve<ISessionFactoryProvider>();
+
+            logger.Info("NHibernate installed in container");
         }
 
         private ISessionFactory BuildSessionFactory()

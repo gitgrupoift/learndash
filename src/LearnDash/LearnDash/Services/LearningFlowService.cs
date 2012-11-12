@@ -2,10 +2,8 @@ namespace LearnDash.Services
 {
     using System.Collections.Generic;
     using System.Linq;
-    using LearnDash.Controllers;
-    using LearnDash.Dal;
-    using LearnDash.Dal.Models;
-    using LearnDash.Dal.NHibernate;
+    using Dal.Models;
+    using Dal.NHibernate;
 
     public class LearningFlowService : ILearningFlowService
     {
