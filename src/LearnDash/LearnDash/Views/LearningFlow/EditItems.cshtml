@@ -15,13 +15,13 @@
     
         <li class="@flowClass" data-id="@task.ID">
             <span style="float: left;">@task.Name</span>
-            <button style="float: right;" name="btnRemoveTask" class="btn btn-warning">
+            <button style="float: right;" name="btnRemoveTask" title="Remove task" class="btn btn-warning">
                 <i class="icon-trash icon-white"></i>
             </button>
-            <button style="float: right;" name="btnChangeName" class="btn btn-info">
+            <button style="float: right;" name="btnChangeName" title="Change name" class="btn btn-info">
                 <i class="icon-pencil icon-white"></i>
             </button>
-            <button style="float: right;" name="btnMakeNext" class="btn btn-success">
+            <button style="float: right;" name="btnMakeNext" title="Make as next" class="btn btn-success">
                 <i class="icon-ok icon-white"></i>
             </button>
             <div style="clear: both;"></div>
@@ -55,6 +55,8 @@
         InitMenuButtons();
         InitTaskButtons();
         InitDialogs();
+
+        $(document).tooltip();
     });
 
     function InitDialogs() {
