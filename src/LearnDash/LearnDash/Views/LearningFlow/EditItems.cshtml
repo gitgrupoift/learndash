@@ -79,6 +79,7 @@
 
     function InitTaskButtons() {
 
+        $("[name='btnChangeName']").unbind("click");
         $("[name='btnChangeName']").click(function () {
             var taskToEdit = $(this).parent();
             $("#newItemName").val(taskToEdit.children("span").text());
@@ -95,7 +96,7 @@
                                 data: JSON.stringify({ taskId: id, itemName: itemName }),
                                 dataType: "json",
                                 contentType: 'application/json',
-                                success: function(data) {
+                                success: function (data) {
                                     if (data.isSuccess) {
                                         taskToEdit.children("span").text(itemName);
                                         $("#newItemName").val('');
@@ -119,6 +120,7 @@
             $("#dialog-name-change").dialog("open");
         });
 
+            $("[name='btnMakeNext']").unbind("click");
             $("[name='btnMakeNext']").click(function () {
                 showLoadingOverlay();
                 var lastTask = $('.flow-task');
@@ -140,7 +142,8 @@
                     hideLoadingOverlay();
                 });
             });
-
+        
+            $("[name='btnRemoveTask']").unbind("click");
             $("[name='btnRemoveTask']").click(function () {
                 showLoadingOverlay();
                 var removedTask = $(this).parent();
@@ -164,30 +167,30 @@
                 $.ajax({
                     type: "POST",
                     url: "@Url.Action("RemoveTask", "LearningFlow")",
-                data: JSON.stringify({ taskId: id, flowId: '@Model.ID' }),
-                dataType: "json",
-                contentType: 'application/json',
-                success: function (data) {
-                    if (data.isSuccess) {
-                        removedTask.remove();
-                        generateNoty('success', 'Task removed sucessfully!');
+                    data: JSON.stringify({ taskId: id, flowId: '@Model.ID' }),
+                    dataType: "json",
+                    contentType: 'application/json',
+                    success: function (data) {
+                        if (data.isSuccess) {
+                            removedTask.remove();
+                            generateNoty('success', 'Task removed sucessfully!');
+                        }
+                        else {
+                            generateNoty('error', 'Encountered error!');
+                        }
+                        hideLoadingOverlay();
                     }
-                    else {
-                        generateNoty('error', 'Encountered error!');
-                    }
-                    hideLoadingOverlay();
-                }
+                });
             });
-        });
 
 
-        $(".flow-next-text").children("[name='btnMakeNext']").hide();
-    }
+            $(".flow-next-text").children("[name='btnMakeNext']").hide();
+        }
 
-    function InitMenuButtons() {
-        $("#btnClear").click(function () {
-            showLoadingOverlay();
-            ClearFlow('@Model.ID', "@Url.Action("Clear", "LearningFlow")",
+        function InitMenuButtons() {
+            $("#btnClear").click(function () {
+                showLoadingOverlay();
+                ClearFlow('@Model.ID', "@Url.Action("Clear", "LearningFlow")",
             function (data) {
                 if (data.isSuccess) {
                     $('.flow-task').remove();
@@ -199,40 +202,40 @@
                 hideLoadingOverlay();
             }
             );
-        });
+            });
 
-        var btnAddTask = $("#btnAddTask");
-        btnAddTask.click(function () {
-            showLoadingOverlay();
+            var btnAddTask = $("#btnAddTask");
+            btnAddTask.click(function () {
+                showLoadingOverlay();
 
-            // get value and clear textBox
-            var txtBoxTaskName = $("#txtBoxTaskName");
-            var taskName = ClearSpecialCharacters(txtBoxTaskName.val());
-            txtBoxTaskName.val("");
+                // get value and clear textBox
+                var txtBoxTaskName = $("#txtBoxTaskName");
+                var taskName = ClearSpecialCharacters(txtBoxTaskName.val());
+                txtBoxTaskName.val("");
 
-            // task name validation
-            $("#taskNameValidation").hide();
-            $(".control-group").removeClass("error");
+                // task name validation
+                $("#taskNameValidation").hide();
+                $(".control-group").removeClass("error");
 
-            if (isBlank(taskName)) {
-                $(".control-group").addClass("error");
-                $("#taskNameValidation").show();
-                hideLoadingOverlay(function () { $("#txtBoxTaskName").focus() });
-                return;
-            }
+                if (isBlank(taskName)) {
+                    $(".control-group").addClass("error");
+                    $("#taskNameValidation").show();
+                    hideLoadingOverlay(function () { $("#txtBoxTaskName").focus() });
+                    return;
+                }
 
-            var currentElementsCount = $('.flow-task').size();
-            var taskClass = "flow-task";
+                var currentElementsCount = $('.flow-task').size();
+                var taskClass = "flow-task";
 
-            var isNext = false;
-            // if there are none tasks this task will be set as next
-            if (currentElementsCount <= 0) {
-                taskClass = taskClass + " flow-next-text";
-                isNext = true;
-            }
-            $.ajax({
-                type: "POST",
-                url: "@Url.Action("AddTask", "LearningFlow")",
+                var isNext = false;
+                // if there are none tasks this task will be set as next
+                if (currentElementsCount <= 0) {
+                    taskClass = taskClass + " flow-next-text";
+                    isNext = true;
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("AddTask", "LearningFlow")",
                 data: JSON.stringify({ task: { Name: taskName, IsNext: isNext }, flowId: '@Model.ID' }),
                 dataType: "json",
                 contentType: 'application/json',
