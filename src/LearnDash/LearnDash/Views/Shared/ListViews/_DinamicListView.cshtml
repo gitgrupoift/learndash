@@ -48,7 +48,9 @@ else
             var timesDone = parseInt($completedTask.attr("data-timesdone"));
             $completedTask.attr("data-timesdone", timesDone + 1);
             var currentId = $completedTask.attr('data-id');
-
+        
+            difference++;
+        
             CompleteTask('@Model.ID', null, currentId, "@Url.Action("CompleteTask", "LearningFlow")",
                 function(data) {
                     if(data.isSuccess) {
