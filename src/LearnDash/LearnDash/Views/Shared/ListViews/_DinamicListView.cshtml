@@ -48,8 +48,23 @@ else
             var timesDone = parseInt($completedTask.attr("data-timesdone"));
             $completedTask.attr("data-timesdone", timesDone + 1);
             var currentId = $completedTask.attr('data-id');
-        
-            difference++;
+
+            var min = 999;
+            var max = 0;
+
+            $.each($(".flow-task"), function (index, item) {
+                var value = $(item).attr("data-timesdone");
+                
+                if (value > max) {
+                    max = value;
+                }
+                
+                if(value < min) {
+                    min = value;
+                }
+            });
+
+            difference = max - min;
         
             CompleteTask('@Model.ID', null, currentId, "@Url.Action("CompleteTask", "LearningFlow")",
                 function(data) {
