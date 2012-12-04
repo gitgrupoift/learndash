@@ -3,17 +3,18 @@
 @using (Html.BeginForm())
 {
     <fieldset>
-        <div class="control-group">
+        <div>
             @Html.LabelFor(model => model.Name)
             @Html.TextBoxFor(model => model.Name)
-            @Html.ValidationMessageFor(model=>model.Name)
-            
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+        <div>
             @Html.LabelFor(model => model.FlowType)
             @Html.DropDownListFor(model => model.FlowType, this.ViewBag.FlowTypes as SelectList)
             @Html.ValidationMessageFor(model => model.FlowType)
         </div>
         <div>
-            <button class="btn btn-success" type="submit"><i class="icon-plus icon-white"></i> Save</button>
+            <button class="btn btn-success" type="submit"><i class="icon-plus icon-white"></i>Save</button>
         </div>
     </fieldset>
 }
