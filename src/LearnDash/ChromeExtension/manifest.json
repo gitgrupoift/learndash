@@ -1,0 +1,13 @@
+{
+  "name": "LearnDash",
+  "version": "0.1",
+  "manifest_version": 2,
+  "description": "Extension for LearnDash platform.",
+  "browser_action": {
+    "default_icon": "favicon.ico",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "http://api.flickr.com/"
+  ]
+}
