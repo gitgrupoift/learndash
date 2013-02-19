@@ -33,7 +33,7 @@ namespace Core
 
             public static bool VerifySettings()
             {
-                if(Settings.Redis.UseLocalRedis)
+                if(UseLocalRedis)
                 {
                     if(string.IsNullOrWhiteSpace(RedisLocalHost))
                     {

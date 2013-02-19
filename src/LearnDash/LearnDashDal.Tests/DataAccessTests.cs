@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using LearnDash.Dal.NHibernate;
-using NUnit.Framework;
-
-namespace LearnDashDal.Tests
+﻿namespace LearnDashDal.Tests
 {
+    using LearnDash.Dal.NHibernate;
+
+    using NUnit.Framework;
+
     [TestFixture]
-    class DataAccesTests
+    public class DataAccesTests
     {
         [Test]
         public void Can_create_access_to_db_in_memory()

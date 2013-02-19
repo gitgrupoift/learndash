@@ -1,0 +1,92 @@
+﻿.flow-name
+{
+    background-color: #222;
+    color: yellow;
+    font-weight: bold;
+    text-align: center;
+    width: 300px;
+    height: 70px;
+    z-index: 260;
+    margin-left: auto;
+    margin-right: auto;
+    border-color: #222;
+    opacity: 0.8;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+}
+
+.flow-name span
+{
+    line-height: 3;
+    font-size: 22px;
+}
+
+.flow-next
+{
+    background-color: lightgreen !important;
+}
+
+.flow-next-text span
+{
+    color: lightgreen !important;
+}
+
+.flow-selected
+{
+    background-color: yellow !important;
+}
+
+.flow-task span
+{
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+    position: relative;
+    top: 40%;
+    color: navy;
+}
+
+.clear-both {
+    clear: both;
+}
+
+#flow-list {
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+#flow-list li {
+    list-style-type: none;
+    padding: 0px;
+    margin-top : 10px;
+    border-bottom: dotted;
+    border-width: 1px;
+}
+
+
+
+/* View */
+.flow-task-container
+{
+    margin-top: 10px;
+}
+
+.flow-task-container div 
+{
+    background-color: lightblue;
+    font-weight: bold;
+    text-align: center;
+    width: 500px;
+    height: 50px;
+    z-index: 260;
+    margin-left: auto;
+    margin-right: auto;
+    border-color: #222;
+    opacity: 0.8;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    border-style: solid;
+    list-style-type: none;
+    margin-top: 10px;
+}

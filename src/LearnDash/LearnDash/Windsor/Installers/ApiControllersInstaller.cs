@@ -1,6 +1,7 @@
 ﻿namespace LearnDash.Windsor.Installers
 {
     using System;
+    using System.Web.Http;
     using System.Web.Mvc;
     using Castle.MicroKernel.Registration;
     using Castle.MicroKernel.SubSystems.Configuration;
@@ -8,7 +9,7 @@
     using Controllers;
     using NLog;
 
-    public class ControllersInstaller : IWindsorInstaller
+    public class ApiControllersInstaller : IWindsorInstaller
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -16,16 +17,16 @@
         {
             try
             {
-                logger.Info("Installing Controllers in container");
+                logger.Info("Installing Api Controllers in container");
 
                 container.Register(
                     AllTypes.FromThisAssembly()
-                            .BasedOn<IController>()
-                            .If(Component.IsInSameNamespaceAs<HomeController>())
+                            .BasedOn<ApiController>()
+                            .If(Component.IsInSameNamespaceAs<FlowsController>())
                             .If(t => t.Name.EndsWith("Controller"))
                             .Configure(c => c.LifestyleTransient()));
 
-                logger.Info("Controllers isntalled in container");
+                logger.Info("Controllers Api  installed in container");
             }
             catch (Exception ex)
             {

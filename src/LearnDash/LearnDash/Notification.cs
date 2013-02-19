@@ -1,5 +1,7 @@
-﻿namespace LearnDash.Controllers
+﻿namespace Core
 {
+    using LearnDash;
+
     public class Notification
     {
         public NotificationType Type { get; set; }

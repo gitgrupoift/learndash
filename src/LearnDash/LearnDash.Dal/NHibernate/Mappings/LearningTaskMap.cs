@@ -14,9 +14,6 @@ namespace LearnDash.Dal.NHibernate.Mappings
             Map(x => x.TaskOrder);
             Map(x => x.Reccuring);
             Map(x => x.TimesDone);
-
-            //todo: this should be as a separate table
-            Map(x => x.Type);
         }
     }
 }

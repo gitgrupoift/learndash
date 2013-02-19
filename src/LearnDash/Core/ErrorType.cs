@@ -1,4 +1,4 @@
-namespace LearnDash.Controllers
+namespace Core
 {
     public enum ErrorType
     {

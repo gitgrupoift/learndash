@@ -19,7 +19,7 @@
 
         public static void ErrorExceptionsWithInner(this Logger logger, string message,Exception ex)
         {
-            var innerExceptions = string.Empty;
+            var innerExceptions = "No Inner Exception";
 
             if (ex.InnerException != null)
             {

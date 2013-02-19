@@ -2,15 +2,11 @@ namespace LearnDash.Dal.Models
 {
     using System.ComponentModel.DataAnnotations;
 
-    public enum LearningTaskType
-    {
-        None=0,
-    }
-
     public class LearningTask : IDBModel
     {
         [Required]
         public virtual int ID { get; set; }
+
         /// <summary>
         /// This allows to set specific ordering of tasks
         /// </summary>
@@ -29,17 +25,12 @@ namespace LearnDash.Dal.Models
         public virtual string Name { get; set; }
 
         /// <summary>
-        /// Type of the task. Right now we are not supporting this.
-        /// </summary>
-        public virtual LearningTaskType Type { get; set; }
-
-        /// <summary>
         /// Should task be reused after completion, after completing, it will be displayed again.
         /// </summary>
         public virtual bool Reccuring { get; set; }
         
         /// <summary>
-        /// This is counter used to count every user in the system
+        /// This is counter used to count every use in the system
         /// </summary>
         public virtual int TimesDone { get; set; }
 

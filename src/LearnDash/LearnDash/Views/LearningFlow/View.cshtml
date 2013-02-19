@@ -1,11 +1,6 @@
 ﻿@using LearnDash.Dal.Models
 @model LearningFlow
 
-    @if (Model.FlowType == FlowType.Static)
-    {
-        @Html.Partial("ListViews/_LinearListView", Model)
-    }
-    else
-    {
-        @Html.Partial("ListViews/_DinamicListView", Model)
-    }
+@*@Html.Partial("ListViews/_LinearListView", Model)*@
+
+@Html.Partial("ListViews/_List", Model)

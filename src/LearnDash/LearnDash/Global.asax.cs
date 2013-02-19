@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Http;
-using System.Web.Mvc;
-using System.Web.Optimization;
-using System.Web.Routing;
-using Castle.Core.Logging;
-using Castle.Facilities.TypedFactory;
-using Castle.MicroKernel.Registration;
-using Castle.Windsor;
-using LearnDash.Dal.NHibernate;
-using LearnDash.Windsor;
-using LearnDash.Windsor.Installers;
-using LearnDash.Services;
-using Core.Extensions;
-
-namespace LearnDash
+﻿namespace LearnDash
 {
+    using System;
+    using System.Web;
+    using System.Web.Http;
+    using System.Web.Http.Dispatcher;
+    using System.Web.Mvc;
+    using System.Web.Optimization;
+    using System.Web.Routing;
+
+    using Castle.Facilities.TypedFactory;
+    using Castle.Windsor;
+
+    using Core.Extensions;
+
+    using LearnDash.Windsor;
+    using LearnDash.Windsor.Installers;
+
     public class MvcApplication : HttpApplication
     {
         private static IWindsorContainer container;
@@ -36,7 +34,7 @@ namespace LearnDash
             routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional });
+                defaults: new { id = UrlParameter.Optional });
 
             routes.MapRoute(
                 name: "Default",
@@ -46,6 +44,8 @@ namespace LearnDash
 
         protected void Application_Start()
         {
+            GlobalConfiguration.Configuration.Formatters.XmlFormatter.SupportedMediaTypes.Clear();
+                
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);
@@ -60,11 +60,9 @@ namespace LearnDash
             bundle.AddFile("~/Scripts/learningflow.js");
             bundle.AddFile("~/Scripts/userecho.js");
             bundle.AddFile("~/Scripts/layout.js");
-            bundle.AddFile("~/Scripts/jquery.isotope.min.js");
             BundleTable.Bundles.Add(bundle);
 
             bundle = new Bundle("~/Content/customcss");
-            bundle.AddFile("~/Content/isotope.css");
             bundle.AddFile("~/Content/themes/black-tie/jquery-ui-1.9.1.custom.css");
             BundleTable.Bundles.Add(bundle);
 
@@ -100,7 +98,8 @@ namespace LearnDash
                 new NHibernateInstaller(),
                 new RepositoryInstaller(),
                 new ControllersInstaller(),
-                new ServicesInstaller());
+                new ServicesInstaller(),
+                new ApiControllersInstaller());
 
             // binding mvc controller factory with new factory that uses windsor
             var controllerFactory = new WindsorControllerFactory(container.Kernel);
@@ -108,6 +107,10 @@ namespace LearnDash
 
             // add container to session manager, container is then used to resolve some services
             SessionManager.Container = container;
+
+            GlobalConfiguration.Configuration.Services.Replace(
+                typeof(IHttpControllerActivator),
+                new WindsorCompositionRoot(container));
         }
 
         protected void Application_End()
@@ -122,7 +125,7 @@ namespace LearnDash
             var exception = ctx.Server.GetLastError();
 
             Logger.ErrorExceptionsWithInner("Unhandled Application Error", exception);
-            Logger.Error("Requested url : {0} StackTrace : \r\n{1}", Request.RawUrl, exception.StackTrace);
+            Logger.Error(string.Format("Request Url : {0}", ctx.Request.Url));
         }
     }
 }

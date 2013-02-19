@@ -1,11 +1,13 @@
-﻿using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.Windsor;
-using LearnDash.Services;
-using NLog;
-
-namespace LearnDash.Windsor.Installers
+﻿namespace LearnDash.Windsor.Installers
 {
+    using Castle.MicroKernel.Registration;
+    using Castle.MicroKernel.SubSystems.Configuration;
+    using Castle.Windsor;
+
+    using LearnDash.Services;
+
+    using NLog;
+
     public class ServicesInstaller : IWindsorInstaller
     {
         private Logger logger = LogManager.GetCurrentClassLogger();

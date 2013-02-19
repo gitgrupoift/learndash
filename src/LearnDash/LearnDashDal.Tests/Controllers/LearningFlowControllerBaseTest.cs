@@ -52,10 +52,10 @@ namespace LearnDashDal.Tests.Controllers
     }
 
     [TestFixture]
-    public class LearningFlow
+    public class LearningFlowTest
     {
         [TestFixture]
-        public class RenameItem : LearningFlowControllerBaseTest
+        public class RenameItemTest : LearningFlowControllerBaseTest
         {
             [Test]
             public void Action_allways_returns_json_result_type()

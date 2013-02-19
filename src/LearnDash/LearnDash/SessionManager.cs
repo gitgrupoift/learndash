@@ -6,6 +6,9 @@
     using Castle.Windsor;
 
     using Controllers;
+
+    using Core;
+
     using Services;
 
     public static class SessionManager

@@ -4,7 +4,6 @@ namespace LearnDash.Dal.Models
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-
     public enum FlowType
     {
         Static = 1,
@@ -31,7 +30,7 @@ namespace LearnDash.Dal.Models
 
         public LearningFlow(string name)
         {
-            Name = name;
+            this.Name = name;
         }
     }
 }

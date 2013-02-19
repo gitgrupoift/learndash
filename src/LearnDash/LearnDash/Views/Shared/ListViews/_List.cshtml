@@ -1,0 +1,26 @@
+﻿@model LearnDash.Dal.Models.LearningFlow
+<link href="../../Content/list.css" rel="stylesheet" type="text/css" />
+<div class="flow-name">
+    <span>@Model.Name</span>
+</div>
+@if (Model != null && Model.Tasks != null && Model.Tasks.Count > 0)
+{
+    <div class="flow-task-container">
+        @foreach (var task in Model.Tasks)
+        {
+            var flowClass = "flow-task";
+
+            if (task.IsNext)
+            {
+                flowClass += " flow-next";
+            }
+            <div class="@flowClass" data-id="@task.ID"><span>@task.Name</span></div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info"><strong>Ooops!</strong> no items in this flow</div>
+}
+
+<div class="clear-both"></div>
