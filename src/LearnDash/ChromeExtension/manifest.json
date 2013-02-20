@@ -7,7 +7,14 @@
     "default_icon": "favicon.ico",
     "default_popup": "popup.html"
   },
+  "content_scripts": [
+    {
+      "matches": ["http://learndash.mfranc.com/*"],
+      "js": ["jquery.js"]
+    }
+  ],
   "permissions": [
-    "http://api.flickr.com/"
+    "http://learndash.mfranc.com/",
+    "http://localhost:56698/"
   ]
 }

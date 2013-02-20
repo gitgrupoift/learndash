@@ -216,7 +216,6 @@
     <Compile Include="Error.aspx.designer.cs">
       <DependentUpon>Error.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Formatters\JsonpFormatter.cs" />
     <Compile Include="JsonHelpers\Is.cs" />
     <Compile Include="JsonHelpers\JsonMessage.cs" />
     <Compile Include="Notification.cs" />
@@ -355,7 +354,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="App_Packages\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

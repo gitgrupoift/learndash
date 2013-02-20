@@ -13,7 +13,6 @@
 
     using Core.Extensions;
 
-    using LearnDash.Formatters;
     using LearnDash.Windsor;
     using LearnDash.Windsor.Installers;
 
@@ -46,8 +45,6 @@
         protected void Application_Start()
         {
             GlobalConfiguration.Configuration.Formatters.XmlFormatter.SupportedMediaTypes.Clear();
-            GlobalConfiguration.Configuration.Formatters.Insert(0, new JsonpFormatter());   
-
 
             AreaRegistration.RegisterAllAreas();
 
