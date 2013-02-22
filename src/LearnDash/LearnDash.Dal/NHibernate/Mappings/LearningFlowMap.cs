@@ -11,7 +11,7 @@ namespace LearnDash.Dal.NHibernate.Mappings
             Map(x => x.Name);
             Map(x => x.FlowType).CustomType<FlowType>();
 
-            HasMany(x => x.Tasks).KeyColumn("LearningFlowId").Not.Inverse().Cascade.AllDeleteOrphan().Not.LazyLoad();
+            HasMany(x => x.Tasks).KeyColumn("LearningFlowId").Not.Inverse().Cascade.AllDeleteOrphan().LazyLoad();
         }
     }
 }

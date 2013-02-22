@@ -33,7 +33,7 @@
         public void Get_if_flow_exists_return_flow()
         {
             // Act
-            var actualResult = this.controller.GetFlowById(ExistingFlowId);
+            var actualResult = this.controller.Get(ExistingFlowId);
 
             // Assert
             Assert.That(actualResult, Is.Not.Null);
@@ -44,7 +44,7 @@
         public void Get_if_flow_doesnt_exists_return_null()
         {
             // Act
-            var actualResult = this.controller.GetFlowById(NonExistingFlowId);
+            var actualResult = this.controller.Get(NonExistingFlowId);
 
             // Assert
             Assert.That(actualResult, Is.Null);
